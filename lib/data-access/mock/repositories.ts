@@ -264,20 +264,17 @@ export const mockClientsRepository = {
     };
   },
   async addClient(data: Partial<Client>) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const user_id = (await getUserId()) as unknown;
     const newClient: Client = {
-      id: crypto.randomUUID(),
-      owner_id: user_id,
+      id: `c${Date.now()}`,
       firstName: data.firstName || "Nouveau",
       lastName: data.lastName || "Client",
       phone: data.phone || "",
-      address: data.address,
-      notes: data.notes,
-      measurements: data.measurements || {},
+      address: data.address || null,
+      notes: data.notes || null,
       createdAt: new Date(),
       ordersCount: 0
-    };clients.push(newClient);
+    };
+    clients.push(newClient);
     return newClient;
   },
   async deleteClient(id: string) {

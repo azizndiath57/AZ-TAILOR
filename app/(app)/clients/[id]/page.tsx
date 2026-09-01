@@ -95,37 +95,37 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             </div>
 
             <div className="divide-y divide-gray-100">
-              {client.orders?.map((order: unknown) => {
-                const orderData = order as Record<string, unknown>;
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {client.orders?.map((order: any) => {
                 return (
                 <Link
-                  key={orderData.id as string}
-                  href={`/orders/${orderData.id}/edit`}
+                  key={order.id}
+                  href={`/orders/${order.id}/edit`}
                   className="p-4 flex flex-col gap-2 hover:bg-gray-50 transition-colors group"
                 >
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900 group-hover:text-brand transition-colors">{orderData.reference as string}</h4>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusColors[orderData.status as string]}`}>
-                      {statusLabels[orderData.status as string]}
+                    <h4 className="text-sm font-semibold text-gray-900 group-hover:text-brand transition-colors">{order.reference}</h4>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusColors[order.status]}`}>
+                      {statusLabels[order.status]}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <div className="flex flex-col">
-                      <span>{orderData.garmentType as string}</span>
-                      {(orderData.fabricText || orderData.fabricPhotoUrl) && (
+                      <span>{order.garmentType}</span>
+                      {(order.fabricText || order.fabricPhotoUrl) && (
                         <div className="flex items-center gap-2 mt-1">
-                          {orderData.fabricPhotoUrl && (
-                            <img src={orderData.fabricPhotoUrl as string} alt="Tissu" className="w-6 h-6 rounded object-cover border border-gray-200 shrink-0" />
+                          {order.fabricPhotoUrl && (
+                            <img src={order.fabricPhotoUrl} alt="Tissu" className="w-6 h-6 rounded object-cover border border-gray-200 shrink-0" />
                           )}
-                          {orderData.fabricText && (
-                            <span className="text-[10px] opacity-80 line-clamp-1" title={orderData.fabricText as string}>
-                              Tissu: {orderData.fabricText as string}
+                          {order.fabricText && (
+                            <span className="text-[10px] opacity-80 line-clamp-1" title={order.fabricText}>
+                              Tissu: {order.fabricText}
                             </span>
                           )}
                         </div>
                       )}
                     </div>
-                    <span className="font-medium text-gray-900">{(orderData.totalPrice as number).toLocaleString("fr-FR")} FCFA</span>
+                    <span className="font-medium text-gray-900">{(order.totalPrice as number).toLocaleString("fr-FR")} FCFA</span>
                   </div>
                 </Link>
                 );
