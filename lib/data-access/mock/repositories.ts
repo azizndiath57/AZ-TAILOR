@@ -272,7 +272,6 @@ export const mockClientsRepository = {
       address: data.address || null,
       notes: data.notes || null,
       createdAt: new Date(),
-      ordersCount: 0
     };
     clients.push(newClient);
     return newClient;
