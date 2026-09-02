@@ -70,7 +70,11 @@ export async function updateSession(request: NextRequest) {
   const isProtectedRoute = !request.nextUrl.pathname.startsWith('/login') && 
                            !request.nextUrl.pathname.startsWith('/_next') &&
                            !request.nextUrl.pathname.startsWith('/api') &&
-                           request.nextUrl.pathname !== '/favicon.ico'
+                           request.nextUrl.pathname !== '/favicon.ico' &&
+                           request.nextUrl.pathname !== '/' &&
+                           request.nextUrl.pathname !== '/a-propos' &&
+                           request.nextUrl.pathname !== '/politique-de-confidentialite' &&
+                           request.nextUrl.pathname !== '/cgv'
 
   if (isProtectedRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page

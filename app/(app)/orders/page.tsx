@@ -29,6 +29,7 @@ export default async function OrdersPage({
   const resolvedSearchParams = await searchParams;
   const currentStatus = (resolvedSearchParams.status as string) || "all";
   const currentPayment = (resolvedSearchParams.payment as string) || "all";
+  const searchQuery = (resolvedSearchParams.q as string) || "";
   const currentPage = Number(resolvedSearchParams.page) || 1;
   const itemsPerPage = 20;
   
@@ -57,7 +58,16 @@ export default async function OrdersPage({
     return true;
   });
 
-  const paginatedOrders = fullyFilteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Filter by search query if needed
+  const searchFilteredOrders = fullyFilteredOrders.filter(o => {
+    if (!searchQuery) return true;
+    const lowerQ = searchQuery.toLowerCase();
+    const refMatch = o.reference.toLowerCase().includes(lowerQ);
+    const clientNameMatch = o.client ? `${o.client.firstName} ${o.client.lastName}`.toLowerCase().includes(lowerQ) : false;
+    return refMatch || clientNameMatch;
+  });
+
+  const paginatedOrders = searchFilteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -65,7 +75,7 @@ export default async function OrdersPage({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Commandes</h2>
-          <p className="text-sm text-gray-500 mt-1">{fullyFilteredOrders.length} commandes {currentStatus !== "all" || currentPayment !== "all" ? "trouvées" : "enregistrées"}</p>
+          <p className="text-sm text-gray-500 mt-1">{searchFilteredOrders.length} commandes {currentStatus !== "all" || currentPayment !== "all" || searchQuery ? "trouvées" : "enregistrées"}</p>
         </div>
         <Link
           href="/orders/new"
@@ -160,8 +170,8 @@ export default async function OrdersPage({
       </div>
       
       {/* Pagination */}
-      {fullyFilteredOrders.length > 20 && (
-        <Pagination totalItems={fullyFilteredOrders.length} itemsPerPage={20} />
+      {searchFilteredOrders.length > 20 && (
+        <Pagination totalItems={searchFilteredOrders.length} itemsPerPage={20} />
       )}
     </div>
   );

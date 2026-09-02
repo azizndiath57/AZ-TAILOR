@@ -16,7 +16,13 @@ export default function GlobalSearch() {
 
   return (
     <form onSubmit={handleSearch} className="relative hidden md:flex items-center">
-      <span className="absolute left-3 text-gray-400 material-symbols-outlined text-[18px] pointer-events-none">search</span>
+      <button 
+        type="submit"
+        aria-label="Rechercher"
+        className="absolute left-3 text-gray-400 material-symbols-outlined text-[18px] hover:text-gray-700 transition-colors focus:outline-none"
+      >
+        search
+      </button>
       <input 
         type="text" 
         value={query}
