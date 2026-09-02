@@ -72,3 +72,23 @@ export async function signout() {
   revalidatePath('/', 'layout')
   redirect('/login')
 }
+
+export async function signInWithGoogle() {
+  const supabase = await createClient()
+  const origin = (await headers()).get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  })
+
+  if (error) {
+    redirect(`/login?error=${encodeURIComponent(error.message)}`)
+  }
+
+  if (data.url) {
+    redirect(data.url)
+  }
+}

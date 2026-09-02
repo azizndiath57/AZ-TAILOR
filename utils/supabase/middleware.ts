@@ -68,6 +68,7 @@ export async function updateSession(request: NextRequest) {
   // The (app) group routes mapped to:
   // /, /dashboard, /orders, /clients, /settings
   const isProtectedRoute = !request.nextUrl.pathname.startsWith('/login') && 
+                           !request.nextUrl.pathname.startsWith('/auth') &&
                            !request.nextUrl.pathname.startsWith('/_next') &&
                            !request.nextUrl.pathname.startsWith('/api') &&
                            request.nextUrl.pathname !== '/favicon.ico' &&
