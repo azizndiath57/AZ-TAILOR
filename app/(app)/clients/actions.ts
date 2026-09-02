@@ -13,9 +13,16 @@ export async function createClientAction(formData: FormData) {
     notes: formData.get("notes") as string,
   };
 
-  const newClient = await mockClientsRepository.addClient(data);
-  revalidatePath("/clients");
-  redirect(`/clients/${newClient.id}`);
+  try {
+    const newClient = await mockClientsRepository.addClient(data);
+    revalidatePath("/clients");
+    return { success: true, clientId: newClient.id };
+  } catch (error: any) {
+    if (error.message === "LIMITE_ATTEINTE") {
+      return { error: "LIMIT_REACHED" };
+    }
+    return { error: error.message };
+  }
 }
 
 export async function deleteClientAction(id: string) {

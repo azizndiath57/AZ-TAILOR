@@ -1,9 +1,53 @@
+"use client";
+
 import Link from "next/link";
 import { createClientAction } from "../actions";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NewClientPage() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+
+  const handleSubmit = async (formData: FormData) => {
+    setError(null);
+    const result = await createClientAction(formData);
+    
+    if (result?.error === "LIMIT_REACHED") {
+      setShowLimitModal(true);
+    } else if (result?.error) {
+      setError(result.error);
+    } else if (result?.success) {
+      router.push(`/clients/${result.clientId}`);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto space-y-8">
+      {/* Modal Freemium */}
+      {showLimitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 overflow-hidden text-center">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-brand/10 mb-4">
+              <span className="material-symbols-outlined text-brand text-2xl">workspace_premium</span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Limite Atteinte</h3>
+            <p className="text-gray-500 mb-6 text-sm">
+              Vous avez atteint la limite de 20 clients pour le plan gratuit. Passez au plan Pro pour ajouter des clients en illimité et développer votre activité.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => setShowLimitModal(false)} className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                Annuler
+              </button>
+              <Link href="/settings?tab=abonnement" className="flex-1 px-4 py-2 bg-brand text-white font-medium rounded-lg hover:bg-brand/90 transition-colors">
+                Passer au Pro
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link href="/clients" className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors">
@@ -15,8 +59,14 @@ export default function NewClientPage() {
         </div>
       </div>
 
+      {error && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg border border-red-100 text-sm">
+          {error}
+        </div>
+      )}
+
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-        <form action={createClientAction}>
+        <form action={handleSubmit}>
           <div className="p-6 md:p-8 space-y-6">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

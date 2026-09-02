@@ -213,6 +213,15 @@ export const SupabaseOrdersRepository = {
     let clientId = clientData.id;
     
     if (!clientId) {
+      // Vérification des limites (Freemium)
+      const { data: sub } = await supabase.from('subscriptions').select('plan_type').eq('owner_id', user_id).single();
+      if (!sub || sub.plan_type === 'free') {
+        const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', user_id);
+        if (count !== null && count >= 20) {
+          throw new Error("LIMITE_ATTEINTE");
+        }
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: newClient, error } = await supabase.from('clients').insert({
         owner_id: user_id,
@@ -366,6 +375,16 @@ export const SupabaseClientsRepository = {
   async addClient(data: Partial<Client>) {
     const supabase = await createClient();
     const user_id = await getUserId();
+    
+    // Vérification des limites (Freemium)
+    const { data: sub } = await supabase.from('subscriptions').select('plan_type').eq('owner_id', user_id).single();
+    if (!sub || sub.plan_type === 'free') {
+      const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', user_id);
+      if (count !== null && count >= 20) {
+        throw new Error("LIMITE_ATTEINTE");
+      }
+    }
+
     const { data: newClient } = await supabase.from('clients').insert({
       owner_id: user_id,
       first_name: data.firstName || "Nouveau",

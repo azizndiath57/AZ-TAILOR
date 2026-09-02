@@ -1,15 +1,21 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { createPortal } from "react-dom";
+import { useSearchParams } from "next/navigation";
 import CustomSelect from "@/app/components/CustomSelect";
 import PhoneInput from "@/app/components/PhoneInput";
 import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings";
+import { getSubscriptionStatus } from "@/app/actions/subscription";
+import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
 
-type Tab = "profil" | "preferences" | "securite";
+type Tab = "profil" | "abonnement" | "preferences" | "securite";
 
-export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("profil");
+function SettingsContent() {
+  const searchParams = useSearchParams();
+  const initialTab = (searchParams.get("tab") as Tab) || "profil";
+  
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
@@ -23,6 +29,9 @@ export default function SettingsPage() {
   const [preferencesUpdateStatus, setPreferencesUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [profileUpdateStatus, setProfileUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [settings, setSettings] = useState<any>({ workshopName: "AZ-TAILOR", address: "Dakar, Sénégal", phone: "+221 77 123 45 67" });
+  
+  const [subscription, setSubscription] = useState<{plan: string, isActive: boolean, endDate?: string}>({ plan: 'free', isActive: false });
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -31,6 +40,9 @@ export default function SettingsPage() {
         setSettings(data);
         if (data.logoUrl) setLogoUrl(data.logoUrl);
       }
+    });
+    getSubscriptionStatus().then(data => {
+      setSubscription(data);
     });
   }, []);
 
@@ -125,6 +137,17 @@ export default function SettingsPage() {
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">storefront</span>
               Profil de l'Atelier
+            </button>
+            <button 
+              onClick={() => setActiveTab("abonnement")}
+              className={`flex items-center gap-3 px-4 py-3 font-medium rounded-r-lg transition-colors text-left ${
+                activeTab === "abonnement" 
+                  ? "text-brand bg-brand-light border-l-4 border-brand" 
+                  : "text-gray-600 border-l-4 border-transparent hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <span aria-hidden="true" className="material-symbols-outlined text-[20px]">workspace_premium</span>
+              Abonnement
             </button>
             <button 
               onClick={() => setActiveTab("preferences")}
@@ -273,6 +296,84 @@ export default function SettingsPage() {
                   </button>
                 </div>
               </form>
+            </section>
+          )}
+
+          {activeTab === "abonnement" && (
+            <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Mon Abonnement</h3>
+              
+              <div className="space-y-6">
+                <div className="p-6 rounded-xl border border-gray-200 bg-gray-50">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <span className="inline-block px-3 py-1 bg-white border border-gray-200 text-gray-700 font-medium text-xs rounded-full uppercase tracking-wider mb-2">
+                        {subscription.plan === 'pro' ? 'Plan Pro' : 'Plan Gratuit'}
+                      </span>
+                      <h4 className="text-xl font-bold text-gray-900">
+                        {subscription.plan === 'pro' ? 'AZ-TAILOR Pro' : 'AZ-TAILOR Débutant'}
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {subscription.plan === 'pro' 
+                          ? 'Vous profitez de toutes les fonctionnalités.' 
+                          : 'Vous êtes limité à 20 clients.'}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-gray-900">
+                        {subscription.plan === 'pro' ? '5 000' : '0'} <span className="text-sm text-gray-500 font-normal">FCFA / mois</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center gap-2 text-sm text-gray-700">
+                      <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                      {subscription.plan === 'pro' ? 'Clients illimités' : 'Jusqu\'à 20 clients'}
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-700">
+                      <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                      Logo sur vos factures
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-700">
+                      <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+                      Statistiques de base
+                    </li>
+                    {subscription.plan !== 'pro' && (
+                      <li className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="material-symbols-outlined text-gray-300 text-lg">cancel</span>
+                        Mode sombre (Premium)
+                      </li>
+                    )}
+                  </ul>
+
+                  {subscription.plan === 'pro' ? (
+                    <button 
+                      onClick={async () => {
+                        setIsStripeLoading(true);
+                        await createCustomerPortalSession();
+                      }}
+                      disabled={isStripeLoading}
+                      className="w-full py-2.5 px-4 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
+                    >
+                      {isStripeLoading && <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></span>}
+                      Gérer mon abonnement (Stripe)
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={async () => {
+                        setIsStripeLoading(true);
+                        await createCheckoutSession();
+                      }}
+                      disabled={isStripeLoading}
+                      className="w-full py-2.5 px-4 bg-brand text-white font-medium rounded-lg hover:bg-brand/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
+                    >
+                      {isStripeLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
+                      Passer au Plan Pro
+                    </button>
+                  )}
+                </div>
+              </div>
             </section>
           )}
 
@@ -432,5 +533,13 @@ export default function SettingsPage() {
       )}
 
     </div>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Chargement des paramètres...</div>}>
+      <SettingsContent />
+    </Suspense>
   );
 }
