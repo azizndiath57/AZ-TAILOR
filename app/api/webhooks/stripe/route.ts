@@ -44,7 +44,7 @@ export async function POST(req: Request) {
           stripe_customer_id: subscription.customer as string,
           plan_type: 'pro',
           status: subscription.status,
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
         })
         .eq('owner_id', userId);
     }
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
       .update({
         plan_type: 'pro',
         status: subscription.status,
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
       })
       .eq('stripe_subscription_id', subscription.id);
   }
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
       .from('subscriptions')
       .update({
         status: subscription.status,
-        current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
         // Si l'abonnement est annulé/supprimé, on le repasse en 'free' (selon la logique métier voulue)
         plan_type: subscription.status === 'active' ? 'pro' : 'free',
       })
