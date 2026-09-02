@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section 
-      className="relative pt-32 md:pt-40 pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center object-cover" 
+      className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center object-cover" 
       style={{
         backgroundImage: 'linear-gradient(rgba(252, 249, 248, 0.85), rgba(252, 249, 248, 0.85)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1PZZ77xeEoPjc8isBgGX0moiMB4kgU8J-P1v4tNbA-mJlmHrncKp60GAfRynAi_x06zKa68e6xBtmCc7nnHTtoiNbbAwEJPHmjfeS1_vQQ9p-xxaZFkUUxRy3qY9GRVdBo9ifh3-Uyn0egXsYghr8Gv-gJLwP7yjJsde6M1x7_KGAAjcESlrd_kc7zot8FZI6HeLPrPHMahdQwrextMPgBra9AzyLTrr0T0S2gaOeJdEak7lgIh7UsWcxmopyR5UxUYo")',
         backgroundSize: 'cover',
@@ -18,7 +18,7 @@ export default function Hero() {
     >
       <FadeInUp delay={100}>
         <div className="max-w-3xl mx-auto space-y-stack-md">
-          <h1 className="font-display text-5xl md:text-[72px] text-primary leading-tight tracking-tight">
+          <h1 className="font-display text-4xl md:text-6xl text-primary leading-tight tracking-tight">
             Oubliez les cahiers perdus.<br className="mb-4 md:mb-6" />
             <span className="text-secondary block mt-2 md:mt-4">
               Gérez votre atelier avec précision.
