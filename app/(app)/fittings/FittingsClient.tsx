@@ -74,7 +74,7 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Client</th>
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Type</th>
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Détails</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -109,7 +109,12 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                         </Link>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
-                        {order.garmentType}
+                        <div className="flex flex-col gap-1.5 items-start">
+                          <span>{order.garmentType}</span>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-yellow-50 text-yellow-600">
+                            1er Essayage
+                          </span>
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1 text-sm text-gray-500">
@@ -123,11 +128,8 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-4">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-yellow-50 text-yellow-600">
-                            1er Essayage
-                          </span>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex justify-center">
                           <OrderActionsDropdown orderId={order.id} />
                         </div>
                       </td>
