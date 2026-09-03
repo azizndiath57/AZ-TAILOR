@@ -8,7 +8,7 @@ export async function login(formData: FormData) {
   const supabase = await createClient()
   
   const data = {
-    email: formData.get('email') as string,
+    email: (formData.get('email') as string).trim(),
     password: formData.get('password') as string,
   }
 
@@ -27,11 +27,11 @@ import { headers } from 'next/headers'
 export async function signup(formData: FormData) {
   const supabase = await createClient()
 
-  const email = formData.get('email') as string;
+  const email = (formData.get('email') as string).trim();
   const password = formData.get('password') as string;
   const confirmPassword = formData.get('confirmPassword') as string;
-  const firstName = formData.get('firstName') as string;
-  const lastName = formData.get('lastName') as string;
+  const firstName = (formData.get('firstName') as string).trim();
+  const lastName = (formData.get('lastName') as string).trim();
 
   if (password !== confirmPassword) {
     redirect(`/login?mode=signup&error=${encodeURIComponent("Les mots de passe ne correspondent pas.")}`);
