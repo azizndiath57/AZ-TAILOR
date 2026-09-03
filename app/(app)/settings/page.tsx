@@ -8,6 +8,7 @@ import PhoneInput from "@/app/components/PhoneInput";
 import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings";
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
+import { createFedaPayCheckoutSession } from "@/app/actions/fedapay";
 
 type Tab = "profil" | "abonnement" | "preferences" | "securite";
 
@@ -32,6 +33,7 @@ function SettingsContent() {
   
   const [subscription, setSubscription] = useState<{plan: string, isActive: boolean, endDate?: string}>({ plan: 'free', isActive: false });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
+  const [isMobileMoneyLoading, setIsMobileMoneyLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -357,20 +359,38 @@ function SettingsContent() {
                       className="w-full py-2.5 px-4 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                     >
                       {isStripeLoading && <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></span>}
-                      Gérer mon abonnement (Stripe)
+                      Gérer mon abonnement
                     </button>
                   ) : (
-                    <button 
-                      onClick={async () => {
-                        setIsStripeLoading(true);
-                        await createCheckoutSession();
-                      }}
-                      disabled={isStripeLoading}
-                      className="w-full py-2.5 px-4 bg-brand text-white font-medium rounded-lg hover:bg-brand/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
-                    >
-                      {isStripeLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                      Passer au Plan Pro
-                    </button>
+                    <div className="space-y-3">
+                      <p className="text-sm text-gray-600 font-medium mb-1">Choisissez votre moyen de paiement :</p>
+                      
+                      {/* Bouton FedaPay Mobile Money */}
+                      <button 
+                        onClick={async () => {
+                          setIsMobileMoneyLoading(true);
+                          await createFedaPayCheckoutSession();
+                        }}
+                        disabled={isMobileMoneyLoading || isStripeLoading}
+                        className="w-full py-2.5 px-4 bg-[#1b4bff] text-white font-medium rounded-lg hover:bg-[#1b4bff]/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
+                      >
+                        {isMobileMoneyLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
+                        S'abonner par Mobile Money
+                      </button>
+
+                      {/* Bouton Stripe (Carte Bancaire) */}
+                      <button 
+                        onClick={async () => {
+                          setIsStripeLoading(true);
+                          await createCheckoutSession();
+                        }}
+                        disabled={isStripeLoading || isMobileMoneyLoading}
+                        className="w-full py-2.5 px-4 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
+                      >
+                        {isStripeLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
+                        S'abonner par Carte Bancaire
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
