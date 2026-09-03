@@ -131,14 +131,14 @@ function SettingsContent() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         
         {/* Sidebar Nav (Settings specific) */}
-        <div className="md:col-span-4 lg:col-span-3">
-          <nav className="flex flex-col gap-1">
+        <div className="md:col-span-4 lg:col-span-3 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+          <nav className="flex flex-row md:flex-col gap-2 min-w-max md:min-w-0">
             <button 
               onClick={() => setActiveTab("profil")}
-              className={`flex items-center gap-3 px-4 py-3 font-medium rounded-r-lg transition-colors text-left ${
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
                 activeTab === "profil" 
-                  ? "text-brand bg-brand-light border-l-4 border-brand" 
-                  : "text-gray-600 border-l-4 border-transparent hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
               }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">storefront</span>
@@ -146,10 +146,10 @@ function SettingsContent() {
             </button>
             <button 
               onClick={() => setActiveTab("abonnement")}
-              className={`flex items-center gap-3 px-4 py-3 font-medium rounded-r-lg transition-colors text-left ${
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
                 activeTab === "abonnement" 
-                  ? "text-brand bg-brand-light border-l-4 border-brand" 
-                  : "text-gray-600 border-l-4 border-transparent hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
               }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">workspace_premium</span>
@@ -157,10 +157,10 @@ function SettingsContent() {
             </button>
             <button 
               onClick={() => setActiveTab("preferences")}
-              className={`flex items-center gap-3 px-4 py-3 font-medium rounded-r-lg transition-colors text-left ${
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
                 activeTab === "preferences" 
-                  ? "text-brand bg-brand-light border-l-4 border-brand" 
-                  : "text-gray-600 border-l-4 border-transparent hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
               }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">tune</span>
@@ -168,10 +168,10 @@ function SettingsContent() {
             </button>
             <button 
               onClick={() => setActiveTab("securite")}
-              className={`flex items-center gap-3 px-4 py-3 font-medium rounded-r-lg transition-colors text-left ${
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
                 activeTab === "securite" 
-                  ? "text-brand bg-brand-light border-l-4 border-brand" 
-                  : "text-gray-600 border-l-4 border-transparent hover:bg-gray-50 hover:text-gray-900"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
               }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">security</span>

@@ -17,7 +17,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <span aria-hidden="true" className="material-symbols-outlined text-[18px]">architecture</span>
           <span className="font-bold tracking-tight text-sm">AZ-TAILOR</span>
         </div>
-        <NotificationsDropdown />
+        <div className="flex items-center gap-3">
+          <NotificationsDropdown />
+          <form action={signout}>
+            <button type="submit" className="flex items-center justify-center p-1.5 text-gray-500 hover:text-red-600 rounded-full hover:bg-red-50 transition-colors" title="Se déconnecter">
+              <span aria-hidden="true" className="material-symbols-outlined text-[22px]">logout</span>
+            </button>
+          </form>
+        </div>
       </header>
 
       {/* Desktop Navigation Drawer */}
