@@ -19,7 +19,8 @@ export async function createPayTechCheckoutSession() {
       return { error: "Clés API PayTech manquantes sur le serveur." };
     }
 
-  const orderId = `order_${Date.now()}_${user.id.substring(0, 5)}`;
+  // On intègre l'ID de l'utilisateur directement dans la référence pour l'IPN (format: timestamp__userid)
+  const orderId = `${Date.now()}__${user.id}`;
   const amount = 5000; // Montant de l'abonnement
   
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
@@ -39,11 +40,10 @@ export async function createPayTechCheckoutSession() {
       currency: "XOF",
       ref_command: orderId,
       command_name: "Abonnement",
-      env: "test", // On force le mode test car le compte n'est pas forcément activé en production
+      env: "test",
       success_url: `${siteUrl}/settings?success=true`,
       ipn_url: `${siteUrl}/api/webhooks/paytech`,
-      cancel_url: `${siteUrl}/settings?canceled=true`,
-      custom_field: JSON.stringify({ custom_user_id: user.id })
+      cancel_url: `${siteUrl}/settings?canceled=true`
     })
   });
 

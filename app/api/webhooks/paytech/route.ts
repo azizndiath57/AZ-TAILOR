@@ -33,9 +33,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid signatures" }, { status: 401 });
     }
 
-    if (type_event === 'sale_complete' && custom_field) {
-      let customData = typeof custom_field === 'string' ? JSON.parse(custom_field) : custom_field;
-      const customUserId = customData.custom_user_id;
+    if (type_event === 'sale_complete' && ref_command) {
+      // ref_command is in format: timestamp__userid
+      const parts = ref_command.split('__');
+      const customUserId = parts.length > 1 ? parts[1] : null;
 
       if (customUserId) {
         // On calcule une date de fin (1 mois plus tard)
