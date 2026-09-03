@@ -13,7 +13,11 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current && 
+        !dropdownRef.current.contains(event.target as Node) &&
+        !(event.target as Element).closest('.mobile-actions-portal')
+      ) {
         setIsOpen(false);
       }
     }
@@ -78,7 +82,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
 
           {/* Mobile Bottom Sheet Portal */}
           {typeof document !== 'undefined' && createPortal(
-            <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)}>
+            <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity mobile-actions-portal" onClick={() => setIsOpen(false)}>
               <div className="bg-white w-full rounded-t-2xl p-4 pb-safe animate-slide-up shadow-2xl border-t border-gray-200" onClick={(e) => e.stopPropagation()}>
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
                 <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">Actions Client</h3>
