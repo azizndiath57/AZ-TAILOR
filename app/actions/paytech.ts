@@ -22,7 +22,7 @@ export async function createPayTechCheckoutSession() {
   const orderId = `order_${Date.now()}_${user.id.substring(0, 5)}`;
   const amount = 5000; // Montant de l'abonnement
   
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org';
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
   
   // Requête vers PayTech
   const response = await fetch('https://paytech.sn/api/payment/request-payment', {
@@ -35,20 +35,14 @@ export async function createPayTechCheckoutSession() {
     },
     body: JSON.stringify({
       item_name: "Abonnement PRO AZ-TAILOR",
-      item_price: amount,
+      item_price: amount.toString(),
       currency: "XOF",
       ref_command: orderId,
       command_name: "Abonnement",
-      env: process.env.NODE_ENV === 'production' ? 'live' : 'test',
-      success_url: siteUrl.startsWith('http://') 
-        ? `https://aztailor.org/settings?success=true`
-        : `${siteUrl}/settings?success=true`,
-      ipn_url: siteUrl.startsWith('http://') 
-        ? `https://aztailor.org/api/webhooks/paytech`
-        : `${siteUrl}/api/webhooks/paytech`,
-      cancel_url: siteUrl.startsWith('http://')
-        ? `https://aztailor.org/settings?canceled=true`
-        : `${siteUrl}/settings?canceled=true`,
+      env: "test", // On force le mode test car le compte n'est pas forcément activé en production
+      success_url: `${siteUrl}/settings?success=true`,
+      ipn_url: `${siteUrl}/api/webhooks/paytech`,
+      cancel_url: `${siteUrl}/settings?canceled=true`,
       custom_field: JSON.stringify({ custom_user_id: user.id })
     })
   });
