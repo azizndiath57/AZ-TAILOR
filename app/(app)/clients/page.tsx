@@ -50,7 +50,7 @@ export default async function ClientsPage({
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Téléphone</th>
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Date d&apos;ajout</th>
                 <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Commandes</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -85,8 +85,10 @@ export default async function ClientsPage({
                         {client.ordersCount} commande{client.ordersCount > 1 ? "s" : ""}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <ClientActionsDropdown clientId={client.id} />
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex justify-center">
+                        <ClientActionsDropdown clientId={client.id} />
+                      </div>
                     </td>
                   </tr>
                 ))
