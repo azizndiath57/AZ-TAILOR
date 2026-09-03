@@ -61,7 +61,7 @@ export async function createOrderAction(formData: FormData) {
     return { success: true };
   } catch (err: any) {
     console.error("ERROR IN CREATE ORDER ACTION:", err);
-    throw new Error(err.message || "Erreur interne");
+    return { error: err.message || "Erreur interne" };
   }
 }
 
@@ -105,21 +105,26 @@ export async function editOrderAction(formData: FormData) {
     }
   }
 
-  await OrdersRepository.updateOrder(orderId, {
-    clientId: clientId || undefined,
-    garmentType: garmentType || undefined,
-    fabricText: fabricText || undefined,
-    fabricPhotoUrl: fabricPhotoUrl || undefined,
-    expectedDeliveryDate: expectedDeliveryDate ? new Date(expectedDeliveryDate) : undefined,
-    totalPrice: totalPrice || undefined,
-    totalPaid: totalPaid !== undefined ? totalPaid : undefined,
-    status: (status as any) || undefined,
-    notes: notes || undefined,
-  });
+  try {
+    await OrdersRepository.updateOrder(orderId, {
+      clientId: clientId || undefined,
+      garmentType: garmentType || undefined,
+      fabricText: fabricText || undefined,
+      fabricPhotoUrl: fabricPhotoUrl || undefined,
+      expectedDeliveryDate: expectedDeliveryDate ? new Date(expectedDeliveryDate) : undefined,
+      totalPrice: totalPrice || undefined,
+      totalPaid: totalPaid !== undefined ? totalPaid : undefined,
+      status: (status as any) || undefined,
+      notes: notes || undefined,
+    });
 
-  revalidatePath("/orders");
-  revalidatePath(`/orders/${orderId}`);
-  revalidatePath("/dashboard");
-  
-  return { success: true };
+    revalidatePath("/orders");
+    revalidatePath(`/orders/${orderId}`);
+    revalidatePath("/dashboard");
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error("ERROR IN EDIT ORDER ACTION:", err);
+    return { error: err.message || "Erreur interne" };
+  }
 }

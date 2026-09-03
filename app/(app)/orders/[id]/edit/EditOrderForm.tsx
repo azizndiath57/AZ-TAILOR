@@ -43,14 +43,23 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
     setIsPending(true);
     formData.append("orderId", order.id);
     
-    // In a real app we'd call the editOrderAction
-    // For now we just pretend to save and redirect
-    const res = await editOrderAction(formData);
-    
-    setIsPending(false);
-    if (res?.success) {
-      router.push(`/orders`);
-      router.refresh();
+    try {
+      const res = await editOrderAction(formData);
+      
+      setIsPending(false);
+      if (res && res.error) {
+        alert("Une erreur est survenue: " + res.error);
+        return;
+      }
+      
+      if (res?.success) {
+        router.push(`/orders`);
+        router.refresh();
+      }
+    } catch (err: any) {
+      console.error(err);
+      setIsPending(false);
+      alert("Une erreur est survenue: " + (err.message || "Erreur inconnue"));
     }
   }
 

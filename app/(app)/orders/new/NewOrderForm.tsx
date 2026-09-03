@@ -48,7 +48,13 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
     const formData = new FormData(e.currentTarget);
     
     try {
-      await createOrderAction(formData);
+      const result = await createOrderAction(formData);
+      
+      if (result && result.error) {
+        setIsSubmitting(false);
+        alert("Une erreur est survenue lors de l'enregistrement de la commande: " + result.error);
+        return;
+      }
       
       setIsSubmitting(false);
       setShowSuccessAlert(true);
