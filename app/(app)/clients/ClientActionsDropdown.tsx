@@ -44,7 +44,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
       {isOpen && (
         <>
           {/* Desktop Dropdown */}
-          <div className="hidden sm:block absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50 py-1" onClick={(e) => e.preventDefault()}>
+          <div className="hidden lg:block absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50 py-1" onClick={(e) => e.preventDefault()}>
             <Link
               href={`/clients/${clientId}`}
               className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -78,7 +78,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
 
           {/* Mobile Bottom Sheet Portal */}
           {typeof document !== 'undefined' && createPortal(
-            <div className="sm:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)}>
+            <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)}>
               <div className="bg-white w-full rounded-t-2xl p-4 pb-safe animate-slide-up shadow-2xl border-t border-gray-200" onClick={(e) => e.stopPropagation()}>
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
                 <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">Actions Client</h3>

@@ -41,7 +41,7 @@ export default function OrderActionsDropdown({ orderId }: { orderId: string }) {
       {isOpen && (
         <>
           {/* Desktop Dropdown */}
-          <div className="hidden sm:block absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 py-1 overflow-hidden">
+          <div className="hidden lg:block absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 py-1 overflow-hidden">
             <Link 
               href="/orders/new" 
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
@@ -88,7 +88,7 @@ export default function OrderActionsDropdown({ orderId }: { orderId: string }) {
 
           {/* Mobile Bottom Sheet Portal */}
           {typeof document !== 'undefined' && createPortal(
-            <div className="sm:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)}>
+            <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)}>
               <div className="bg-white w-full rounded-t-2xl p-4 pb-8 animate-slide-up shadow-2xl border-t border-gray-200" onClick={(e) => e.stopPropagation()}>
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
                 <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">Actions Commande</h3>
