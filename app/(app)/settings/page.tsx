@@ -8,7 +8,8 @@ import PhoneInput from "@/app/components/PhoneInput";
 import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings";
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
-import { createFedaPayCheckoutSession } from "@/app/actions/fedapay";
+import { createPayTechCheckoutSession } from "@/app/actions/paytech";
+import ConfirmDialog from "@/app/components/ConfirmDialog";
 
 type Tab = "profil" | "abonnement" | "preferences" | "securite";
 
@@ -34,6 +35,9 @@ function SettingsContent() {
   const [subscription, setSubscription] = useState<{plan: string, isActive: boolean, endDate?: string}>({ plan: 'free', isActive: false });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [isMobileMoneyLoading, setIsMobileMoneyLoading] = useState(false);
+  
+  const [isPayTechConfirmOpen, setIsPayTechConfirmOpen] = useState(false);
+  const [payTechError, setPayTechError] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -365,17 +369,15 @@ function SettingsContent() {
                     <div className="space-y-3">
                       <p className="text-sm text-gray-600 font-medium mb-1">Choisissez votre moyen de paiement :</p>
                       
-                      {/* Bouton FedaPay Mobile Money */}
+                      {/* Bouton PayTech Mobile Money */}
                       <button 
-                        onClick={async () => {
-                          setIsMobileMoneyLoading(true);
-                          await createFedaPayCheckoutSession();
-                        }}
+                        type="button"
+                        onClick={() => setIsPayTechConfirmOpen(true)}
                         disabled={isMobileMoneyLoading || isStripeLoading}
-                        className="w-full py-2.5 px-4 bg-[#1b4bff] text-white font-medium rounded-lg hover:bg-[#1b4bff]/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
+                        className="w-full py-2.5 px-4 bg-[#00a650] text-white font-medium rounded-lg hover:bg-[#00a650]/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                       >
                         {isMobileMoneyLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                        S'abonner par Mobile Money
+                        S'abonner via PayTech (Wave, Orange, Free)
                       </button>
 
                       {/* Bouton Stripe (Carte Bancaire) */}
@@ -549,6 +551,42 @@ function SettingsContent() {
             </div>
           </div>
         </div>,
+        document.body
+      )}
+
+      {/* PayTech Confirmation Modal */}
+      {mounted && createPortal(
+        <>
+          <ConfirmDialog 
+            isOpen={isPayTechConfirmOpen}
+            title="Confirmation d'abonnement"
+            message="Voulez-vous procéder au paiement de 5 000 FCFA via PayTech pour activer votre abonnement PRO ?"
+            confirmText="Oui, procéder au paiement"
+            cancelText="Non, annuler"
+            onConfirm={async () => {
+              setIsPayTechConfirmOpen(false);
+              setIsMobileMoneyLoading(true);
+              try {
+                await createPayTechCheckoutSession();
+              } catch (error: any) {
+                setPayTechError(error.message);
+                setIsMobileMoneyLoading(false);
+              }
+            }}
+            onCancel={() => setIsPayTechConfirmOpen(false)}
+          />
+
+          <ConfirmDialog
+            isOpen={!!payTechError}
+            title="Erreur de paiement"
+            message={payTechError || ""}
+            confirmText="OK"
+            cancelText="Fermer"
+            type="danger"
+            onConfirm={() => setPayTechError(null)}
+            onCancel={() => setPayTechError(null)}
+          />
+        </>,
         document.body
       )}
 
