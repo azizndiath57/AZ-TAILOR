@@ -13,7 +13,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="bg-gray-50 text-gray-900 min-h-screen flex flex-col md:flex-row overflow-x-hidden print:min-h-0 print:bg-white">
       {/* Mobile Top App Bar */}
       <header className="md:hidden flex justify-between items-center px-4 py-4 w-full bg-white border-b border-gray-200 sticky top-0 z-40 print:hidden">
-        <div className="flex items-center gap-2 bg-gray-900 text-white px-3 py-1.5 rounded-md">
+        <div className="flex items-center gap-2 bg-gray-900 text-[#D4AF37] px-3 py-1.5 rounded-md">
           <span aria-hidden="true" className="material-symbols-outlined text-[18px]">architecture</span>
           <span className="font-bold tracking-tight text-sm">AZ-TAILOR</span>
         </div>
@@ -23,7 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {/* Desktop Navigation Drawer */}
       <nav className="hidden md:flex flex-col gap-2 py-6 h-screen w-64 fixed left-0 top-0 bg-white border-r border-gray-200 z-40 print:hidden">
         <div className="px-6 mb-8">
-          <div className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg w-full justify-center">
+          <div className="flex items-center gap-2 bg-gray-900 text-[#D4AF37] px-4 py-2.5 rounded-lg w-full justify-center">
             <span aria-hidden="true" className="material-symbols-outlined text-2xl">architecture</span>
             <h1 className="font-bold text-lg tracking-tight">AZ-TAILOR</h1>
           </div>
