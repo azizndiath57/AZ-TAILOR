@@ -40,7 +40,7 @@ export async function createPayTechCheckoutSession() {
       currency: "XOF",
       ref_command: orderId,
       command_name: "Abonnement",
-      env: "test",
+      env: process.env.PAYTECH_ENV || "live",
       success_url: `${siteUrl}/settings?success=true`,
       ipn_url: `${siteUrl}/api/webhooks/paytech`,
       cancel_url: `${siteUrl}/settings?canceled=true`
