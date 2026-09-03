@@ -4,19 +4,20 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
 export async function createPayTechCheckoutSession() {
-  const supabase = createClient();
-  const { data: { user } } = await (await supabase).auth.getUser();
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error("Utilisateur non connecté");
-  }
+    if (!user) {
+      return { error: "Utilisateur non connecté" };
+    }
 
-  const apiKey = process.env.PAYTECH_API_KEY;
-  const apiSecret = process.env.PAYTECH_API_SECRET;
-  
-  if (!apiKey || !apiSecret) {
-    throw new Error("Clés API PayTech manquantes.");
-  }
+    const apiKey = process.env.PAYTECH_API_KEY;
+    const apiSecret = process.env.PAYTECH_API_SECRET;
+    
+    if (!apiKey || !apiSecret) {
+      return { error: "Clés API PayTech manquantes sur le serveur." };
+    }
 
   const orderId = `order_${Date.now()}_${user.id.substring(0, 5)}`;
   const amount = 5000; // Montant de l'abonnement
@@ -52,11 +53,14 @@ export async function createPayTechCheckoutSession() {
     })
   });
 
-  const data = await response.json();
-  
-  if (data.success === 1) {
-    redirect(data.redirect_url);
-  } else {
-    throw new Error(`Erreur PayTech: ${JSON.stringify(data)}`);
+    const data = await response.json();
+    
+    if (data.success === 1) {
+      return { url: data.redirect_url };
+    } else {
+      return { error: `Erreur PayTech: ${data.message || JSON.stringify(data)}` };
+    }
+  } catch (err: any) {
+    return { error: err.message || "Une erreur est survenue" };
   }
 }

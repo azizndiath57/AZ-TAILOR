@@ -357,7 +357,18 @@ function SettingsContent() {
                     <button 
                       onClick={async () => {
                         setIsStripeLoading(true);
-                        await createCustomerPortalSession();
+                        try {
+                          const res = await createCustomerPortalSession();
+                          if (res?.error) {
+                            setPayTechError(res.error);
+                            setIsStripeLoading(false);
+                          } else if (res?.url) {
+                            window.location.href = res.url;
+                          }
+                        } catch (err: any) {
+                          setPayTechError(err.message);
+                          setIsStripeLoading(false);
+                        }
                       }}
                       disabled={isStripeLoading}
                       className="w-full py-2.5 px-4 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
@@ -384,7 +395,18 @@ function SettingsContent() {
                       <button 
                         onClick={async () => {
                           setIsStripeLoading(true);
-                          await createCheckoutSession();
+                          try {
+                            const res = await createCheckoutSession();
+                            if (res?.error) {
+                              setPayTechError(res.error);
+                              setIsStripeLoading(false);
+                            } else if (res?.url) {
+                              window.location.href = res.url;
+                            }
+                          } catch (err: any) {
+                            setPayTechError(err.message);
+                            setIsStripeLoading(false);
+                          }
                         }}
                         disabled={isStripeLoading || isMobileMoneyLoading}
                         className="w-full py-2.5 px-4 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
@@ -567,7 +589,13 @@ function SettingsContent() {
               setIsPayTechConfirmOpen(false);
               setIsMobileMoneyLoading(true);
               try {
-                await createPayTechCheckoutSession();
+                const res = await createPayTechCheckoutSession();
+                if (res?.error) {
+                  setPayTechError(res.error);
+                  setIsMobileMoneyLoading(false);
+                } else if (res?.url) {
+                  window.location.href = res.url;
+                }
               } catch (error: any) {
                 setPayTechError(error.message);
                 setIsMobileMoneyLoading(false);
