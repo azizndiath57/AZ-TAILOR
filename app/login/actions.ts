@@ -8,14 +8,18 @@ export async function login(formData: FormData) {
   const supabase = await createClient()
   
   const data = {
-    email: (formData.get('email') as string).trim(),
+    email: (formData.get('email') as string).trim().toLowerCase(),
     password: formData.get('password') as string,
   }
 
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`)
+    let errorMessage = error.message;
+    if (errorMessage === "Invalid login credentials") {
+      errorMessage = "Email ou mot de passe incorrect (ou compte non validé).";
+    }
+    redirect(`/login?error=${encodeURIComponent(errorMessage)}`)
   }
 
   revalidatePath('/', 'layout')
@@ -27,7 +31,7 @@ import { headers } from 'next/headers'
 export async function signup(formData: FormData) {
   const supabase = await createClient()
 
-  const email = (formData.get('email') as string).trim();
+  const email = (formData.get('email') as string).trim().toLowerCase();
   const password = formData.get('password') as string;
   const confirmPassword = formData.get('confirmPassword') as string;
   const firstName = (formData.get('firstName') as string).trim();
