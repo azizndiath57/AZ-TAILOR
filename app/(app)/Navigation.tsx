@@ -17,7 +17,7 @@ export default function Navigation({ mobile = false }: { mobile?: boolean }) {
   if (mobile) {
     return (
       <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-white border-t border-gray-200 shadow-sm print:hidden">
-        {navItems.slice(0, 4).map((item) => {
+        {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
