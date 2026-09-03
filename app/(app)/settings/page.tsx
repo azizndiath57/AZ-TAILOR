@@ -119,7 +119,7 @@ function SettingsContent() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -131,7 +131,7 @@ function SettingsContent() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         
         {/* Sidebar Nav (Settings specific) */}
-        <div className="md:col-span-4">
+        <div className="md:col-span-4 lg:col-span-3">
           <nav className="flex flex-col gap-1">
             <button 
               onClick={() => setActiveTab("profil")}
@@ -181,7 +181,7 @@ function SettingsContent() {
         </div>
 
         {/* Content Area */}
-        <div className="md:col-span-8 flex flex-col gap-6">
+        <div className="md:col-span-8 lg:col-span-7 flex flex-col gap-6">
           
           {activeTab === "profil" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">

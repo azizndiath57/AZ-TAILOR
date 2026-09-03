@@ -5,10 +5,11 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { OrderWithFinancials } from "@/lib/data-access/types";
 import Pagination from "@/app/components/Pagination";
+import CustomDatePicker from "@/app/components/CustomDatePicker";
 import OrderActionsDropdown from "../orders/OrderActionsDropdown";
 
 export default function FittingsClient({ orders }: { orders: OrderWithFinancials[] }) {
-  const [currentDate, setCurrentDate] = useState(new Date("2026-09-01T00:00:00"));
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const itemsPerPage = 20;
@@ -16,24 +17,15 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
   // Keep only active orders that might need a fitting (en_cours or en_attente)
   const allFittingOrders = orders
     .filter(o => o.status === "en_cours" || o.status === "en_attente")
+    .filter(o => {
+      if (!currentDate) return true;
+      const fittingDate = new Date(o.expectedDeliveryDate);
+      fittingDate.setDate(fittingDate.getDate() - 2);
+      return fittingDate.toDateString() === currentDate.toDateString();
+    })
     .sort((a, b) => new Date(a.expectedDeliveryDate).getTime() - new Date(b.expectedDeliveryDate).getTime());
 
   const paginatedFittings = allFittingOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  const prevMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() - 1);
-    setCurrentDate(newDate);
-  };
-
-  const nextMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() + 1);
-    setCurrentDate(newDate);
-  };
-
-  const monthName = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(currentDate);
-  const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -48,17 +40,12 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
       {/* Fittings Table */}
       <div className="bg-white border border-gray-200 rounded-xl">
         <div className="border-b border-gray-200 p-4 bg-gray-50/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <button onClick={prevMonth} className="p-2 text-gray-500 hover:bg-gray-50 transition-colors flex items-center justify-center">
-              <span aria-hidden="true" className="material-symbols-outlined text-[20px]">chevron_left</span>
-            </button>
-            <div className="flex items-center gap-2 px-4 py-2 border-l border-r border-gray-100 bg-gray-50/30">
-              <span aria-hidden="true" className="material-symbols-outlined text-gray-400 text-[18px]">calendar_today</span>
-              <span className="font-semibold text-sm text-gray-800 min-w-[120px] text-center">{capitalizedMonth}</span>
-            </div>
-            <button onClick={nextMonth} className="p-2 text-gray-500 hover:bg-gray-50 transition-colors flex items-center justify-center">
-              <span aria-hidden="true" className="material-symbols-outlined text-[20px]">chevron_right</span>
-            </button>
+          <div className="w-[300px]">
+            <CustomDatePicker 
+              placeholder="Filtrer par date d'essayage..."
+              onChange={(date) => setCurrentDate(date)}
+              defaultValue={currentDate || undefined}
+            />
           </div>
           <Link href="/orders/new" className="flex items-center gap-2 px-4 py-2 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm">
             <span aria-hidden="true" className="material-symbols-outlined text-[18px]">add</span>
