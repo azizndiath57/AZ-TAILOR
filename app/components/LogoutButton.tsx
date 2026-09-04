@@ -1,6 +1,6 @@
 'use client';
 
-import { signout } from "@/app/login/actions";
+import { signout } from "@/app/(auth)/connexion/actions";
 
 export default function LogoutButton() {
   return (

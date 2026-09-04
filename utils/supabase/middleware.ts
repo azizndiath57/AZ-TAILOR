@@ -67,7 +67,8 @@ export async function updateSession(request: NextRequest) {
   // However, Next.js routes are evaluated by their URL path.
   // The (app) group routes mapped to:
   // /, /dashboard, /orders, /clients, /settings
-  const isProtectedRoute = !request.nextUrl.pathname.startsWith('/login') && 
+  const isProtectedRoute = !request.nextUrl.pathname.startsWith('/connexion') && 
+                           !request.nextUrl.pathname.startsWith('/inscription') &&
                            !request.nextUrl.pathname.startsWith('/auth') &&
                            !request.nextUrl.pathname.startsWith('/_next') &&
                            !request.nextUrl.pathname.startsWith('/api') &&
@@ -80,11 +81,11 @@ export async function updateSession(request: NextRequest) {
   if (isProtectedRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/connexion'
     return NextResponse.redirect(url)
   }
   
-  if (request.nextUrl.pathname.startsWith('/login') && user) {
+  if ((request.nextUrl.pathname.startsWith('/connexion') || request.nextUrl.pathname.startsWith('/inscription')) && user) {
      // user is logged in, don't let them see the login page
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'

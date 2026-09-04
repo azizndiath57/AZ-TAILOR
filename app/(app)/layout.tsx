@@ -1,7 +1,7 @@
 import React from "react";
 import NotificationsDropdown from "@/app/components/NotificationsDropdown";
 import { createClient } from "@/utils/supabase/server";
-import { signout } from "@/app/login/actions";
+import { signout } from "@/app/(auth)/connexion/actions";
 import Navigation from "./Navigation"; // We'll create this
 import LogoutButton from "@/app/components/LogoutButton";
 
