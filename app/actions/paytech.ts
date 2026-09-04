@@ -25,27 +25,34 @@ export async function createPayTechCheckoutSession() {
   
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
   
-  // Requête vers PayTech
-  const response = await fetch('https://paytech.sn/api/payment/request-payment', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'API_KEY': apiKey,
-      'API_SECRET': apiSecret
-    },
-    body: JSON.stringify({
+    // PayTech n'accepte que 'prod' ou 'test' pour l'environnement
+    const paytechEnv = (process.env.PAYTECH_ENV || process.env.NODE_ENV) === "production" ? "prod" : "test";
+    
+    // Si l'utilisateur a mis "live" dans son .env par erreur, on force à "prod"
+    const finalEnv = (process.env.PAYTECH_ENV === "live" || process.env.PAYTECH_ENV === "prod") ? "prod" : "test";
+
+    const bodyData = {
       item_name: "Abonnement PRO AZ-TAILOR",
-      item_price: amount.toString(),
+      item_price: amount,
       currency: "XOF",
       ref_command: orderId,
       command_name: "Abonnement",
-      env: process.env.PAYTECH_ENV || "live",
+      env: finalEnv,
       success_url: `${siteUrl}/settings?success=true`,
       ipn_url: `${siteUrl}/api/webhooks/paytech`,
       cancel_url: `${siteUrl}/settings?canceled=true`
-    })
-  });
+    };
+
+    const response = await fetch('https://paytech.sn/api/payment/request-payment', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'API_KEY': apiKey,
+        'API_SECRET': apiSecret
+      },
+      body: JSON.stringify(bodyData)
+    });
 
     const data = await response.json();
     
