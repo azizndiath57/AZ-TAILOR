@@ -79,7 +79,7 @@ export default async function InscriptionPage({
                 type="text"
                 required
                 autoComplete="new-password"
-                style={{ WebkitTextSecurity: "disc" }}
+                style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
               />
             </div>
@@ -97,7 +97,7 @@ export default async function InscriptionPage({
                 type="text"
                 required
                 autoComplete="new-password"
-                style={{ WebkitTextSecurity: "disc" }}
+                style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
               />
             </div>
