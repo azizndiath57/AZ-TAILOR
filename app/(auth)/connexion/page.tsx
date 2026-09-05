@@ -8,7 +8,7 @@ export default function ConnexionPage() {
   const [state, formAction, isPending] = useActionState(login, null);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-paytech-theme p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Header */}
         <div className="p-8 pb-4 text-center bg-midnight/5 border-b border-gray-100">

@@ -9,38 +9,33 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section 
-      className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center object-cover" 
-      style={{
-        backgroundImage: 'linear-gradient(rgba(252, 249, 248, 0.85), rgba(252, 249, 248, 0.85)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1PZZ77xeEoPjc8isBgGX0moiMB4kgU8J-P1v4tNbA-mJlmHrncKp60GAfRynAi_x06zKa68e6xBtmCc7nnHTtoiNbbAwEJPHmjfeS1_vQQ9p-xxaZFkUUxRy3qY9GRVdBo9ifh3-Uyn0egXsYghr8Gv-gJLwP7yjJsde6M1x7_KGAAjcESlrd_kc7zot8FZI6HeLPrPHMahdQwrextMPgBra9AzyLTrr0T0S2gaOeJdEak7lgIh7UsWcxmopyR5UxUYo")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 20%'
-      }}
+      className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop w-full mx-auto text-center object-cover bg-paytech-theme"
     >
       <FadeInUp delay={100}>
-        <div className="max-w-3xl mx-auto space-y-stack-md">
-          <h1 className="font-display text-4xl md:text-6xl text-primary leading-tight tracking-tight">
+        <div className="max-w-3xl mx-auto space-y-stack-md relative z-10">
+          <h1 className="font-display text-4xl md:text-6xl text-white leading-tight tracking-tight">
             Oubliez les cahiers perdus.<br className="mb-4 md:mb-6" />
-            <span className="text-secondary block mt-2 md:mt-4">
+            <span className="text-teal-300 block mt-2 md:mt-4">
               Gérez votre atelier avec précision.
             </span>
           </h1>
           
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+          <p className="font-body-lg text-body-lg text-gray-200 max-w-2xl mx-auto">
             AZ-TAILORS centralise vos mesures, vos tissus et vos paiements en un seul endroit. 
             Conçu par et pour les artisans de l&apos;élégance.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <MagneticButton
-              href="/login"
-              className="w-full sm:w-auto bg-secondary text-on-secondary font-label-md text-label-md px-8 py-4 rounded-full hover:bg-on-secondary-container transition-colors shadow-md"
+              href="/connexion"
+              className="w-full sm:w-auto bg-brand text-white font-label-md text-label-md px-8 py-4 rounded-full hover:bg-brand/90 transition-colors shadow-md"
             >
               Commencer gratuitement
             </MagneticButton>
             
             <Link
-              href="/login"
-              className="w-full sm:w-auto border-[1.5px] border-primary text-primary font-label-md text-label-md px-8 py-4 rounded-full hover:bg-surface-container-low transition-colors"
+              href="/connexion"
+              className="w-full sm:w-auto border-[1.5px] border-white text-white font-label-md text-label-md px-8 py-4 rounded-full hover:bg-white/10 transition-colors"
             >
               Voir la démo
             </Link>
