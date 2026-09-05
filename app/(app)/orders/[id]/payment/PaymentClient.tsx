@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { OrderWithFinancials } from "@/lib/data-access/types";
 import { PaymentMethod, PAYMENT_METHODS } from "@/lib/constants/payment-methods";
 import SignaturePad from "@/app/components/SignaturePad";
-import { addPaymentAction } from "../actions";
+import { addPaymentAction } from "../../actions";
 
 export default function PaymentClient({ order }: { order: OrderWithFinancials }) {
   const router = useRouter();
