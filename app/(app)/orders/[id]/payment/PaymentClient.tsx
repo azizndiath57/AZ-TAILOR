@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { OrderWithFinancials } from "@/lib/data-access/types";
 import { PaymentMethod, PAYMENT_METHODS } from "@/lib/constants/payment-methods";
 import SignaturePad from "@/app/components/SignaturePad";
+import { addPaymentAction } from "../actions";
 
 export default function PaymentClient({ order }: { order: OrderWithFinancials }) {
   const router = useRouter();
@@ -21,19 +22,18 @@ export default function PaymentClient({ order }: { order: OrderWithFinancials })
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulating API call to process payment
-    setTimeout(() => {
-      // Logic to actually add payment would go here, maybe a server action
-      console.log("Processing payment...", {
-        orderId: order.id,
-        amount: Number(amount),
-        method: selectedMethod,
+    try {
+      await addPaymentAction(
+        order.id, 
+        Number(amount), 
+        selectedMethod, 
         signature
-      });
-      setIsSubmitting(false);
-      // Redirect to invoice after successful payment
+      );
       router.push(`/orders/${order.id}/invoice`);
-    }, 800);
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {

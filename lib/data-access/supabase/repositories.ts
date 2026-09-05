@@ -143,6 +143,7 @@ export const SupabaseOrdersRepository = {
         totalPrice,
         status: o.status as any,
         expectedDeliveryDate: new Date(o.expected_delivery_date),
+        clientSignature: o.client_signature || null,
         createdAt: new Date(o.created_at),
         client: {
           id: o.clients.id,
@@ -189,6 +190,7 @@ export const SupabaseOrdersRepository = {
       totalPrice,
       status: o.status as any,
       expectedDeliveryDate: new Date(o.expected_delivery_date),
+      clientSignature: o.client_signature || null,
       createdAt: new Date(o.created_at),
       client: {
         id: o.clients.id,
@@ -309,6 +311,22 @@ export const SupabaseOrdersRepository = {
           method: 'cash'
         });
       }
+    }
+  },
+
+  async addPayment(orderId: string, amount: number, method: string, signature?: string | null) {
+    const supabase = await createClient();
+    const user_id = await getUserId();
+    
+    await supabase.from('payments').insert({
+      owner_id: user_id,
+      order_id: orderId,
+      amount,
+      method
+    });
+
+    if (signature) {
+      await supabase.from('orders').update({ client_signature: signature }).eq('id', orderId);
     }
   }
 };

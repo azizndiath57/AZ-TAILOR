@@ -128,3 +128,17 @@ export async function editOrderAction(formData: FormData) {
     return { error: err.message || "Erreur interne" };
   }
 }
+
+export async function addPaymentAction(orderId: string, amount: number, method: string, signature?: string | null) {
+  try {
+    await OrdersRepository.addPayment(orderId, amount, method, signature);
+    revalidatePath("/orders");
+    revalidatePath(`/orders/${orderId}`);
+    revalidatePath(`/orders/${orderId}/invoice`);
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (err: any) {
+    console.error("ERROR IN ADD PAYMENT ACTION:", err);
+    return { error: err.message || "Erreur interne" };
+  }
+}

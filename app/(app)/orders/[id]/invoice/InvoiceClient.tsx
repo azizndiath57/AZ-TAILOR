@@ -200,6 +200,16 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
           </div>
         </div>
 
+        {/* Signature */}
+        {order.clientSignature && (
+          <div className="flex justify-start mb-16 mt-[-40px]">
+            <div className="flex flex-col items-start bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Signature du client</span>
+              <img src={order.clientSignature} alt="Signature" className="h-20 object-contain" />
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="border-t border-gray-100 pt-8 text-center flex flex-col gap-3">
           <div className="w-12 h-1 bg-gray-200 mx-auto rounded-full mb-2"></div>

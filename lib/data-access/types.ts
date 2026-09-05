@@ -43,6 +43,7 @@ export interface Order {
   status: OrderStatus;
   expectedDeliveryDate: Date;
   notes?: string | null;
+  clientSignature?: string | null;
   createdAt: Date;
 }
 
