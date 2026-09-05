@@ -9,8 +9,10 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section 
-      className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop w-full mx-auto text-center object-cover bg-paytech-theme"
+      className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop w-full mx-auto text-center object-cover bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/hero-banner.jpg')" }}
     >
+      <div className="absolute inset-0 bg-black/70 z-0"></div>
       <FadeInUp delay={100}>
         <div className="max-w-3xl mx-auto space-y-stack-md relative z-10">
           <h1 className="font-display text-4xl md:text-6xl text-white leading-tight tracking-tight">

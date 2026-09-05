@@ -12,12 +12,22 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-b border-outline-variant/10 shadow-md">
       <div className="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <Link href="/" className="flex items-center gap-4 group">
-          {/* Cannot use next/image with external googleusercontent easily without configuring next.config.ts domains, so using standard img for now as requested */}
-          <img
-            alt="AZ-TAILORS Logo"
-            className="h-8 w-auto group-hover:rotate-12 transition-transform duration-300"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPCefO8PyzbTxUOQCr0tC4ALkSNYcKjW5bsq10GxZaKRnmr3e36tn8wWUxemYbZMwhyum7XPZcqT3bicCRbt3luOiXBScNont8ngmdNV2_HdWs2RgTkPEzJRg5EWPMCfcLNqkfE_-En77c7fnnro3RymBfGKgIUIkx1BzYr7xQYhAPIxMDobqKEq-FglRt9aVqbmeC0_17N2YFxn_Mwmruv7dJ88V1Ri8s8DGVxXNI3TDjTruC6Br7Lw"
-          />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="1.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="h-8 w-8 text-primary group-hover:rotate-12 transition-transform duration-300"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="9.5" cy="9.5" r="1.5" fill="currentColor" />
+            <circle cx="14.5" cy="9.5" r="1.5" fill="currentColor" />
+            <circle cx="9.5" cy="14.5" r="1.5" fill="currentColor" />
+            <circle cx="14.5" cy="14.5" r="1.5" fill="currentColor" />
+          </svg>
           <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">
             AZ-TAILORS
           </span>
