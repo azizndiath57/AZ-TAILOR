@@ -11,7 +11,7 @@ import { addPaymentAction } from "../../actions";
 export default function PaymentClient({ order }: { order: OrderWithFinancials }) {
   const router = useRouter();
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>("cash");
-  const [amount, setAmount] = useState<string>("");
+  const [amount, setAmount] = useState<string>(order.balanceDue > 0 ? order.balanceDue.toString() : "");
   const [signature, setSignature] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [signatureKey, setSignatureKey] = useState(0);
