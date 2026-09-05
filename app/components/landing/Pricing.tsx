@@ -34,7 +34,7 @@ export default function Pricing() {
               <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> Gestion des commandes basique</li>
               <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> Factures standards</li>
             </ul>
-            <Link href="/login" className="block text-center w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors">
+            <Link href="/connexion" className="block text-center w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors">
               Commencer
             </Link>
           </FadeInUp>
@@ -55,7 +55,7 @@ export default function Pricing() {
               <li className="flex items-center gap-3 font-body-sm"><span className="material-symbols-outlined text-secondary text-xl">check</span> Relances WhatsApp Auto</li>
               <li className="flex items-center gap-3 font-body-sm"><span className="material-symbols-outlined text-secondary text-xl">check</span> Statistiques avancées</li>
             </ul>
-            <MagneticButton href="/login" className="w-full bg-secondary text-on-secondary py-3 rounded-full font-label-md hover:bg-on-secondary-container transition-colors shadow-md">
+            <MagneticButton href="/connexion" className="w-full bg-secondary text-on-secondary py-3 rounded-full font-label-md hover:bg-on-secondary-container transition-colors shadow-md">
               Essai gratuit 14 jours
             </MagneticButton>
           </FadeInUp>

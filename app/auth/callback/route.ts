@@ -26,5 +26,5 @@ export async function GET(request: Request) {
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=L'authentification%20a%20échoué.`)
+  return NextResponse.redirect(`${origin}/connexion?error=L'authentification%20a%20échoué.`)
 }

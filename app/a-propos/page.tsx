@@ -67,7 +67,7 @@ export default function AboutPage() {
 
           <div className="pt-12 mt-12 border-t border-outline-variant/20 flex flex-col items-center gap-6">
             <MagneticButton
-              href="/login"
+              href="/connexion"
               className="bg-secondary text-on-secondary font-label-md text-label-md px-8 py-4 rounded-full hover:bg-on-secondary-container transition-colors shadow-md"
             >
               Commencer gratuitement

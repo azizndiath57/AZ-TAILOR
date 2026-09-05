@@ -55,13 +55,13 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <Link
             className="hidden md:inline-flex font-label-md text-label-md text-primary hover:bg-surface-container-low px-4 py-2 rounded-full transition-all duration-300"
-            href="/login"
+            href="/connexion"
           >
             Se connecter
           </Link>
           <div className="hidden md:block">
             <MagneticButton
-              href="/login"
+              href="/connexion"
               className="bg-secondary text-on-secondary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-on-secondary-container transition-colors shadow-sm"
             >
               Commencer gratuitement
@@ -89,8 +89,8 @@ export default function Navbar() {
           <Link href="#ateliers" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">Ateliers</Link>
           <Link href="#blog" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">Blog</Link>
           <hr className="border-outline-variant/20 my-2" />
-          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold text-center">Se connecter</Link>
-          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-on-secondary text-center font-bold py-3 rounded-full mt-2">Commencer gratuitement</Link>
+          <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold text-center">Se connecter</Link>
+          <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-on-secondary text-center font-bold py-3 rounded-full mt-2">Commencer gratuitement</Link>
         </div>
       )}
     </nav>
