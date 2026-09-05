@@ -4,10 +4,25 @@ import { createClient } from "@/utils/supabase/server";
 import { signout } from "@/app/(auth)/connexion/actions";
 import Navigation from "./Navigation"; // We'll create this
 import LogoutButton from "@/app/components/LogoutButton";
+import SubscriptionGuard from "@/app/components/SubscriptionGuard";
+import { getSubscriptionStatus } from "@/app/actions/subscription";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const subscriptionStatus = await getSubscriptionStatus();
+
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    if (profile?.role === 'admin') {
+      isAdmin = true;
+    }
+  }
 
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen flex flex-col md:flex-row overflow-x-hidden print:min-h-0 print:bg-white">
@@ -37,7 +52,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </div>
 
         <div className="flex-1 space-y-1">
-          <Navigation />
+          <Navigation isAdmin={isAdmin} />
         </div>
 
         {/* Profil atelier et Notifications */}
@@ -63,12 +78,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
       {/* Main Content Area */}
       <main className="flex-1 md:ml-64 p-6 md:p-10 bg-gray-50 pb-24 md:pb-12 min-h-screen print:ml-0 print:p-0 print:min-h-0 print:bg-white">
-        {children}
+        <SubscriptionGuard status={subscriptionStatus}>
+          {children}
+        </SubscriptionGuard>
       </main>
 
       {/* Mobile Bottom Navigation */}
       {/* Mobile Bottom Navigation (Handled in Navigation.tsx for pathname) */}
-      <Navigation mobile />
+      <Navigation mobile isAdmin={isAdmin} />
     </div>
   );
 }

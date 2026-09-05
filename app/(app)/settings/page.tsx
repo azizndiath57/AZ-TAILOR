@@ -16,26 +16,26 @@ type Tab = "profil" | "abonnement" | "preferences" | "securite";
 function SettingsContent() {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Tab) || "profil";
-  
+
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [passwordUpdateStatus, setPasswordUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
-  
+
   const [preferencesUpdateStatus, setPreferencesUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [profileUpdateStatus, setProfileUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [settings, setSettings] = useState<any>({ workshopName: "AZ-TAILOR", address: "Dakar, Sénégal", phone: "+221 77 123 45 67" });
-  
-  const [subscription, setSubscription] = useState<{plan: string, isActive: boolean, endDate?: string}>({ plan: 'free', isActive: false });
+
+  const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: false, isTrialExpired: false, trialDaysLeft: 0, endDate: null });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [isMobileMoneyLoading, setIsMobileMoneyLoading] = useState(false);
-  
+
   const [isPayTechConfirmOpen, setIsPayTechConfirmOpen] = useState(false);
   const [payTechError, setPayTechError] = useState<string | null>(null);
 
@@ -74,15 +74,15 @@ function SettingsContent() {
   const handleUpdatePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPassword || !newPassword) return;
-    
+
     setPasswordUpdateStatus("loading");
-    
+
     // Simulate API call
     setTimeout(() => {
       setPasswordUpdateStatus("success");
       setCurrentPassword("");
       setNewPassword("");
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => setPasswordUpdateStatus("idle"), 3000);
     }, 1000);
@@ -91,7 +91,7 @@ function SettingsContent() {
   const handleUpdatePreferences = (e: React.FormEvent) => {
     e.preventDefault();
     setPreferencesUpdateStatus("loading");
-    
+
     // Simulate API call
     setTimeout(() => {
       setPreferencesUpdateStatus("success");
@@ -102,7 +102,7 @@ function SettingsContent() {
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setProfileUpdateStatus("loading");
-    
+
     const formData = new FormData(e.target as HTMLFormElement);
     const data = {
       workshopName: formData.get("workshopName"),
@@ -111,9 +111,9 @@ function SettingsContent() {
       phone: formData.get("phone"),
       logoUrl: logoUrl,
     };
-    
+
     await updateSettingsAction(data);
-    
+
     setProfileUpdateStatus("success");
     setTimeout(() => setProfileUpdateStatus("idle"), 3000);
   };
@@ -129,50 +129,46 @@ function SettingsContent() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        
+
         {/* Sidebar Nav (Settings specific) */}
         <div className="md:col-span-4 lg:col-span-3 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
           <nav className="flex flex-row md:flex-col gap-2 min-w-max md:min-w-0">
-            <button 
+            <button
               onClick={() => setActiveTab("profil")}
-              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
-                activeTab === "profil" 
-                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${activeTab === "profil"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
-              }`}
+                }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">storefront</span>
               Profil de l'Atelier
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab("abonnement")}
-              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
-                activeTab === "abonnement" 
-                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${activeTab === "abonnement"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
-              }`}
+                }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">workspace_premium</span>
               Abonnement
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab("preferences")}
-              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
-                activeTab === "preferences" 
-                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${activeTab === "preferences"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
-              }`}
+                }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">tune</span>
               Préférences
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab("securite")}
-              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${
-                activeTab === "securite" 
-                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand" 
+              className={`flex items-center gap-2 md:gap-3 px-4 py-2.5 md:py-3 font-medium rounded-lg transition-colors text-left ${activeTab === "securite"
+                  ? "text-brand bg-brand-light/50 md:bg-brand-light md:border-l-4 md:border-transparent md:!border-brand"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 md:border-l-4 md:border-transparent"
-              }`}
+                }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">security</span>
               Sécurité
@@ -182,22 +178,22 @@ function SettingsContent() {
 
         {/* Content Area */}
         <div className="md:col-span-8 lg:col-span-7 flex flex-col gap-6">
-          
+
           {activeTab === "profil" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Informations de l'Atelier</h3>
-              
+
               <form onSubmit={handleUpdateProfile} className="space-y-6">
                 {/* Logo / Image */}
                 <div className="flex items-center gap-6">
-                  <input 
-                    type="file" 
-                    accept="image/png, image/jpeg, image/gif" 
-                    ref={fileInputRef} 
-                    onChange={handleFileChange} 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    accept="image/png, image/jpeg, image/gif"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
                   />
-                  <div 
+                  <div
                     onClick={handleLogoClick}
                     className="w-24 h-24 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer overflow-hidden hover:bg-gray-200 transition-colors relative group"
                   >
@@ -214,16 +210,16 @@ function SettingsContent() {
                   </div>
                   <div>
                     <div className="flex flex-wrap gap-2 mb-2">
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={handleLogoClick}
                         className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
                       >
                         Changer le logo
                       </button>
                       {logoUrl && (
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={handleRemoveLogo}
                           className="px-4 py-2 bg-red-50 border border-red-100 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors shadow-sm"
                         >
@@ -238,32 +234,32 @@ function SettingsContent() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'atelier</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="workshopName"
                       defaultValue={settings.workshopName}
-                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
+                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                     />
                   </div>
-                  
+
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Slogan</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="slogan"
                       placeholder="Ex: L'élégance sur-mesure"
                       defaultValue={settings.slogan || ""}
-                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
+                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                     />
                   </div>
-                  
+
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="address"
                       defaultValue={settings.address}
-                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
+                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                     />
                   </div>
 
@@ -271,10 +267,10 @@ function SettingsContent() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone Principal</label>
                     <PhoneInput defaultValue={settings.phone} name="phone" />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Devise par défaut</label>
-                    <CustomSelect 
+                    <CustomSelect
                       defaultValue="XOF"
                       options={[
                         { value: "XOF", label: "Franc CFA (XOF)", icon: "payments" },
@@ -292,8 +288,8 @@ function SettingsContent() {
                       Profil mis à jour !
                     </span>
                   )}
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={profileUpdateStatus === "loading"}
                     className="flex items-center gap-2 px-6 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -308,7 +304,7 @@ function SettingsContent() {
           {activeTab === "abonnement" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Mon Abonnement</h3>
-              
+
               <div className="space-y-6">
                 <div className="p-6 rounded-xl border border-gray-200 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
@@ -320,14 +316,14 @@ function SettingsContent() {
                         {subscription.plan === 'pro' ? 'AZ-TAILOR Pro' : 'AZ-TAILOR Débutant'}
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
-                        {subscription.plan === 'pro' 
-                          ? 'Vous profitez de toutes les fonctionnalités.' 
+                        {subscription.plan === 'pro'
+                          ? 'Vous profitez de toutes les fonctionnalités.'
                           : 'Vous êtes limité à 20 clients.'}
                       </p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-gray-900">
-                        {subscription.plan === 'pro' ? '5 000' : '0'} <span className="text-sm text-gray-500 font-normal">FCFA / mois</span>
+                        {subscription.plan === 'pro' ? '4 000' : '0'} <span className="text-sm text-gray-500 font-normal">FCFA / mois</span>
                       </div>
                     </div>
                   </div>
@@ -354,7 +350,7 @@ function SettingsContent() {
                   </ul>
 
                   {subscription.plan === 'pro' ? (
-                    <button 
+                    <button
                       onClick={async () => {
                         setIsStripeLoading(true);
                         try {
@@ -379,9 +375,9 @@ function SettingsContent() {
                   ) : (
                     <div className="space-y-3">
                       <p className="text-sm text-gray-600 font-medium mb-1">Choisissez votre moyen de paiement :</p>
-                      
+
                       {/* Bouton PayTech Mobile Money */}
-                      <button 
+                      <button
                         type="button"
                         onClick={() => setIsPayTechConfirmOpen(true)}
                         disabled={isMobileMoneyLoading || isStripeLoading}
@@ -392,7 +388,7 @@ function SettingsContent() {
                       </button>
 
                       {/* Bouton Stripe (Carte Bancaire) */}
-                      <button 
+                      <button
                         onClick={async () => {
                           setIsStripeLoading(true);
                           try {
@@ -424,7 +420,7 @@ function SettingsContent() {
           {activeTab === "preferences" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Préférences</h3>
-              
+
               <form onSubmit={handleUpdatePreferences} className="space-y-6">
                 <div>
                   <h4 className="text-sm font-semibold text-gray-800 mb-3">Notifications</h4>
@@ -439,7 +435,7 @@ function SettingsContent() {
                     </label>
                   </div>
                 </div>
-                
+
                 <div className="pt-4 border-t border-gray-100">
                   <h4 className="text-sm font-semibold text-gray-800 mb-3">Thème</h4>
                   <div className="flex gap-4">
@@ -464,8 +460,8 @@ function SettingsContent() {
                       Préférences sauvegardées !
                     </span>
                   )}
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={preferencesUpdateStatus === "loading"}
                     className="flex items-center gap-2 px-6 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -480,36 +476,36 @@ function SettingsContent() {
           {activeTab === "securite" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Sécurité & Compte</h3>
-              
+
               <div className="space-y-6">
                 <div>
                   <h4 className="text-sm font-semibold text-gray-800 mb-3">Changer le mot de passe</h4>
                   <form onSubmit={handleUpdatePassword} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel</label>
-                      <input 
-                        type="password" 
+                      <input
+                        type="password"
                         required
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        placeholder="••••••••" 
-                        className="w-full md:w-2/3 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
+                        placeholder="••••••••"
+                        className="w-full md:w-2/3 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
-                      <input 
-                        type="password" 
+                      <input
+                        type="password"
                         required
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
-                        placeholder="••••••••" 
-                        className="w-full md:w-2/3 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
+                        placeholder="••••••••"
+                        className="w-full md:w-2/3 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                       />
                     </div>
                     <div className="flex items-center gap-4">
-                      <button 
-                        type="submit" 
+                      <button
+                        type="submit"
                         disabled={passwordUpdateStatus === "loading"}
                         className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -525,12 +521,12 @@ function SettingsContent() {
                     </div>
                   </form>
                 </div>
-                
+
                 <div className="pt-6 border-t border-gray-100">
                   <h4 className="text-sm font-semibold text-red-600 mb-3">Zone de danger</h4>
                   <p className="text-sm text-gray-500 mb-4">Une fois que vous supprimez votre compte, il n'y a pas de retour en arrière possible. Soyez certain de votre choix.</p>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => setIsDeleteAccountModalOpen(true)}
                     className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors"
                   >
@@ -579,10 +575,10 @@ function SettingsContent() {
       {/* PayTech Confirmation Modal */}
       {mounted && createPortal(
         <>
-          <ConfirmDialog 
+          <ConfirmDialog
             isOpen={isPayTechConfirmOpen}
             title="Confirmation d'abonnement"
-            message="Voulez-vous procéder au paiement de 5 000 FCFA via PayTech pour activer votre abonnement PRO ?"
+            message="Voulez-vous procéder au paiement de 4 000 FCFA via PayTech pour activer votre abonnement PRO ?"
             confirmText="Oui, procéder au paiement"
             cancelText="Non, annuler"
             onConfirm={async () => {

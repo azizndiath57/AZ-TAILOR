@@ -1,12 +1,11 @@
+"use client";
+
 import { signup } from "./actions";
 import Link from "next/link";
+import { useActionState } from "react";
 
-export default async function InscriptionPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string; success?: string }>;
-}) {
-  const { error, success } = await searchParams;
+export default function InscriptionPage() {
+  const [state, formAction, isPending] = useActionState(signup, null);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
@@ -24,7 +23,7 @@ export default async function InscriptionPage({
           </p>
         </div>
 
-        <form className="p-8" action={signup}>
+        <form className="p-8" action={formAction}>
           <div className="space-y-5">
             <div>
               <label
@@ -102,21 +101,22 @@ export default async function InscriptionPage({
               />
             </div>
 
-            {error && (
+            {state?.error && (
               <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg flex items-start gap-2">
                 <span className="material-symbols-outlined text-base shrink-0">
                   error
                 </span>
-                <span>{error}</span>
+                <span>{state.error}</span>
               </div>
             )}
 
             <div className="pt-2 flex flex-col gap-4">
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm"
+                disabled={isPending}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50"
               >
-                Créer mon compte
+                {isPending ? "Création..." : "Créer mon compte"}
               </button>
             </div>
           </div>

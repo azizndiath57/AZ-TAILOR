@@ -14,20 +14,20 @@ export async function createPayTechCheckoutSession() {
 
     const apiKey = process.env.PAYTECH_API_KEY;
     const apiSecret = process.env.PAYTECH_API_SECRET;
-    
+
     if (!apiKey || !apiSecret) {
       return { error: "Clés API PayTech manquantes sur le serveur." };
     }
 
-  // On intègre l'ID de l'utilisateur directement dans la référence pour l'IPN (format: timestamp__userid)
-  const orderId = `${Date.now()}__${user.id}`;
-  const amount = 5000; // Montant de l'abonnement
-  
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
-  
+    // On intègre l'ID de l'utilisateur directement dans la référence pour l'IPN (format: timestamp__userid)
+    const orderId = `${Date.now()}__${user.id}`;
+    const amount = 4000; // Montant de l'abonnement
+
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
+
     // PayTech n'accepte que 'prod' ou 'test' pour l'environnement
     const paytechEnv = (process.env.PAYTECH_ENV || process.env.NODE_ENV) === "production" ? "prod" : "test";
-    
+
     // Si l'utilisateur a mis "live" dans son .env par erreur, on force à "prod"
     const finalEnv = (process.env.PAYTECH_ENV === "live" || process.env.PAYTECH_ENV === "prod") ? "prod" : "test";
 
@@ -55,7 +55,7 @@ export async function createPayTechCheckoutSession() {
     });
 
     const data = await response.json();
-    
+
     if (data.success === 1) {
       return { url: data.redirect_url };
     } else {

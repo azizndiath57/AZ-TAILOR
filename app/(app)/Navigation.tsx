@@ -11,7 +11,7 @@ const navItems = [
   { href: "/settings", label: "Paramètres", icon: "settings" },
 ];
 
-export default function Navigation({ mobile = false }: { mobile?: boolean }) {
+export default function Navigation({ mobile = false, isAdmin = false }: { mobile?: boolean, isAdmin?: boolean }) {
   const pathname = usePathname();
 
   if (mobile) {
@@ -31,6 +31,14 @@ export default function Navigation({ mobile = false }: { mobile?: boolean }) {
             </Link>
           );
         })}
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className={`flex flex-col items-center justify-center p-2 rounded text-red-500`}
+          >
+            <span aria-hidden="true" className="material-symbols-outlined text-2xl">admin_panel_settings</span>
+          </Link>
+        )}
       </nav>
     );
   }
@@ -54,6 +62,15 @@ export default function Navigation({ mobile = false }: { mobile?: boolean }) {
           </Link>
         );
       })}
+      {isAdmin && (
+        <Link
+          href="/admin"
+          className="flex items-center gap-3 px-6 py-3 font-medium transition-colors border-l-4 border-transparent text-red-600 hover:bg-red-50"
+        >
+          <span aria-hidden="true" className="material-symbols-outlined text-xl">admin_panel_settings</span>
+          <span>Super Admin</span>
+        </Link>
+      )}
     </>
   );
 }

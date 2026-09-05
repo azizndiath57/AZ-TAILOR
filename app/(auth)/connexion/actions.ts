@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { normalizePhone, generateSyntheticEmail } from '@/lib/phone'
 
-export async function login(formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   const supabase = await createClient()
   
   const phone = formData.get('phone') as string;
@@ -14,7 +14,7 @@ export async function login(formData: FormData) {
   const normalizedPhone = normalizePhone(phone);
 
   if (!normalizedPhone) {
-    redirect(`/connexion?error=${encodeURIComponent("Numéro de téléphone invalide.")}`)
+    return { error: "Numéro de téléphone invalide." }
   }
 
   const email = generateSyntheticEmail(normalizedPhone);
@@ -31,7 +31,7 @@ export async function login(formData: FormData) {
     if (errorMessage === "Invalid login credentials") {
       errorMessage = "Numéro ou mot de passe incorrect.";
     }
-    redirect(`/connexion?error=${encodeURIComponent(errorMessage)}`)
+    return { error: errorMessage }
   }
 
   revalidatePath('/', 'layout')
