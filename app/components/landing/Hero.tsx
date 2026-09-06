@@ -16,9 +16,9 @@ export default function Hero() {
       <FadeInUp delay={100}>
         <div className="max-w-3xl mx-auto space-y-stack-md relative z-10">
           <h1 className="font-display text-4xl md:text-6xl text-white leading-tight tracking-tight">
-            Oubliez les cahiers perdus.<br className="mb-4 md:mb-6" />
+            Fàttel kaye yi.<br className="mb-4 md:mb-6" />
             <span className="text-teal-300 block mt-2 md:mt-4">
-              Gérez votre atelier avec précision.
+              Yoral sa atelye ni mu ware.
             </span>
           </h1>
           
