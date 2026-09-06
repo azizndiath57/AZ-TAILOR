@@ -98,10 +98,11 @@ export default function OrderFilters() {
   
   const currentStatus = searchParams.get("status") || "all";
   const currentPayment = searchParams.get("payment") || "all";
+  const currentSearch = searchParams.get("q") || "";
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === "all") {
+    if (value === "all" || value === "") {
       params.delete(key);
     } else {
       params.set(key, value);
@@ -110,8 +111,31 @@ export default function OrderFilters() {
     router.push(`/orders?${params.toString()}`);
   };
 
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSearch = (val: string) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(() => {
+      updateFilters("q", val);
+    }, 300);
+  };
+
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3">
+      <div className="relative w-full sm:w-64 shrink-0">
+        <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+          search
+        </span>
+        <input
+          type="text"
+          placeholder="Rechercher par prénom, nom, réf..."
+          defaultValue={currentSearch}
+          onChange={(e) => handleSearch(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 bg-white border border-gray-900 rounded-lg text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand transition-colors"
+        />
+      </div>
       <FilterDropdown 
         options={STATUS_OPTIONS}
         value={currentStatus}

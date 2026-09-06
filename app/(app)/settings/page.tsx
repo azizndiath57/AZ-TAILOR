@@ -9,6 +9,7 @@ import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings"
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
 import { createPayTechCheckoutSession } from "@/app/actions/paytech";
+import { updatePassword } from "@/app/(auth)/connexion/actions";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 
 type Tab = "profil" | "abonnement" | "preferences" | "securite";
@@ -71,21 +72,26 @@ function SettingsContent() {
     }
   };
 
-  const handleUpdatePassword = (e: React.FormEvent) => {
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPassword || !newPassword) return;
 
     setPasswordUpdateStatus("loading");
 
-    // Simulate API call
-    setTimeout(() => {
-      setPasswordUpdateStatus("success");
-      setCurrentPassword("");
-      setNewPassword("");
+    const res = await updatePassword(newPassword);
 
-      // Clear success message after 3 seconds
-      setTimeout(() => setPasswordUpdateStatus("idle"), 3000);
-    }, 1000);
+    if (res?.error) {
+      alert("Erreur: " + res.error);
+      setPasswordUpdateStatus("idle");
+      return;
+    }
+
+    setPasswordUpdateStatus("success");
+    setCurrentPassword("");
+    setNewPassword("");
+
+    // Clear success message after 3 seconds
+    setTimeout(() => setPasswordUpdateStatus("idle"), 3000);
   };
 
   const handleUpdatePreferences = (e: React.FormEvent) => {

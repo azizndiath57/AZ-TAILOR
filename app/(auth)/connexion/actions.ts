@@ -44,3 +44,18 @@ export async function signout() {
   revalidatePath('/', 'layout')
   redirect('/connexion')
 }
+
+export async function updatePassword(newPassword: string) {
+  console.log("UPDATE PASSWORD ACTION CALLED");
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase.auth.updateUser({ password: newPassword })
+  
+  if (error) {
+    console.error("Supabase update error:", error.message);
+    return { error: error.message }
+  }
+  
+  console.log("Password updated successfully for user:", data?.user?.id);
+  return { success: true }
+}

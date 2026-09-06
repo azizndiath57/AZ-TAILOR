@@ -37,10 +37,10 @@ export default function PrivacyPolicyPage() {
               
               <h3 className="font-bold text-lg mt-6 mb-2">Votre compte (données de l'atelier)</h3>
               <ul className="list-disc pl-5 space-y-1 mb-4">
-                <li>ABDOUL AZIZ NDIAYE</li>
-                <li>azizndiath57@gmail.com</li>
-                <li>+221778685084</li>
-                <li>AZ-TAILOR</li>
+                <li>Nom et prénom du gérant</li>
+                <li>Adresse e-mail</li>
+                <li>Numéro de téléphone</li>
+                <li>Nom de l'atelier</li>
                 <li>Mot de passe (chiffré)</li>
               </ul>
 
