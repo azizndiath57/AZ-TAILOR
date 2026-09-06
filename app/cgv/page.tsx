@@ -28,7 +28,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 1 — Objet</h2>
               <p>
-                Les présentes conditions régissent l'utilisation du service AZ-TAILOR, une application en ligne de gestion d'atelier de couture, éditée par AZ-TAILOR, entreprise individuel, Guédiawaye, Dakar.
+                Les présentes conditions régissent l'utilisation du service AZ-TAILOR, une application en ligne de gestion d'atelier de couture, éditée par AZ-TAILOR, entreprise individuelle, Guédiawaye, Dakar.
               </p>
               <p className="mt-4">
                 Créer un compte vaut acceptation de ces conditions.

@@ -49,7 +49,7 @@ export default function Footer() {
         
         <div className="pt-8 border-t border-tertiary-fixed-dim/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-tertiary-fixed-dim font-body-sm">
-            © {new Date().getFullYear()} AZ-TAILOR. Tous droits réservés.
+            © {new Date().getFullYear()} AZ-TAILOR (EI). Tous droits réservés.
           </p>
           <div className="flex gap-4">
             <a href="https://www.facebook.com/abdu.qw/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-tertiary-fixed-dim/10 flex items-center justify-center hover:bg-secondary transition-colors text-white">
