@@ -73,7 +73,7 @@ export default function Pricing() {
               <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> Suivi d&apos;inventaire tissu</li>
               <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> Support prioritaire</li>
             </ul>
-            <a href="https://wa.me/221778685084?text=Bonjour,%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20formule%20Grand%20Atelier%20pour%20AZ-TAILORS." target="_blank" rel="noopener noreferrer" className="block text-center w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors">
+            <a href="https://wa.me/221778685084?text=Bonjour,%20je%20suis%20int%C3%A9ress%C3%A9%20par%20la%20formule%20Grand%20Atelier%20pour%20AZ-TAILOR." target="_blank" rel="noopener noreferrer" className="block text-center w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors">
               Nous contacter
             </a>
           </FadeInUp>

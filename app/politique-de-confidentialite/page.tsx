@@ -4,8 +4,8 @@ import Footer from "@/app/components/landing/Footer";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Politique de confidentialité | AZ-TAILORS",
-  description: "Politique de confidentialité et protection des données personnelles sur AZ-TAILORS.",
+  title: "Politique de confidentialité | AZ-TAILOR",
+  description: "Politique de confidentialité et protection des données personnelles sur AZ-TAILOR.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">1. Qui sommes-nous</h2>
               <p>
-                AZ-TAILORS est un service édité par ABDOUL AZIZ NDIAYE, qui a comme statut juridique, entrepreneur individuel, et qui est basé à Guédiawaye dans la ville de Dakar.
+                AZ-TAILOR est un service édité par ABDOUL AZIZ NDIAYE, qui a comme statut juridique, entrepreneur individuel, et qui est basé à Guédiawaye dans la ville de Dakar.
               </p>
             </section>
 
@@ -73,7 +73,7 @@ export default function PrivacyPolicyPage() {
                 Les informations que vous enregistrez sur vos clientes vous appartiennent. Vous en êtes responsable : c'est à vous d'informer vos clientes que leurs mesures et coordonnées sont enregistrées dans un outil de gestion, et d'obtenir leur accord.
               </p>
               <p className="mt-4">
-                AZ-TAILORS agit uniquement comme prestataire technique. Nous stockons ces données pour vous, nous ne les exploitons pas, nous ne les revendons pas, et nous n'y accédons pas en dehors des cas prévus au point 6.
+                AZ-TAILOR agit uniquement comme prestataire technique. Nous stockons ces données pour vous, nous ne les exploitons pas, nous ne les revendons pas, et nous n'y accédons pas en dehors des cas prévus au point 6.
               </p>
             </section>
 

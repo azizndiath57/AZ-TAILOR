@@ -12,7 +12,7 @@ export default function Features() {
         <FadeInUp>
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-headline-md text-headline-md text-primary mb-4">
-              Ce que vous perdez sans <span className="text-secondary">AZ-TAILORS</span>
+              Ce que vous perdez sans <span className="text-secondary">AZ-TAILOR</span>
             </h2>
             <p className="font-body-md text-body-md text-on-surface-variant">
               Gérer un atelier avec du papier et des fichiers Excel éparpillés limite votre croissance.

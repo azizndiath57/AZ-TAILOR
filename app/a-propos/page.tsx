@@ -5,8 +5,8 @@ import MagneticButton from "@/app/components/landing/MagneticButton";
 import Link from "next/link";
 
 export const metadata = {
-  title: "À propos | AZ-TAILORS",
-  description: "Découvrez comment AZ-TAILORS a été pensé et créé pour les tailleurs et couturières d'Afrique de l'Ouest.",
+  title: "À propos | AZ-TAILOR",
+  description: "Découvrez comment AZ-TAILOR a été pensé et créé pour les tailleurs et couturières d'Afrique de l'Ouest.",
 };
 
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
 
           <div className="prose prose-lg text-on-surface-variant space-y-6">
             <p className="font-body-lg font-medium text-primary">
-              AZ-TAILORS est un outil de gestion pensé pour les tailleurs et les couturières d'Afrique de l'Ouest.
+              AZ-TAILOR est un outil de gestion pensé pour les tailleurs et les couturières d'Afrique de l'Ouest.
             </p>
 
             <p>
@@ -37,7 +37,7 @@ export default function AboutPage() {
             </p>
 
             <p>
-              J'ai passé quelques semaines à traîner dans des ateliers de couture à Dakar, à regarder comment le travail s'organise vraiment. Partout la même chose : un savoir-faire impressionnant sur la machine, et à côté, un cahier corné où se perdaient les mesures, les acomptes et les échéances. Ce n'est jamais un manque de sérieux, c'est un manque d'outil — personne n'avait pensé à construire quelque chose pour eux. J'ai décidé de m'y mettre, et AZ-TAILORS est le résultat.
+              J'ai passé quelques semaines à traîner dans des ateliers de couture à Dakar, à regarder comment le travail s'organise vraiment. Partout la même chose : un savoir-faire impressionnant sur la machine, et à côté, un cahier corné où se perdaient les mesures, les acomptes et les échéances. Ce n'est jamais un manque de sérieux, c'est un manque d'outil — personne n'avait pensé à construire quelque chose pour eux. J'ai décidé de m'y mettre, et AZ-TAILOR est le résultat.
             </p>
 
             <h2 className="font-display text-3xl text-primary mt-12 mb-6">
@@ -57,7 +57,7 @@ export default function AboutPage() {
             </h2>
 
             <p>
-              AZ-TAILORS est en version bêta disponible depuis 02/09/2026. L'outil est développé depuis Dakar, et il évolue en écoutant les ateliers qui l'utilisent.
+              AZ-TAILOR est en version bêta disponible depuis 02/09/2026. L'outil est développé depuis Dakar, et il évolue en écoutant les ateliers qui l'utilisent.
             </p>
 
             <p>

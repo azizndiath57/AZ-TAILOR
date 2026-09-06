@@ -23,7 +23,7 @@ export default function Hero() {
           </h1>
           
           <p className="font-body-lg text-body-lg text-gray-200 max-w-2xl mx-auto">
-            AZ-TAILORS centralise vos mesures, vos tissus et vos paiements en un seul endroit. 
+            AZ-TAILOR centralise vos mesures, vos tissus et vos paiements en un seul endroit. 
             Conçu par et pour les artisans de l&apos;élégance.
           </p>
           
@@ -49,7 +49,7 @@ export default function Hero() {
         <div className={`mt-20 relative mx-auto max-w-5xl rounded-xl overflow-hidden border border-outline-variant/20 ${styles.ambientShadow} ${styles.hoverLift}`}>
           {/* Cannot use next/image with external googleusercontent without config, using img */}
           <img 
-            alt="AZ-TAILORS Dashboard Mockup" 
+            alt="AZ-TAILOR Dashboard Mockup" 
             className="w-full h-auto object-cover rounded-xl" 
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2DjaiV-mb2KFNwkaws7_2panfkVP5Xj2JUwnJGUOANytOhVEu79LRai40_0yLExr3GI0K9hc-tIZz6-13_-YvsY9DSsfHUl0rNsrh2jov4kGWIOPUe-vumdwOffJ0T_673eVT5gvFQJW4xypmjH1yGx_R-QeOQ3JG_eA_ssZN05M1HzrCwmUBgEA-7ahGl9ILrzHoDbfbOJHJM_JzycTpBwd5yo0c7StIs5D8Rt463qYQmwMbFTn_Dw" 
           />

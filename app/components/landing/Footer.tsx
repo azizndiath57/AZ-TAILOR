@@ -15,12 +15,12 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-4 mb-6">
               {/* Cannot use next/image with external googleusercontent without config, using img */}
               <img 
-                alt="AZ-TAILORS Logo" 
+                alt="AZ-TAILOR Logo" 
                 className="h-10 w-auto brightness-0 invert" 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPCefO8PyzbTxUOQCr0tC4ALkSNYcKjW5bsq10GxZaKRnmr3e36tn8wWUxemYbZMwhyum7XPZcqT3bicCRbt3luOiXBScNont8ngmdNV2_HdWs2RgTkPEzJRg5EWPMCfcLNqkfE_-En77c7fnnro3RymBfGKgIUIkx1BzYr7xQYhAPIxMDobqKEq-FglRt9aVqbmeC0_17N2YFxn_Mwmruv7dJ88V1Ri8s8DGVxXNI3TDjTruC6Br7Lw" 
               />
               <span className="font-headline-sm text-headline-sm font-bold tracking-tight">
-                AZ-TAILORS
+                AZ-TAILOR
               </span>
             </Link>
             <p className="font-body-md text-tertiary-fixed-dim max-w-sm">
@@ -49,7 +49,7 @@ export default function Footer() {
         
         <div className="pt-8 border-t border-tertiary-fixed-dim/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-tertiary-fixed-dim font-body-sm">
-            © {new Date().getFullYear()} AZ-TAILORS. Tous droits réservés.
+            © {new Date().getFullYear()} AZ-TAILOR. Tous droits réservés.
           </p>
           <div className="flex gap-4">
             <a href="https://www.facebook.com/abdu.qw/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-tertiary-fixed-dim/10 flex items-center justify-center hover:bg-secondary transition-colors text-white">

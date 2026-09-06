@@ -4,8 +4,8 @@ import Footer from "@/app/components/landing/Footer";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Conditions Générales de Vente | AZ-TAILORS",
-  description: "Conditions générales d'utilisation et de vente du service AZ-TAILORS.",
+  title: "Conditions Générales de Vente | AZ-TAILOR",
+  description: "Conditions générales d'utilisation et de vente du service AZ-TAILOR.",
 };
 
 export default function CGVPage() {
@@ -28,7 +28,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 1 — Objet</h2>
               <p>
-                Les présentes conditions régissent l'utilisation du service AZ-TAILORS, une application en ligne de gestion d'atelier de couture, éditée par AZ-TAILOR, entreprise individuel, Guédiawaye, Dakar.
+                Les présentes conditions régissent l'utilisation du service AZ-TAILOR, une application en ligne de gestion d'atelier de couture, éditée par AZ-TAILOR, entreprise individuel, Guédiawaye, Dakar.
               </p>
               <p className="mt-4">
                 Créer un compte vaut acceptation de ces conditions.
@@ -38,7 +38,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 2 — Le service</h2>
               <p>
-                AZ-TAILORS permet notamment de gérer un fichier clientes et leurs mesures, d'enregistrer et suivre des commandes, de suivre les acomptes et les paiements, de générer des fiches de commande imprimables et d'envoyer des notifications automatiques aux clientes.
+                AZ-TAILOR permet notamment de gérer un fichier clientes et leurs mesures, d'enregistrer et suivre des commandes, de suivre les acomptes et les paiements, de générer des fiches de commande imprimables et d'envoyer des notifications automatiques aux clientes.
               </p>
               <p className="mt-4">
                 Le service est accessible en ligne, sans installation, depuis un navigateur.
@@ -140,7 +140,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 10 — Responsabilité</h2>
               <p>
-                AZ-TAILORS est un outil de gestion. Vous restez seul responsable de votre activité, de vos engagements envers vos clientes, de l'exactitude des mesures et des montants que vous saisissez, et du respect de vos obligations légales et fiscales.
+                AZ-TAILOR est un outil de gestion. Vous restez seul responsable de votre activité, de vos engagements envers vos clientes, de l'exactitude des mesures et des montants que vous saisissez, et du respect de vos obligations légales et fiscales.
               </p>
               <p className="mt-4">
                 Notre responsabilité ne peut être engagée au-delà des sommes que vous avez versées au titre des 3 derniers mois d'abonnement.
@@ -153,7 +153,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 11 — Propriété intellectuelle</h2>
               <p>
-                Le code, le design, la marque et les contenus d'AZ-TAILORS restent notre propriété. Votre abonnement vous donne un droit d'usage personnel et non exclusif du service, sans transfert de propriété.
+                Le code, le design, la marque et les contenus d'AZ-TAILOR restent notre propriété. Votre abonnement vous donne un droit d'usage personnel et non exclusif du service, sans transfert de propriété.
               </p>
             </section>
 

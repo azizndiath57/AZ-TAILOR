@@ -29,7 +29,7 @@ export default function Navbar() {
             <circle cx="14.5" cy="14.5" r="1.5" fill="currentColor" />
           </svg>
           <span className="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">
-            AZ-TAILORS
+            AZ-TAILOR
           </span>
         </Link>
         
