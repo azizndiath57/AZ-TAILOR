@@ -3,14 +3,15 @@ import NotificationsDropdown from "@/app/components/NotificationsDropdown";
 import { createClient } from "@/utils/supabase/server";
 import { signout } from "@/app/(auth)/connexion/actions";
 import Navigation from "./Navigation"; // We'll create this
-import LogoutButton from "@/app/components/LogoutButton";
 import SubscriptionGuard from "@/app/components/SubscriptionGuard";
 import { getSubscriptionStatus } from "@/app/actions/subscription";
+import { getSettingsAction } from "@/app/actions/settings";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const subscriptionStatus = await getSubscriptionStatus();
+  const settings = await getSettingsAction();
 
   let isAdmin = false;
   if (user) {
@@ -56,23 +57,35 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Profil atelier et Notifications */}
-        <div className="px-6 pt-6 border-t border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Compte</h4>
+        <div className="px-4 pb-6 mt-auto border-t border-gray-100 pt-4">
+          <div className="flex items-center justify-between px-2 mb-2">
+            <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Mon Compte</h4>
             <NotificationsDropdown />
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-700 shrink-0">
-              {user?.user_metadata?.first_name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'U'}
+          <div className="flex items-center justify-between p-2 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className="w-9 h-9 bg-brand/10 text-brand rounded-lg flex items-center justify-center font-bold text-sm shrink-0">
+                {settings?.workshopName?.charAt(0)?.toUpperCase() || 'A'}
+              </div>
+              <div className="flex flex-col overflow-hidden">
+                <span className="font-semibold text-sm truncate text-gray-900 leading-tight">
+                  {settings?.workshopName || "Mon Atelier"}
+                </span>
+                <span className="text-[11px] text-gray-500 truncate leading-tight">Gérant</span>
+              </div>
             </div>
-            <div className="flex flex-col overflow-hidden">
-              <span className="font-semibold text-sm truncate text-gray-900">
-                {user?.user_metadata?.first_name} {user?.user_metadata?.last_name}
-              </span>
-              <span className="text-xs text-gray-500 truncate">{user?.email}</span>
-            </div>
+            <form action={signout}>
+              <button 
+                type="submit" 
+                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                title="Se déconnecter"
+              >
+                <span aria-hidden="true" className="material-symbols-outlined text-[18px]">
+                  logout
+                </span>
+              </button>
+            </form>
           </div>
-          <LogoutButton />
         </div>
       </nav>
 
