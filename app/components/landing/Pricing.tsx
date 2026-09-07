@@ -56,7 +56,7 @@ export default function Pricing() {
               <li className="flex items-center gap-3 font-body-sm"><span className="material-symbols-outlined text-secondary text-xl">check</span> Statistiques avancées</li>
             </ul>
             <MagneticButton href="/connexion" className="w-full bg-secondary text-on-secondary py-3 rounded-full font-label-md hover:bg-on-secondary-container transition-colors shadow-md">
-              Essai gratuit 14 jours
+              Essai gratuit 3 mois
             </MagneticButton>
           </FadeInUp>
 

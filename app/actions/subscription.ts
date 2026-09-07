@@ -29,7 +29,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
   let trialDaysLeft = 0;
 
   if (sub.plan_type === 'free') {
-      const trialDurationDays = 30;
+      const trialDurationDays = 90;
       const createdAt = new Date(sub.created_at);
       const now = new Date();
       // Calculate diff in days

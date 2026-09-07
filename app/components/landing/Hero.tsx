@@ -42,6 +42,10 @@ export default function Hero() {
               Voir la démo
             </Link>
           </div>
+          <p className="text-gray-300 text-sm mt-4 font-medium flex items-center justify-center gap-2">
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px] text-teal-300">verified</span>
+            3 mois d'essai 100% gratuit, sans carte bancaire ni engagement.
+          </p>
         </div>
       </FadeInUp>
 
