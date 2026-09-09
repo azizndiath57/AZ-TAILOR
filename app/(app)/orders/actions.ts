@@ -19,8 +19,8 @@ export async function createOrderAction(formData: FormData) {
   const fabricPhoto = formData.get("fabricPhoto") as File | null;
   if (fabricPhoto && fabricPhoto.size > 0) {
     try {
-      const { createClient } = await import("@/utils/supabase/server");
-      const supabase = await createClient();
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
       const fileName = `${crypto.randomUUID()}-${fabricPhoto.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
       const { error } = await supabase.storage.from("fabric_photos").upload(fileName, fabricPhoto);
       if (!error) {
@@ -92,8 +92,8 @@ export async function editOrderAction(formData: FormData) {
   const fabricPhoto = formData.get("fabricPhoto") as File | null;
   if (fabricPhoto && fabricPhoto.size > 0) {
     try {
-      const { createClient } = await import("@/utils/supabase/server");
-      const supabase = await createClient();
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
       const fileName = `${crypto.randomUUID()}-${fabricPhoto.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
       const { error } = await supabase.storage.from("fabric_photos").upload(fileName, fabricPhoto);
       if (!error) {
