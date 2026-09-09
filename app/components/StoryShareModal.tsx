@@ -140,12 +140,24 @@ export default function StoryShareModal({ isOpen, onClose, order, settings }: St
                 
                 <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 w-full max-w-3xl border border-white/20 shadow-2xl text-center">
                   <h2 className="text-white/70 text-3xl font-medium uppercase tracking-widest mb-4">Nouvelle Création</h2>
+                  
+                  {order.fabricPhotoUrl && (
+                    <div className="flex justify-center my-8">
+                      <img 
+                        src={order.fabricPhotoUrl} 
+                        alt="Tissu" 
+                        crossOrigin="anonymous"
+                        className="w-64 h-64 object-cover rounded-2xl shadow-lg border-4 border-white/30" 
+                      />
+                    </div>
+                  )}
+
                   <p className="text-white text-6xl font-bold leading-tight drop-shadow-sm">
                     {order.garmentType}
                   </p>
                   <div className="mt-8 pt-8 border-t border-white/20 flex justify-center items-center gap-4 text-white/90">
                     <span aria-hidden="true" className="material-symbols-outlined text-4xl">check_circle</span>
-                    <span className="text-3xl font-medium">Prêt pour {order.client.firstName} !</span>
+                    <span className="text-3xl font-medium">Pour {order.client.firstName} !</span>
                   </div>
                 </div>
               </div>

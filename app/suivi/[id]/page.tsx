@@ -71,6 +71,16 @@ export default async function PublicOrderTrackingPage({ params }: { params: Prom
         <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 text-center">
           <h2 className="text-2xl font-semibold text-gray-900">Bonjour {order.client.firstName},</h2>
           <p className="text-gray-500 mt-2">Voici l'état d'avancement de votre vêtement ({order.garmentType}).</p>
+          
+          {order.fabricPhotoUrl && (
+            <div className="mt-6 flex justify-center">
+              <img 
+                src={order.fabricPhotoUrl} 
+                alt="Tissu" 
+                className="w-24 h-24 object-cover rounded-xl shadow-sm border border-gray-200" 
+              />
+            </div>
+          )}
         </div>
 
         {/* Progress Tracker */}
