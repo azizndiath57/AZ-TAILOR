@@ -57,21 +57,19 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
       `}} />
       
       {/* Action Bar (Hidden when printing) */}
-      <div className="flex justify-between items-center print:hidden">
-        <Link href="/orders" className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 print:hidden">
+        <Link href="/orders" className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors shrink-0">
           <span aria-hidden="true" className="material-symbols-outlined text-[20px]">arrow_back</span>
           Retour aux commandes
         </Link>
-        <div className="flex gap-3">
-          {(order.status === 'pret' || order.status === 'livre') && (
-            <button
-              onClick={() => setIsStoryModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity shadow-sm"
-            >
-              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">photo_camera</span>
-              <span className="font-bold">Story</span>
-            </button>
-          )}
+        <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">
+          <button
+            onClick={() => setIsStoryModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity shadow-sm"
+          >
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">photo_camera</span>
+            <span className="font-bold">Story</span>
+          </button>
           <a
             href={whatsappUrl}
             target="_blank"
