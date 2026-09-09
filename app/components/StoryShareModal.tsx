@@ -142,12 +142,12 @@ export default function StoryShareModal({ isOpen, onClose, order, settings }: St
                   <h2 className="text-white/70 text-3xl font-medium uppercase tracking-widest mb-4">Nouvelle Création</h2>
                   
                   {order.fabricPhotoUrl && (
-                    <div className="flex justify-center my-8">
+                    <div className="flex justify-center my-12">
                       <img 
                         src={order.fabricPhotoUrl} 
                         alt="Tissu" 
                         crossOrigin="anonymous"
-                        className="w-64 h-64 object-cover rounded-2xl shadow-lg border-4 border-white/30" 
+                        className="w-[450px] h-[450px] object-cover rounded-3xl shadow-2xl border-8 border-white/30" 
                       />
                     </div>
                   )}
