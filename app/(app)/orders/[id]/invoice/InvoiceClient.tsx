@@ -240,9 +240,9 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
               {(order.fabricText || order.fabricPhotoUrl) && (
                 <tr className="group hover:bg-gray-50 transition-colors">
                   <td className="py-5 text-sm text-gray-600">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       {order.fabricPhotoUrl && (
-                        <img src={order.fabricPhotoUrl} alt="Tissu" className="w-10 h-10 rounded object-cover border border-gray-200 shrink-0" />
+                        <img src={order.fabricPhotoUrl} alt="Tissu" className="w-28 h-28 rounded-lg object-cover border border-gray-200 shadow-sm shrink-0" />
                       )}
                       {order.fabricText && <span>Tissu: {order.fabricText}</span>}
                     </div>
