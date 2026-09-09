@@ -20,7 +20,7 @@ export default function StoryShareModal({ isOpen, onClose, order, settings }: St
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setTimeout(() => generateImage(true), 500);
+      setTimeout(() => generateImage('preview'), 500);
     } else {
       document.body.style.overflow = 'auto';
       setPreviewUrl(null);
