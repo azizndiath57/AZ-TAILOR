@@ -159,7 +159,7 @@ export default async function OrdersPage({
                       {new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(order.expectedDeliveryDate))}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <OrderActionsDropdown orderId={order.id} />
+                      <OrderActionsDropdown orderId={order.id} status={order.status} />
                     </td>
                   </tr>
                 );

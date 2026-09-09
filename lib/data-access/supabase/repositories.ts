@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { createAdminClient } from '@/utils/supabase/admin';
 import { 
   Order, 
   OrderWithFinancials, 
@@ -205,6 +206,62 @@ export const SupabaseOrdersRepository = {
       totalPaid,
       balanceDue: Math.max(0, totalPrice - totalPaid),
       paymentStatus: totalPaid === 0 ? "non_paye" : totalPaid >= totalPrice ? "paye" : "partiel"
+    };
+  },
+  
+  async getPublicOrderById(orderId: string) {
+    const supabaseAdmin = createAdminClient();
+    const { data: o } = await supabaseAdmin
+      .from('orders')
+      .select(`
+        *,
+        clients(first_name, last_name),
+        payments(amount)
+      `)
+      .eq('id', orderId)
+      .single();
+
+    if (!o) return null;
+    
+    // Récupérer les infos de l'atelier
+    const { data: settings } = await supabaseAdmin
+      .from('settings')
+      .select('*')
+      .eq('owner_id', o.owner_id)
+      .single();
+
+    const totalPaid = o.payments?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0;
+    const totalPrice = Number(o.total_price);
+    
+    return {
+      order: {
+        id: o.id,
+        reference: o.reference,
+        garmentType: o.garment_type,
+        fabricText: o.fabric_text,
+        fabricPhotoUrl: o.fabric_photo_url,
+        totalPrice,
+        status: o.status as any,
+        expectedDeliveryDate: new Date(o.expected_delivery_date),
+        createdAt: new Date(o.created_at),
+        client: {
+          firstName: o.clients?.first_name || "",
+          lastName: o.clients?.last_name || "",
+        },
+        totalPaid,
+        balanceDue: Math.max(0, totalPrice - totalPaid),
+        paymentStatus: totalPaid === 0 ? "non_paye" : totalPaid >= totalPrice ? "paye" : "partiel"
+      },
+      settings: settings ? {
+        workshopName: settings.workshop_name,
+        slogan: settings.slogan,
+        address: settings.address,
+        phone: settings.phone,
+        logoUrl: settings.logo_url
+      } : {
+        workshopName: "AZ-TAILOR",
+        slogan: "Atelier de Couture Sur-Mesure"
+      }
     };
   },
   

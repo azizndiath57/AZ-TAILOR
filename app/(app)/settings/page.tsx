@@ -9,7 +9,7 @@ import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings"
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
 import { createPayTechCheckoutSession } from "@/app/actions/paytech";
-import { updatePassword } from "@/app/(auth)/connexion/actions";
+import { createClient } from "@/utils/supabase/client";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 
 type Tab = "profil" | "abonnement" | "preferences" | "securite";
@@ -78,10 +78,12 @@ function SettingsContent() {
 
     setPasswordUpdateStatus("loading");
 
-    const res = await updatePassword(newPassword);
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
 
-    if (res?.error) {
-      alert("Erreur: " + res.error);
+    if (error) {
+      console.error("Erreur de mise à jour du mot de passe:", error.message);
+      alert("Erreur: " + error.message);
       setPasswordUpdateStatus("idle");
       return;
     }

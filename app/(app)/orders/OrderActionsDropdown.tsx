@@ -5,7 +5,9 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { deleteOrderAction } from "./actions";
 
-export default function OrderActionsDropdown({ orderId }: { orderId: string }) {
+import { OrderStatus } from "@/lib/domain/order-status";
+
+export default function OrderActionsDropdown({ orderId, status }: { orderId: string, status?: OrderStatus }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -60,6 +62,15 @@ export default function OrderActionsDropdown({ orderId }: { orderId: string }) {
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">edit</span>
               Modifier
             </Link>
+            {(status === 'pret' || status === 'livre') && (
+              <Link 
+                href={`/orders/${orderId}/invoice?share=true`} 
+                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
+              >
+                <span aria-hidden="true" className="material-symbols-outlined text-[18px]">share</span>
+                Partager (Story)
+              </Link>
+            )}
             <Link 
               href={`/orders/${orderId}/invoice`} 
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
@@ -110,9 +121,18 @@ export default function OrderActionsDropdown({ orderId }: { orderId: string }) {
                     className="flex items-center gap-3 px-4 py-3.5 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
-                    <span aria-hidden="true" className="material-symbols-outlined text-[22px]">edit</span>
+                    <span aria-hidden="true" className="material-symbols-outlined text-[20px]">edit</span>
                     Modifier
                   </Link>
+                  {(status === 'pret' || status === 'livre') && (
+                    <Link 
+                      href={`/orders/${orderId}/invoice?share=true`} 
+                      className="flex items-center gap-3 p-4 text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <span aria-hidden="true" className="material-symbols-outlined text-[20px]">share</span>
+                      Partager (Story)
+                    </Link>
+                  )}
                   <Link 
                     href={`/orders/${orderId}/invoice`} 
                     className="flex items-center gap-3 px-4 py-3.5 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"

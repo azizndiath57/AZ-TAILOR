@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { OrderWithFinancials } from "@/lib/data-access/types";
+import StoryShareModal from "@/app/components/StoryShareModal";
 
 export default function InvoiceClient({ order, settings }: { order: OrderWithFinancials, settings: any }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSavedDialogOpen, setIsSavedDialogOpen] = useState(false);
+  const [isLinkCopiedDialogOpen, setIsLinkCopiedDialogOpen] = useState(false);
+  const [isStoryModalOpen, setIsStoryModalOpen] = useState(searchParams.get('share') === 'true');
+  const [baseUrl, setBaseUrl] = useState(process.env.NEXT_PUBLIC_SITE_URL || 'https://az-tailor.com');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setBaseUrl(window.location.origin);
+    }
+  }, []);
 
   const handlePrint = () => {
     window.print();
@@ -31,7 +42,9 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
     year: 'numeric' 
   }).format(new Date(order.expectedDeliveryDate));
 
-  const whatsappText = `Bonjour ${order.client.firstName}, voici le récapitulatif de votre commande (${order.reference}). Le reste à payer est de ${new Intl.NumberFormat('fr-FR').format(order.balanceDue)} FCFA. Merci pour votre confiance ! - ${settings.workshopName || "AZ-TAILOR"}`;
+  const trackingUrl = `${baseUrl}/suivi/${order.id}`;
+
+  const whatsappText = `Bonjour ${order.client.firstName}, voici le récapitulatif de votre commande (${order.reference}). Le reste à payer est de ${new Intl.NumberFormat('fr-FR').format(order.balanceDue)} FCFA. \n\nSuivez l'avancement de votre commande en direct ici : ${trackingUrl}\n\nMerci pour votre confiance ! - ${settings.workshopName || "AZ-TAILOR"}\n\n✂️ Géré par AZ-TAILOR - L'application n°1 des tailleurs. Créez votre atelier sur az-tailor.com`;
   const whatsappUrl = `https://wa.me/${order.client.phone.replace(/[^0-9+]/g, '')}?text=${encodeURIComponent(whatsappText)}`;
 
   return (
@@ -50,6 +63,15 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
           Retour aux commandes
         </Link>
         <div className="flex gap-3">
+          {(order.status === 'pret' || order.status === 'livre') && (
+            <button
+              onClick={() => setIsStoryModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium rounded-lg hover:opacity-90 transition-opacity shadow-sm"
+            >
+              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">photo_camera</span>
+              <span className="font-bold">Story</span>
+            </button>
+          )}
           <a
             href={whatsappUrl}
             target="_blank"
@@ -58,6 +80,16 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
           >
             <span className="font-bold">WhatsApp</span>
           </a>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(trackingUrl);
+              setIsLinkCopiedDialogOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors shadow-sm"
+          >
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">link</span>
+            Lien
+          </button>
           <button
             onClick={handleSave}
             className="flex items-center gap-2 px-4 py-2 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm"
@@ -100,6 +132,48 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
           </div>
         </div>
       )}
+
+      {/* Link Copied Dialog */}
+      {isLinkCopiedDialogOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm print:hidden animate-in fade-in duration-200">
+          <div className="bg-white border border-gray-200 shadow-sm w-full max-w-sm p-8 rounded-xl overflow-hidden animate-in zoom-in-95 duration-200 text-center">
+            <div className="w-16 h-16 bg-brand/10 mx-auto rounded-full flex items-center justify-center mb-5 border border-brand/20">
+              <span aria-hidden="true" className="material-symbols-outlined text-brand text-3xl">link</span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Lien copié !</h3>
+            <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+              Le lien de suivi de la commande a été copié dans votre presse-papiers.
+            </p>
+            
+            <div className="flex flex-col gap-3 w-full">
+              <a
+                href={trackingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsLinkCopiedDialogOpen(false)}
+                className="w-full py-3 px-4 bg-midnight hover:bg-gray-800 text-white font-medium transition-colors text-sm flex items-center justify-center gap-2 rounded-lg shadow-sm"
+              >
+                <span aria-hidden="true" className="material-symbols-outlined text-[18px]">open_in_new</span>
+                Ouvrir le lien
+              </a>
+              <button
+                onClick={() => setIsLinkCopiedDialogOpen(false)}
+                className="w-full py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium border border-gray-200 transition-colors text-sm rounded-lg"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Story Share Modal */}
+      <StoryShareModal
+        isOpen={isStoryModalOpen}
+        onClose={() => setIsStoryModalOpen(false)}
+        order={order}
+        settings={settings}
+      />
 
       {/* Invoice Document - A4 Container */}
       <div className="bg-white border-0 sm:border sm:border-gray-100 sm:rounded-xl sm:shadow-sm overflow-x-auto print:border-none print:shadow-none print:bg-transparent print:overflow-visible">

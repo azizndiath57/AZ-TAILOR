@@ -117,7 +117,7 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                       </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex justify-center">
-                          <OrderActionsDropdown orderId={order.id} />
+                          <OrderActionsDropdown orderId={order.id} status={order.status} />
                         </div>
                       </td>
                     </tr>
