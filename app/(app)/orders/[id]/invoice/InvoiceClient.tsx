@@ -242,7 +242,7 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
                   <td className="py-5 text-sm text-gray-600">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                       {order.fabricPhotoUrl && (
-                        <div className="w-full sm:w-[400px] mt-4 mb-4">
+                        <div className="w-full sm:w-[250px] mt-4 mb-4">
                           <img 
                             src={order.fabricPhotoUrl} 
                             alt="Tissu" 
