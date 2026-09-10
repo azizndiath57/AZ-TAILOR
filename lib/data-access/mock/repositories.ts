@@ -263,6 +263,24 @@ export const mockClientsRepository = {
       })
     };
   },
+
+  async getPublicClientAndSettings(clientId: string) {
+    const c = clients.find(c => c.id === clientId);
+    if (!c) return null;
+    return {
+      client: {
+        firstName: c.firstName,
+        lastName: c.lastName,
+      },
+      settings: {
+        workshopName: "AZ-TAILOR",
+        slogan: "Atelier de Couture Sur-Mesure",
+        phone: "+221770000000",
+        logoUrl: null
+      }
+    };
+  },
+
   async addClient(data: Partial<Client>) {
     const newClient: Client = {
       id: `c${Date.now()}`,

@@ -236,6 +236,7 @@ export const SupabaseOrdersRepository = {
     return {
       order: {
         id: o.id,
+        clientId: o.client_id,
         reference: o.reference,
         garmentType: o.garment_type,
         fabricText: o.fabric_text,
@@ -444,6 +445,42 @@ export const SupabaseClientsRepository = {
         status: o.status,
         expectedDeliveryDate: new Date(o.expected_delivery_date)
       }))
+    };
+  },
+  
+  async getPublicClientAndSettings(clientId: string) {
+    const supabaseAdmin = createAdminClient();
+    
+    const { data: c } = await supabaseAdmin
+      .from('clients')
+      .select('first_name, last_name, owner_id')
+      .eq('id', clientId)
+      .single();
+      
+    if (!c) return null;
+    
+    const { data: settings } = await supabaseAdmin
+      .from('settings')
+      .select('*')
+      .eq('owner_id', c.owner_id)
+      .single();
+      
+    return {
+      client: {
+        firstName: c.first_name,
+        lastName: c.last_name,
+      },
+      settings: settings ? {
+        workshopName: settings.workshop_name,
+        slogan: settings.slogan,
+        phone: settings.phone,
+        logoUrl: settings.logo_url
+      } : {
+        workshopName: "AZ-TAILOR",
+        slogan: "Atelier de Couture",
+        phone: null,
+        logoUrl: null
+      }
     };
   },
   
