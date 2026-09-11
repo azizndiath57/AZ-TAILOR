@@ -300,11 +300,12 @@
   },
   "Landing": {
     "Navbar": {
-      "features": "Melokaan yi",
-      "pricing": "Njëg yi",
+      "solutions": "Melokaan yi",
+      "tarifs": "Njëg yi",
+      "ateliers": "Atelye yi",
       "blog": "Xibaar yi",
       "login": "Duggu",
-      "getStarted": "Tambali"
+      "startFree": "Tambali ci lu amul njëg"
     },
     "Hero": {
       "title1": "Fàttel kaye yi.",

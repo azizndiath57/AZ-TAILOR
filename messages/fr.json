@@ -300,11 +300,12 @@
   },
   "Landing": {
     "Navbar": {
-      "features": "Fonctionnalités",
-      "pricing": "Tarifs",
+      "solutions": "Fonctionnalités",
+      "tarifs": "Tarifs",
+      "ateliers": "Ateliers",
       "blog": "Blog",
       "login": "Connexion",
-      "getStarted": "Commencer"
+      "startFree": "Commencer gratuitement"
     },
     "Hero": {
       "title1": "Fàttel kaye yi.",
