@@ -7,8 +7,12 @@ import { editOrderAction } from "../../actions";
 import { OrderWithFinancials, Client } from "@/lib/data-access/types";
 import CustomSelect from "@/app/components/CustomSelect";
 import CustomDatePicker from "@/app/components/CustomDatePicker";
+import { useTranslations } from "next-intl";
 
 export default function EditOrderForm({ order, clients }: { order: OrderWithFinancials; clients: Client[] }) {
+  const t = useTranslations("OrderForm");
+  const tDash = useTranslations("Dashboard");
+  const tOrders = useTranslations("Orders");
   const initialClient = clients.find(c => c.id === order.clientId);
   const [clientType, setClientType] = useState<"nouveau" | "existant">("existant");
   const [selectedClientId, setSelectedClientId] = useState<string>(order.clientId || "");
@@ -70,7 +74,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
         
         {/* Section 1: Client */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Informations Client</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("clientInfo")}</h3>
           
           <div className="flex gap-4 mb-6">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -82,7 +86,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 onChange={() => setClientType("existant")}
                 className="w-4 h-4 text-brand bg-gray-100 border-gray-300 focus:ring-brand"
               />
-              <span className="text-sm font-medium text-gray-700">Client existant</span>
+              <span className="text-sm font-medium text-gray-700">{t("existingClient")}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input 
@@ -93,14 +97,14 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 onChange={() => setClientType("nouveau")}
                 className="w-4 h-4 text-brand bg-gray-100 border-gray-300 focus:ring-brand"
               />
-              <span className="text-sm font-medium text-gray-700">Nouveau client</span>
+              <span className="text-sm font-medium text-gray-700">{t("newClient")}</span>
             </label>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {clientType === "existant" ? (
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rechercher un client <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("searchClient")} <span className="text-red-500">*</span></label>
                 <div className="relative" ref={dropdownRef}>
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px] pointer-events-none">search</span>
                   <input 
@@ -112,7 +116,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                       setSelectedClientId(""); // Reset selection if typing
                     }}
                     onFocus={() => setIsClientDropdownOpen(true)}
-                    placeholder="Tapez le nom ou numéro..."
+                    placeholder={t("searchPlaceholder")}
                     className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                   />
                   <input type="hidden" name="clientId" value={selectedClientId} required />
@@ -135,7 +139,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                           </div>
                         ))
                       ) : (
-                        <div className="px-4 py-3 text-sm text-gray-500 text-center">Aucun client trouvé</div>
+                        <div className="px-4 py-3 text-sm text-gray-500 text-center">{t("noClientFound")}</div>
                       )}
                     </div>
                   )}
@@ -144,15 +148,15 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
             ) : (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Prénom <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("firstName")} <span className="text-red-500">*</span></label>
                   <input type="text" name="firstName" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("lastName")} <span className="text-red-500">*</span></label>
                   <input type="text" name="lastName" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" required />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("phone")} <span className="text-red-500">*</span></label>
                   <input type="tel" name="phone" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" required />
                 </div>
               </>
@@ -162,11 +166,11 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
 
         {/* Section 2: Vêtement */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Détails du Vêtement</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("garmentDetails")}</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type de vêtement <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("garmentType")} <span className="text-red-500">*</span></label>
               <CustomSelect 
                 name="garmentType"
                 defaultValue={order.garmentType}
@@ -181,18 +185,18 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="block text-sm font-medium text-gray-700">Tissu fourni</label>
+              <label className="block text-sm font-medium text-gray-700">{t("fabricProvided")}</label>
               <CustomSelect 
                 defaultValue="client"
                 options={[
-                  { value: "atelier", label: "Tissu de l'atelier", icon: "storefront" },
-                  { value: "client", label: "Tissu fourni par le client", icon: "person" }
+                  { value: "atelier", label: t("atelierFabric"), icon: "storefront" },
+                  { value: "client", label: t("clientFabric"), icon: "person" }
                 ]}
               />
               {order.fabricPhotoUrl && (
                 <div className="mt-2 text-xs flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-100">
                   <img src={order.fabricPhotoUrl} alt="Tissu actuel" className="w-8 h-8 rounded object-cover" />
-                  <span className="text-gray-600">Photo actuelle</span>
+                  <span className="text-gray-600">{t("currentPhoto")}</span>
                 </div>
               )}
               <label className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer w-full mt-1">
@@ -200,7 +204,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                   {fabricPhotoName ? 'check_circle' : 'add_a_photo'}
                 </span>
                 <span className="truncate max-w-[200px]">
-                  {fabricPhotoName ? fabricPhotoName : (order.fabricPhotoUrl ? 'Changer la photo (.jpg)' : 'Photo du tissu (.jpg)')}
+                  {fabricPhotoName ? fabricPhotoName : (order.fabricPhotoUrl ? t("changePhoto") : t("addPhoto"))}
                 </span>
                 <input 
                   type="file" 
@@ -220,12 +224,12 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description / Notes de style (Tissu)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t("description")}</label>
             <textarea 
               name="fabricText"
               rows={4}
               defaultValue={order.fabricText || ''}
-              placeholder="Détails du tissu, col, boutons, coupe spéciale..."
+              placeholder={t("descriptionPlaceholder")}
               className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all resize-none"
             ></textarea>
           </div>
@@ -234,7 +238,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
         {/* Section 3: Mesures */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
-            <h3 className="text-lg font-semibold text-gray-900">Mesures</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{t("measurements")}</h3>
           </div>
           
           {clientType === "existant" && selectedClientId ? (
@@ -243,12 +247,12 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-brand">straighten</span>
                   <div>
-                    <p className="text-sm font-medium text-brand">Mesures récupérées automatiquement</p>
-                    <p className="text-xs text-brand/70">Les dernières mesures de ce client ont été appliquées pour cette commande.</p>
+                    <p className="text-sm font-medium text-brand">{t("autoMeasurements")}</p>
+                    <p className="text-xs text-brand/70">{t("autoMeasurementsDesc")}</p>
                   </div>
                 </div>
                 <Link href={`/clients/${selectedClientId}`} target="_blank" className="text-xs font-semibold text-brand hover:underline px-3 py-1.5 bg-white rounded-md border border-brand/20">
-                  Modifier
+                  {t("editMeasurements")}
                 </Link>
               </div>
               
@@ -262,16 +266,16 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                   ))}
                 </div>
               ) : (
-                 <div className="p-4 text-sm text-gray-500 bg-gray-50 rounded-lg text-center border border-gray-100">Aucune mesure enregistrée pour ce client.</div>
+                 <div className="p-4 text-sm text-gray-500 bg-gray-50 rounded-lg text-center border border-gray-100">{t("noMeasurements")}</div>
               )}
             </div>
           ) : (
             <div className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">
               <div className="text-center">
                 <span aria-hidden="true" className="material-symbols-outlined text-4xl text-gray-400 mb-2">straighten</span>
-                <p className="text-sm text-gray-500 mb-4">Le profil de mesures est lié à cette commande.</p>
+                <p className="text-sm text-gray-500 mb-4">{t("measurementsLinked")}</p>
                 <button type="button" className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
-                  Modifier les mesures
+                  {t("editMeasurements")}
                 </button>
               </div>
             </div>
@@ -284,19 +288,19 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
         
         {/* Section 4: Statut de la Commande */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Avancement</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("progress")}</h3>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Statut actuel</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t("currentStatus")}</label>
             <CustomSelect 
               name="status"
               defaultValue={order.status}
               options={[
-                { value: "en_attente", label: "En attente" },
-                { value: "en_cours", label: "En cours" },
-                { value: "pret", label: "Prête pour essayage" },
-                { value: "livre", label: "Livrée" },
-                { value: "annule", label: "Annulée" }
+                { value: "en_attente", label: tDash("waiting") },
+                { value: "en_cours", label: tDash("inProgress") },
+                { value: "pret", label: tDash("ready") },
+                { value: "livre", label: tDash("delivered") },
+                { value: "annule", label: tOrders("canceled") }
               ]}
             />
           </div>
@@ -304,11 +308,11 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
 
         {/* Section 5: Tarification */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Tarification</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("pricing")}</h3>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Montant Total (FCFA) <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("totalAmount")} <span className="text-red-500">*</span></label>
               <input 
                 type="number"
                 name="totalPrice" 
@@ -319,7 +323,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Acompte versé (FCFA)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("amountPaid")}</label>
               <input 
                 type="number" 
                 name="totalPaid"
@@ -330,7 +334,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
             </div>
 
             <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-500">Reste à payer</span>
+              <span className="text-sm font-medium text-gray-500">{t("remainingToPay")}</span>
               <span className="text-xl font-bold text-gray-900">{new Intl.NumberFormat('fr-FR').format(remainingToPay)} FCFA</span>
             </div>
           </div>
@@ -338,11 +342,11 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
 
         {/* Section 6: Délais */}
         <section className="bg-white border border-gray-200 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Planification</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("planning")}</h3>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date de livraison <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("deliveryDate")} <span className="text-red-500">*</span></label>
               <CustomDatePicker 
                 name="expectedDeliveryDate" 
                 defaultValue={new Date(order.expectedDeliveryDate).toISOString()} 
@@ -355,10 +359,10 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
         {/* Submit Actions */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
           <button type="submit" disabled={isPending} className="w-full py-3 bg-midnight text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50">
-            {isPending ? "Mise à jour..." : "Mettre à jour la commande"}
+            {isPending ? t("updating") : t("updateOrder")}
           </button>
           <Link href={`/orders`} className="w-full flex justify-center py-3 bg-white border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
-            Annuler
+            {t("cancel")}
           </Link>
         </div>
 

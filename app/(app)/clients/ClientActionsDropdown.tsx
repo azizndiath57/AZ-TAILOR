@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { deleteClientAction } from "./actions";
+import { useTranslations } from "next-intl";
 
 export default function ClientActionsDropdown({ clientId }: { clientId: string }) {
+  const t = useTranslations("Clients");
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -55,7 +57,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
               onClick={() => setIsOpen(false)}
             >
               <span className="material-symbols-outlined text-[18px]">straighten</span>
-              Voir / Mesures
+              {t("actions.view")}
             </Link>
             <Link
               href={`/clients/${clientId}/edit`}
@@ -63,7 +65,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
               onClick={() => setIsOpen(false)}
             >
               <span className="material-symbols-outlined text-[18px]">edit</span>
-              Modifier
+              {t("actions.edit")}
             </Link>
             <button
               onClick={(e) => {
@@ -76,7 +78,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
               className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
             >
               <span className="material-symbols-outlined text-[18px]">delete</span>
-              {isDeleting ? "Suppression..." : "Supprimer"}
+              {isDeleting ? t("actions.deleting") : t("actions.delete")}
             </button>
           </div>
 
@@ -85,7 +87,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
             <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity mobile-actions-portal" onClick={() => setIsOpen(false)}>
               <div className="bg-white w-full rounded-t-2xl p-4 pb-safe animate-slide-up shadow-2xl border-t border-gray-200" onClick={(e) => e.stopPropagation()}>
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
-                <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">Actions Client</h3>
+                <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">{t("actions.title")}</h3>
                 <div className="flex flex-col gap-1">
                   <Link
                     href={`/clients/${clientId}`}
@@ -93,7 +95,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
                     onClick={() => setIsOpen(false)}
                   >
                     <span className="material-symbols-outlined text-[22px]">straighten</span>
-                    Voir / Mesures
+                    {t("actions.view")}
                   </Link>
                   <Link
                     href={`/clients/${clientId}/edit`}
@@ -101,7 +103,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
                     onClick={() => setIsOpen(false)}
                   >
                     <span className="material-symbols-outlined text-[22px]">edit</span>
-                    Modifier
+                    {t("actions.edit")}
                   </Link>
                   <button
                     onClick={(e) => {
@@ -114,7 +116,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
                   >
                     <span className="material-symbols-outlined text-[22px]">delete</span>
-                    {isDeleting ? "Suppression..." : "Supprimer"}
+                    {isDeleting ? t("actions.deleting") : t("actions.delete")}
                   </button>
                 </div>
               </div>
@@ -131,11 +133,11 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined">warning</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Supprimer le client</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t("actions.deleteConfirmTitle")}</h3>
             </div>
             
             <p className="text-sm text-gray-500 mb-6">
-              Êtes-vous sûr de vouloir supprimer ce client ? Cette action est irréversible et toutes les données associées seront perdues.
+              {t("actions.deleteConfirmText")}
             </p>
             
             <div className="flex justify-end gap-3">
@@ -149,7 +151,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
                 disabled={isDeleting}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
               >
-                Annuler
+                {t("actions.cancel")}
               </button>
               <button 
                 type="button" 
@@ -162,7 +164,7 @@ export default function ClientActionsDropdown({ clientId }: { clientId: string }
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors shadow-sm"
               >
                 {isDeleting && <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>}
-                {isDeleting ? "Suppression..." : "Confirmer"}
+                {isDeleting ? t("actions.deleting") : t("actions.confirm")}
               </button>
             </div>
           </div>

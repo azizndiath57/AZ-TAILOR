@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import Script from "next/script";
+import {NextIntlClientProvider} from 'next-intl';
+import {getLocale, getMessages} from 'next-intl/server';
 import "./globals.css";
 
 const inter = Inter({
@@ -27,13 +29,16 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="fr">
+    <html lang={locale}>
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" crossOrigin="anonymous" />
         <Script id="register-sw" strategy="afterInteractive">
@@ -54,7 +59,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${inter.variable} ${ebGaramond.variable} font-body antialiased overflow-x-hidden`}>
-        {children}
+        <NextIntlClientProvider messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

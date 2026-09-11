@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { DashboardRepository, OrdersRepository, SettingsRepository } from "@/lib/data-access";
 import GlobalSearch from "@/app/components/GlobalSearch";
 import NotificationsDropdown from "@/app/components/NotificationsDropdown";
@@ -21,13 +22,15 @@ export default async function DashboardPage({
     .sort((a, b) => a.expectedDeliveryDate.getTime() - b.expectedDeliveryDate.getTime())
     .slice(0, 4);
 
+  const t = await getTranslations("Dashboard");
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Tableau de bord</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("title")}</h2>
             <p className="text-sm text-gray-500 mt-1">{settings.slogan || "Digitalisez votre atelier, simplifiez votre quotidien."}</p>
           </div>
           <div className="hidden md:flex items-center gap-4">
@@ -43,14 +46,14 @@ export default async function DashboardPage({
       <div className="flex flex-col gap-8">
         {/* État des Commandes */}
         <section>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">État des Commandes</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t("orderStatus")}</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
             {/* Total */}
             <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col justify-between aspect-auto md:aspect-square h-32 md:h-auto">
               <span aria-hidden="true" className="material-symbols-outlined text-2xl text-gray-400">inventory_2</span>
               <div>
                 <span className="text-3xl font-bold text-gray-900 block">{stats.totalOrders}</span>
-                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">Total</span>
+                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">{t("total")}</span>
               </div>
             </div>
 
@@ -59,7 +62,7 @@ export default async function DashboardPage({
               <span aria-hidden="true" className="material-symbols-outlined text-2xl text-gray-400">pending</span>
               <div>
                 <span className="text-3xl font-bold text-gray-900 block">{stats.waitingOrders}</span>
-                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">En attente</span>
+                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">{t("waiting")}</span>
               </div>
             </div>
 
@@ -68,7 +71,7 @@ export default async function DashboardPage({
               <span aria-hidden="true" className="material-symbols-outlined text-2xl text-yellow-500">content_cut</span>
               <div>
                 <span className="text-3xl font-bold text-gray-900 block">{stats.inProgressOrders}</span>
-                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">En cours</span>
+                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">{t("inProgress")}</span>
               </div>
             </div>
 
@@ -77,7 +80,7 @@ export default async function DashboardPage({
               <span aria-hidden="true" className="material-symbols-outlined text-2xl text-blue-500">checkroom</span>
               <div>
                 <span className="text-3xl font-bold text-gray-900 block">{stats.readyOrders}</span>
-                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">Prêtes</span>
+                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">{t("ready")}</span>
               </div>
             </div>
 
@@ -86,7 +89,7 @@ export default async function DashboardPage({
               <span aria-hidden="true" className="material-symbols-outlined text-2xl text-green-500">local_shipping</span>
               <div>
                 <span className="text-3xl font-bold text-gray-900 block">{stats.deliveredOrders}</span>
-                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">Livrées</span>
+                <span className="font-medium text-xs text-gray-500 uppercase tracking-wide">{t("delivered")}</span>
               </div>
             </div>
           </div>
@@ -96,14 +99,14 @@ export default async function DashboardPage({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Financial Section */}
           <section className="lg:col-span-4 flex flex-col gap-4">
-            <h3 className="text-lg font-semibold text-gray-900">Finances (Ce mois)</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{t("financeTitle")}</h3>
             
             <div className="flex flex-col gap-4">
               {/* CA du mois */}
               <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-brand">
                   <span aria-hidden="true" className="material-symbols-outlined bg-brand-light p-2 rounded-lg">payments</span>
-                  <span className="font-semibold text-sm">CA du mois</span>
+                  <span className="font-semibold text-sm">{t("monthlyRevenue")}</span>
                 </div>
                 <span className="text-3xl font-bold text-gray-900">{new Intl.NumberFormat('fr-FR').format(stats.monthlyRevenue)} FCFA</span>
               </div>
@@ -112,7 +115,7 @@ export default async function DashboardPage({
               <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-gray-600">
                   <span aria-hidden="true" className="material-symbols-outlined bg-gray-50 p-2 rounded-lg">account_balance_wallet</span>
-                  <span className="font-semibold text-sm">Reste à encaisser</span>
+                  <span className="font-semibold text-sm">{t("balanceDue")}</span>
                 </div>
                 <span className="text-3xl font-bold text-gray-900">{new Intl.NumberFormat('fr-FR').format(stats.totalBalanceDue)} FCFA</span>
               </div>
@@ -122,16 +125,16 @@ export default async function DashboardPage({
           {/* Tasks List */}
           <section className="lg:col-span-8 flex flex-col gap-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">À faire aujourd&apos;hui</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t("todayTasks")}</h3>
               <Link href="/orders" className="text-sm font-medium text-brand hover:text-brand-light flex items-center gap-1 transition-colors">
-                Voir tout <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_forward</span>
+                {t("seeAll")} <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_forward</span>
               </Link>
             </div>
             
             <div className="flex flex-col gap-3 mt-4">
               {tasks.length === 0 ? (
                 <div className="p-8 text-center text-gray-500 bg-white border border-gray-100 rounded-lg shadow-sm">
-                  Aucune tâche urgente pour le moment.
+                  {t("noUrgentTasks")}
                 </div>
               ) : (
                 tasks.map((task) => {
@@ -152,7 +155,7 @@ export default async function DashboardPage({
                     : urgencyStatus === 'warning' 
                     ? 'bg-yellow-100 text-yellow-800' 
                     : 'bg-green-100 text-green-700';
-                  const badgeText = urgencyStatus === 'urgent' ? 'Urgent' : urgencyStatus === 'warning' ? 'Moins urgent' : 'Pas urgent';
+                  const badgeText = urgencyStatus === 'urgent' ? t("urgent") : urgencyStatus === 'warning' ? t("lessUrgent") : t("notUrgent");
                   const dateColor = urgencyStatus === 'urgent' ? 'text-red-600' : urgencyStatus === 'warning' ? 'text-yellow-600' : 'text-green-600';
                   
                   return (
@@ -177,21 +180,21 @@ export default async function DashboardPage({
                             </span>
                           </div>
                           <p className="text-xs text-gray-500 truncate">
-                            Client: <span className="font-medium text-gray-700">{task.client?.firstName} {task.client?.lastName}</span>
+                            {t("client")} <span className="font-medium text-gray-700">{task.client?.firstName} {task.client?.lastName}</span>
                           </p>
                         </div>
                       </div>
                       <div className="flex flex-col sm:items-end gap-3 w-full sm:w-auto mt-2 sm:mt-0">
                         <div className={`flex items-center text-xs font-semibold gap-1 shrink-0 ${dateColor}`}>
                           <span aria-hidden="true" className="material-symbols-outlined text-[14px]">schedule</span>
-                          <span>Prévu le {new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(task.expectedDeliveryDate)}</span>
+                          <span>{t("plannedFor", { date: new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(task.expectedDeliveryDate) })}</span>
                         </div>
                         <div className="flex gap-2 w-full sm:w-auto">
                           {task.status === 'en_attente' && (
                             <form action={startTask} className="w-full sm:w-auto">
                               <button type="submit" className="w-full px-4 py-2 sm:py-1.5 bg-midnight text-white text-xs font-semibold rounded-md hover:bg-gray-800 transition-colors sm:w-auto flex items-center justify-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">play_arrow</span>
-                                Démarrer
+                                {t("start")}
                               </button>
                             </form>
                           )}
@@ -199,13 +202,13 @@ export default async function DashboardPage({
                             <form action={finishTask} className="w-full sm:w-auto">
                               <button type="submit" className="w-full px-4 py-2 sm:py-1.5 bg-green-600 text-white text-xs font-semibold rounded-md hover:bg-green-700 transition-colors sm:w-auto flex items-center justify-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">check</span>
-                                Terminer
+                                {t("finish")}
                               </button>
                             </form>
                           )}
                           <Link href={`/orders/${task.id}/edit`} className="px-4 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-md hover:bg-gray-50 transition-colors w-full sm:w-auto text-center flex items-center justify-center gap-1">
                             <span className="material-symbols-outlined text-[14px]">visibility</span>
-                            Voir
+                            {t("view")}
                           </Link>
                         </div>
                       </div>

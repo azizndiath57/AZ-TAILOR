@@ -2,8 +2,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import NewOrderForm from "./NewOrderForm";
 import { mockClientsRepository } from "@/lib/data-access";
+import { getTranslations } from "next-intl/server";
 
 export default async function NewOrderPage() {
+  const t = await getTranslations("OrderForm");
   const clients = await mockClientsRepository.getClients();
 
   return (
@@ -17,8 +19,8 @@ export default async function NewOrderPage() {
           <span aria-hidden="true" className="material-symbols-outlined text-xl">arrow_back</span>
         </Link>
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Nouvelle Commande</h2>
-          <p className="text-sm text-gray-500 mt-1">Créer un nouveau dossier de confection</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("createTitle")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("createSubtitle")}</p>
         </div>
       </div>
 

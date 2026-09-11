@@ -3,6 +3,7 @@ import { mockClientsRepository } from "@/lib/data-access";
 import ClientActionsDropdown from "./ClientActionsDropdown";
 import Pagination from "@/app/components/Pagination";
 import ClientSearchDropdown from "./ClientSearchDropdown";
+import { getTranslations } from "next-intl/server";
 
 export default async function ClientsPage({
   searchParams,
@@ -13,6 +14,7 @@ export default async function ClientsPage({
   const currentPage = Number(resolvedSearchParams.page) || 1;
   const itemsPerPage = 20;
 
+  const t = await getTranslations("Clients");
   const clients = await mockClientsRepository.getClients();
   
   // Basic mock sorting (most recent first)
@@ -25,15 +27,15 @@ export default async function ClientsPage({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Mesures & Clients</h2>
-          <p className="text-sm text-gray-500 mt-1">{clients.length} profils enregistrés</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("title")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("subtitle", { count: clients.length })}</p>
         </div>
         <Link
           href="/clients/new"
           className="flex items-center gap-2 px-4 py-2 bg-midnight text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto justify-center"
         >
           <span aria-hidden="true" className="material-symbols-outlined text-[18px]">person_add</span>
-          Nouveau Profil
+          {t("newProfile")}
         </Link>
       </div>
 
@@ -46,18 +48,18 @@ export default async function ClientsPage({
           <table className="w-full text-left min-w-[800px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Profil</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Téléphone</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Date d&apos;ajout</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Commandes</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">Actions</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("columns.profile")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("columns.phone")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("columns.dateAdded")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("columns.orders")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">{t("columns.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {paginatedClients.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                    Aucun client enregistré.
+                    {t("noClients")}
                   </td>
                 </tr>
               ) : (
@@ -82,7 +84,7 @@ export default async function ClientsPage({
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-50 border border-gray-200 text-xs font-medium text-gray-600">
                         <span aria-hidden="true" className="material-symbols-outlined text-[14px]">content_cut</span>
-                        {client.ordersCount} commande{client.ordersCount > 1 ? "s" : ""}
+                        {client.ordersCount} {client.ordersCount > 1 ? t("ordersCountPlural") : t("ordersCountSingle")}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">

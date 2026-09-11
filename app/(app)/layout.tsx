@@ -6,6 +6,7 @@ import Navigation from "./Navigation"; // We'll create this
 import SubscriptionGuard from "@/app/components/SubscriptionGuard";
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { getSettingsAction } from "@/app/actions/settings";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -34,6 +35,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <span className="font-bold tracking-tight text-sm">AZ-TAILOR</span>
         </div>
         <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <NotificationsDropdown />
           <form action={signout}>
             <button type="submit" className="flex items-center justify-center p-1.5 text-gray-500 hover:text-red-600 rounded-full hover:bg-red-50 transition-colors" title="Se déconnecter">
@@ -60,7 +62,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="px-4 pb-6 mt-auto border-t border-gray-100 pt-4">
           <div className="flex items-center justify-between px-2 mb-2">
             <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Mon Compte</h4>
-            <NotificationsDropdown />
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <NotificationsDropdown />
+            </div>
           </div>
           <div className="flex items-center justify-between p-2 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
             <div className="flex items-center gap-3 overflow-hidden">

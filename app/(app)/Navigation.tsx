@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const navItems = [
-  { href: "/dashboard", label: "Tableau de bord", icon: "dashboard" },
-  { href: "/orders", label: "Commandes", icon: "content_cut" },
-  { href: "/clients", label: "Clients", icon: "groups" },
-  { href: "/fittings", label: "Fittings", icon: "checkroom" },
-  { href: "/settings", label: "Paramètres", icon: "settings" },
+  { href: "/dashboard", key: "dashboard", icon: "dashboard" },
+  { href: "/orders", key: "orders", icon: "content_cut" },
+  { href: "/clients", key: "clients", icon: "groups" },
+  { href: "/fittings", key: "fittings", icon: "checkroom" },
+  { href: "/settings", key: "settings", icon: "settings" },
 ];
 
 export default function Navigation({ mobile = false, isAdmin = false }: { mobile?: boolean, isAdmin?: boolean }) {
   const pathname = usePathname();
+  const t = useTranslations("Navigation");
 
   if (mobile) {
     return (
@@ -58,7 +60,7 @@ export default function Navigation({ mobile = false, isAdmin = false }: { mobile
             }`}
           >
             <span aria-hidden="true" className="material-symbols-outlined text-xl">{item.icon}</span>
-            <span>{item.label}</span>
+            <span>{t(item.key)}</span>
           </Link>
         );
       })}
@@ -68,7 +70,7 @@ export default function Navigation({ mobile = false, isAdmin = false }: { mobile
           className="flex items-center gap-3 px-6 py-3 font-medium transition-colors border-l-4 border-transparent text-red-600 hover:bg-red-50"
         >
           <span aria-hidden="true" className="material-symbols-outlined text-xl">admin_panel_settings</span>
-          <span>Super Admin</span>
+          <span>{t("superAdmin")}</span>
         </Link>
       )}
     </>

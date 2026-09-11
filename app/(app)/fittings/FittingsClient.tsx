@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { OrderWithFinancials } from "@/lib/data-access/types";
 import Pagination from "@/app/components/Pagination";
 import CustomDatePicker from "@/app/components/CustomDatePicker";
 import OrderActionsDropdown from "../orders/OrderActionsDropdown";
 
 export default function FittingsClient({ orders }: { orders: OrderWithFinancials[] }) {
+  const t = useTranslations("Fittings");
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -32,8 +34,8 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Agenda des Essayages</h2>
-          <p className="text-sm text-gray-500 mt-1">Planifiez et gérez les rendez-vous d'essayage (Fittings)</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("title")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
         </div>
       </div>
 
@@ -42,14 +44,14 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
         <div className="border-b border-gray-200 p-4 bg-gray-50/50 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="w-[300px]">
             <CustomDatePicker 
-              placeholder="Filtrer par date d'essayage..."
+              placeholder={t("filterPlaceholder")}
               onChange={(date) => setCurrentDate(date)}
               defaultValue={currentDate || undefined}
             />
           </div>
           <Link href="/orders/new" className="flex items-center gap-2 px-4 py-2 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm">
             <span aria-hidden="true" className="material-symbols-outlined text-[18px]">add</span>
-            Nouveau RDV
+            {t("newRdv")}
           </Link>
         </div>
         
@@ -57,11 +59,11 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
           <table className="w-full text-left min-w-[800px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Date</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Client</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Type</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Détails</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">Actions</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.date")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.client")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.type")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.details")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-center">{t("table.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -69,7 +71,7 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                 <tr>
                   <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
                     <span aria-hidden="true" className="material-symbols-outlined text-4xl mb-3 text-gray-300 block">event_available</span>
-                    Aucun essayage prévu pour le moment.
+                    {t("noFittings")}
                   </td>
                 </tr>
               ) : (
@@ -99,7 +101,7 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                         <div className="flex flex-col gap-1.5 items-start">
                           <span>{order.garmentType}</span>
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-yellow-50 text-yellow-600">
-                            1er Essayage
+                            {t("firstFitting")}
                           </span>
                         </div>
                       </td>
@@ -111,7 +113,7 @@ export default function FittingsClient({ orders }: { orders: OrderWithFinancials
                           </span>
                           <span className="flex items-center gap-1.5">
                             <span aria-hidden="true" className="material-symbols-outlined text-[16px]">sell</span>
-                            Réf: {order.reference}
+                            {t("ref")}: {order.reference}
                           </span>
                         </div>
                       </td>

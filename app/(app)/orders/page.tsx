@@ -1,24 +1,16 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { OrdersRepository } from "@/lib/data-access";
 import OrderActionsDropdown from "./OrderActionsDropdown";
 import Pagination from "@/app/components/Pagination";
 import OrderFilters from "./OrderFilters";
 
-const statusLabels: Record<string, string> = {
-  en_attente: "En attente", en_cours: "En cours", pret: "Prête", livre: "Livrée", annule: "Annulée",
-};
 const statusColors: Record<string, string> = {
   en_attente: "bg-gray-100 text-gray-700",
   en_cours: "bg-yellow-100 text-yellow-700",
   pret: "bg-blue-100 text-blue-700",
   livre: "bg-green-100 text-green-700",
   annule: "bg-red-100 text-red-700",
-};
-
-const paymentStatusLabel = (totalPrice: number, totalPaid: number) => {
-  if (totalPaid === 0) return { label: "Non payé", color: "text-red-600 bg-red-50" };
-  if (totalPaid >= totalPrice) return { label: "Payé", color: "text-green-600 bg-green-50" };
-  return { label: "Partiel", color: "text-yellow-600 bg-yellow-50" };
 };
 
 export default async function OrdersPage({
@@ -69,20 +61,34 @@ export default async function OrdersPage({
 
   const paginatedOrders = searchFilteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const t = await getTranslations("Orders");
+  const tDash = await getTranslations("Dashboard"); // for statuses
+
+  // status labels translations
+  const statusLabels: Record<string, string> = {
+    en_attente: tDash("waiting"), en_cours: tDash("inProgress"), pret: tDash("ready"), livre: tDash("delivered"), annule: "Annulée",
+  };
+
+  const paymentStatusLabel = (totalPrice: number, totalPaid: number) => {
+    if (totalPaid === 0) return { label: t("unpaid"), color: "text-red-600 bg-red-50" };
+    if (totalPaid >= totalPrice) return { label: t("paid"), color: "text-green-600 bg-green-50" };
+    return { label: t("partial"), color: "text-yellow-600 bg-yellow-50" };
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Commandes</h2>
-          <p className="text-sm text-gray-500 mt-1">{searchFilteredOrders.length} commandes {currentStatus !== "all" || currentPayment !== "all" || searchQuery ? "trouvées" : "enregistrées"}</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("title")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("subtitle", { count: searchFilteredOrders.length })}</p>
         </div>
         <Link
           href="/orders/new"
           className="flex items-center gap-2 px-4 py-2 bg-midnight text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors w-full sm:w-auto justify-center"
         >
           <span aria-hidden="true" className="material-symbols-outlined text-[18px]">add</span>
-          Nouvelle Commande
+          {t("newOrder")}
         </Link>
       </div>
 
@@ -95,20 +101,20 @@ export default async function OrdersPage({
           <table className="w-full text-left min-w-[800px]">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Référence</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Client</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Type</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Statut</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Paiement</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">Livraison</th>
-                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.reference")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.client")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.type")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.status")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.payment")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide">{t("table.delivery")}</th>
+                <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wide text-right">{t("table.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {paginatedOrders.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                    Aucune commande trouvée pour ce statut.
+                    Aucune commande
                   </td>
                 </tr>
               )}

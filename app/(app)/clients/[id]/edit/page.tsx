@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { mockClientsRepository } from "@/lib/data-access";
 import { updateClientAction } from "../../actions";
+import { getTranslations } from "next-intl/server";
 
 export default async function EditClientPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations("ClientForm");
   const resolvedParams = await params;
   const client = await mockClientsRepository.getClientById(resolvedParams.id);
 
@@ -22,8 +24,8 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
           <span aria-hidden="true" className="material-symbols-outlined text-xl">arrow_back</span>
         </Link>
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Modifier le Profil</h2>
-          <p className="text-sm text-gray-500 mt-1">Mettez à jour les informations de {client.firstName} {client.lastName}</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("editTitle")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("editSubtitle", { name: `${client.firstName} ${client.lastName}` })}</p>
         </div>
       </div>
 
@@ -33,7 +35,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">{t("firstName")}</label>
                 <input 
                   type="text" 
                   id="firstName" 
@@ -44,7 +46,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">{t("lastName")}</label>
                 <input 
                   type="text" 
                   id="lastName" 
@@ -58,7 +60,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">{t("phone")}</label>
                 <input 
                   type="tel" 
                   id="phone" 
@@ -70,7 +72,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
               </div>
 
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">{t("address")}</label>
                 <input 
                   type="text" 
                   id="address" 
@@ -82,13 +84,13 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
             </div>
 
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Notes / Préférences</label>
+              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">{t("notes")}</label>
               <textarea 
                 id="notes" 
                 name="notes" 
                 defaultValue={client.notes || ""}
                 rows={4}
-                placeholder="Ex: Préfère les coupes ajustées..."
+                placeholder={t("notesPlaceholder")}
                 className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all resize-none" 
               />
             </div>
@@ -100,14 +102,14 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
               href={`/clients/${client.id}`} 
               className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
             >
-              Annuler
+              {t("cancel")}
             </Link>
             <button 
               type="submit" 
               className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-midnight rounded-lg hover:bg-gray-800 transition-colors shadow-sm"
             >
               <span className="material-symbols-outlined text-[18px]">save</span>
-              Enregistrer
+              {t("save")}
             </button>
           </div>
         </form>

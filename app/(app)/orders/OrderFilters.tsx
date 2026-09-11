@@ -2,22 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-
-const STATUS_OPTIONS = [
-  { value: "all", label: "Tous les statuts", icon: "lists" },
-  { value: "en_attente", label: "En attente", icon: "pending" },
-  { value: "en_cours", label: "En cours", icon: "sync" },
-  { value: "pret", label: "Prêtes", icon: "check_circle" },
-  { value: "livre", label: "Livrées", icon: "inventory_2" },
-  { value: "annule", label: "Annulées", icon: "cancel" },
-];
-
-const PAYMENT_OPTIONS = [
-  { value: "all", label: "Tous les paiements", icon: "payments" },
-  { value: "paid", label: "Payé", icon: "check_circle" },
-  { value: "partial", label: "Partiel", icon: "timelapse" },
-  { value: "unpaid", label: "Non payé", icon: "error" },
-];
+import { useTranslations } from "next-intl";
 
 function FilterDropdown({ 
   options, 
@@ -95,10 +80,28 @@ function FilterDropdown({
 export default function OrderFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("Orders");
+  const tDash = useTranslations("Dashboard");
   
   const currentStatus = searchParams.get("status") || "all";
   const currentPayment = searchParams.get("payment") || "all";
   const currentSearch = searchParams.get("q") || "";
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("status"), icon: "lists" },
+    { value: "en_attente", label: tDash("waiting"), icon: "pending" },
+    { value: "en_cours", label: tDash("inProgress"), icon: "sync" },
+    { value: "pret", label: tDash("ready"), icon: "check_circle" },
+    { value: "livre", label: tDash("delivered"), icon: "inventory_2" },
+    { value: "annule", label: t("canceled"), icon: "cancel" },
+  ];
+
+  const PAYMENT_OPTIONS = [
+    { value: "all", label: t("payment"), icon: "payments" },
+    { value: "paid", label: t("paid"), icon: "check_circle" },
+    { value: "partial", label: t("partial"), icon: "timelapse" },
+    { value: "unpaid", label: t("unpaid"), icon: "error" },
+  ];
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -130,7 +133,7 @@ export default function OrderFilters() {
         </span>
         <input
           type="text"
-          placeholder="Rechercher par prénom, nom, réf..."
+          placeholder={t("search")}
           defaultValue={currentSearch}
           onChange={(e) => handleSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 bg-white border border-gray-900 rounded-lg text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand transition-colors"

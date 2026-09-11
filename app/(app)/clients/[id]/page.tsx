@@ -3,10 +3,7 @@ import { notFound } from "next/navigation";
 import { mockClientsRepository } from "@/lib/data-access";
 import ClientActionsDropdown from "../ClientActionsDropdown";
 import ClientMeasurementsForm from "./ClientMeasurementsForm";
-
-const statusLabels: Record<string, string> = {
-  en_attente: "En attente", en_cours: "En cours", pret: "Prête", livre: "Livrée", annule: "Annulée",
-};
+import { getTranslations } from "next-intl/server";
 
 const statusColors: Record<string, string> = {
   en_attente: "bg-gray-100 text-gray-700",
@@ -17,6 +14,18 @@ const statusColors: Record<string, string> = {
 };
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations("ClientDetails");
+  const tDash = await getTranslations("Dashboard");
+  const tOrders = await getTranslations("Orders");
+  
+  const statusLabelsMap: Record<string, string> = {
+    en_attente: tDash("waiting"), 
+    en_cours: tDash("inProgress"), 
+    pret: tDash("ready"), 
+    livre: tDash("delivered"), 
+    annule: tOrders("canceled"),
+  };
+
   const resolvedParams = await params;
   const client = await mockClientsRepository.getClientById(resolvedParams.id);
 
@@ -39,7 +48,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             <div>
               <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{client.firstName} {client.lastName}</h2>
               <p className="text-sm text-gray-500 mt-1">
-                Client depuis le {new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(client.createdAt))}
+                {t("clientSince", { date: new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(client.createdAt)) })}
               </p>
             </div>
           </div>
@@ -50,7 +59,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
           >
             <span aria-hidden="true" className="material-symbols-outlined text-[18px]">edit</span>
-            Modifier le profil
+            {t("editProfile")}
           </Link>
           <div className="p-1 bg-white border border-gray-200 rounded-lg">
             <ClientActionsDropdown clientId={client.id} />
@@ -70,27 +79,27 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
 
           {/* Infos Client */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">Coordonnées</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">{t("contactInfo")}</h3>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Téléphone</p>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{t("phone")}</p>
               <p className="text-sm font-medium text-gray-900">{client.phone}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Adresse</p>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{t("address")}</p>
               <p className="text-sm text-gray-700">{client.address || "—"}</p>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Notes / Préférences</p>
-              <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100">{client.notes || "Aucune note"}</p>
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">{t("notes")}</p>
+              <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg border border-gray-100">{client.notes || t("noNotes")}</p>
             </div>
           </div>
 
           {/* Commandes du client */}
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col h-full">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="text-lg font-semibold text-gray-900">Commandes ({client.orders?.length || 0})</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t("orders", { count: client.orders?.length || 0 })}</h3>
               <Link href={`/orders/new?clientId=${client.id}&clientName=${encodeURIComponent(client.firstName + " " + client.lastName)}`} className="text-sm font-medium text-brand hover:underline flex items-center gap-1">
-                Nouvelle <span className="material-symbols-outlined text-[16px]">add</span>
+                {t("newOrder")} <span className="material-symbols-outlined text-[16px]">add</span>
               </Link>
             </div>
 
@@ -106,7 +115,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                   <div className="flex items-center justify-between">
                     <h4 className="text-sm font-semibold text-gray-900 group-hover:text-brand transition-colors">{order.reference}</h4>
                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusColors[order.status]}`}>
-                      {statusLabels[order.status]}
+                      {statusLabelsMap[order.status]}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-500">
@@ -119,7 +128,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                           )}
                           {order.fabricText && (
                             <span className="text-[10px] opacity-80 line-clamp-1" title={order.fabricText}>
-                              Tissu: {order.fabricText}
+                              {t("fabric", { text: order.fabricText })}
                             </span>
                           )}
                         </div>
@@ -134,7 +143,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             {(client.orders?.length || 0) > 0 && (
               <div className="p-4 border-t border-gray-100 mt-auto bg-gray-50/50">
                 <Link href="/orders" className="text-sm font-medium text-gray-600 hover:text-gray-900 flex justify-center items-center gap-1">
-                  Voir tout l&apos;historique <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  {t("viewHistory")} <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </Link>
               </div>
             )}

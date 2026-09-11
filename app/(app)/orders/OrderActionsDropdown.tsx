@@ -6,12 +6,14 @@ import { createPortal } from "react-dom";
 import { deleteOrderAction } from "./actions";
 
 import { OrderStatus } from "@/lib/domain/order-status";
+import { useTranslations } from "next-intl";
 
 export default function OrderActionsDropdown({ orderId, status }: { orderId: string, status?: OrderStatus }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const t = useTranslations("Orders");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -53,14 +55,14 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">add</span>
-              Créer
+              {t("create")}
             </Link>
             <Link 
               href={`/orders/${orderId}/edit`} 
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">edit</span>
-              Modifier
+              {t("edit")}
             </Link>
             <Link 
               href={`/orders/${orderId}/invoice?share=true`} 
@@ -68,21 +70,21 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
               onClick={() => setIsOpen(false)}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">share</span>
-              Partager (Story)
+              {t("shareStory")}
             </Link>
             <Link 
               href={`/orders/${orderId}/invoice`} 
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">receipt_long</span>
-              Facture
+              {t("invoice")}
             </Link>
             <Link 
               href={`/orders/${orderId}/payment`} 
               className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition-colors"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">payments</span>
-              Paiement
+              {t("paymentAction")}
             </Link>
             <div className="h-px bg-gray-100 my-1"></div>
             <button 
@@ -96,7 +98,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 text-left"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">delete</span>
-              {isDeleting ? "Suppression..." : "Supprimer"}
+              {isDeleting ? t("deleting") : t("delete")}
             </button>
           </div>
 
@@ -105,7 +107,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
             <div className="lg:hidden fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm transition-opacity mobile-actions-portal" onClick={() => setIsOpen(false)}>
               <div className="bg-white w-full rounded-t-2xl p-4 pb-8 animate-slide-up shadow-2xl border-t border-gray-200" onClick={(e) => e.stopPropagation()}>
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
-                <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">Actions Commande</h3>
+                <h3 className="font-semibold text-gray-900 px-4 mb-3 text-lg">{t("table.actions")}</h3>
                 <div className="flex flex-col gap-1">
                   <Link 
                     href="/orders/new" 
@@ -113,7 +115,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     onClick={() => setIsOpen(false)}
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[22px]">add</span>
-                    Créer
+                    {t("create")}
                   </Link>
                   <Link 
                     href={`/orders/${orderId}/edit`} 
@@ -121,7 +123,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     onClick={() => setIsOpen(false)}
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[20px]">edit</span>
-                    Modifier
+                    {t("edit")}
                   </Link>
                   <Link 
                     href={`/orders/${orderId}/invoice?share=true`} 
@@ -129,7 +131,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     onClick={() => setIsOpen(false)}
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[22px]">share</span>
-                    Partager (Story)
+                    {t("shareStory")}
                   </Link>
                   <Link 
                     href={`/orders/${orderId}/invoice`} 
@@ -137,7 +139,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     onClick={() => setIsOpen(false)}
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[22px]">receipt_long</span>
-                    Facture
+                    {t("invoice")}
                   </Link>
                   <Link 
                     href={`/orders/${orderId}/payment`} 
@@ -145,7 +147,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     onClick={() => setIsOpen(false)}
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[22px]">payments</span>
-                    Paiement
+                    {t("paymentAction")}
                   </Link>
                   <div className="h-px bg-gray-100 my-2 mx-4"></div>
                   <button 
@@ -159,7 +161,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-base font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
                   >
                     <span aria-hidden="true" className="material-symbols-outlined text-[22px]">delete</span>
-                    {isDeleting ? "Suppression..." : "Supprimer"}
+                    {isDeleting ? t("deleting") : t("delete")}
                   </button>
                 </div>
               </div>
@@ -176,11 +178,11 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
               <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined">warning</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Supprimer la commande</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t("deleteConfirmTitle")}</h3>
             </div>
             
             <p className="text-sm text-gray-500 mb-6">
-              Êtes-vous sûr de vouloir supprimer cette commande ? Cette action est irréversible et toutes les données associées seront perdues.
+              {t("deleteConfirmDesc")}
             </p>
             
             <div className="flex justify-end gap-3">
@@ -194,7 +196,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                 disabled={isDeleting}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
               >
-                Annuler
+                {t("cancel")}
               </button>
               <button 
                 type="button" 
@@ -207,7 +209,7 @@ export default function OrderActionsDropdown({ orderId, status }: { orderId: str
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors shadow-sm"
               >
                 {isDeleting && <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>}
-                {isDeleting ? "Suppression..." : "Confirmer"}
+                {isDeleting ? t("deleting") : t("confirmDelete")}
               </button>
             </div>
           </div>

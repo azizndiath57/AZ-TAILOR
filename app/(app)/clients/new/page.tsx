@@ -4,8 +4,10 @@ import Link from "next/link";
 import { createClientAction } from "../actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function NewClientPage() {
+  const t = useTranslations("ClientForm");
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [showLimitModal, setShowLimitModal] = useState(false);
@@ -32,16 +34,16 @@ export default function NewClientPage() {
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-brand/10 mb-4">
               <span className="material-symbols-outlined text-brand text-2xl">workspace_premium</span>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Limite Atteinte</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{t("limitTitle")}</h3>
             <p className="text-gray-500 mb-6 text-sm">
-              Vous avez atteint la limite de 20 clients pour le plan gratuit. Passez au plan Pro pour ajouter des clients en illimité et développer votre activité.
+              {t("limitDesc")}
             </p>
             <div className="flex gap-3">
               <button onClick={() => setShowLimitModal(false)} className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
-                Annuler
+                {t("cancel")}
               </button>
               <Link href="/settings?tab=abonnement" className="flex-1 px-4 py-2 bg-brand text-white font-medium rounded-lg hover:bg-brand/90 transition-colors">
-                Passer au Pro
+                {t("upgradeToPro")}
               </Link>
             </div>
           </div>
@@ -54,8 +56,8 @@ export default function NewClientPage() {
           <span aria-hidden="true" className="material-symbols-outlined text-xl">arrow_back</span>
         </Link>
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Nouveau Profil</h2>
-          <p className="text-sm text-gray-500 mt-1">Ajoutez un client et ses informations de contact</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("newTitle")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("newSubtitle")}</p>
         </div>
       </div>
 
@@ -71,7 +73,7 @@ export default function NewClientPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">{t("firstName")}</label>
                 <input 
                   type="text" 
                   id="firstName" 
@@ -81,7 +83,7 @@ export default function NewClientPage() {
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">{t("lastName")}</label>
                 <input 
                   type="text" 
                   id="lastName" 
@@ -94,7 +96,7 @@ export default function NewClientPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">{t("phone")}</label>
                 <input 
                   type="tel" 
                   id="phone" 
@@ -105,7 +107,7 @@ export default function NewClientPage() {
               </div>
 
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">{t("address")}</label>
                 <input 
                   type="text" 
                   id="address" 
@@ -116,12 +118,12 @@ export default function NewClientPage() {
             </div>
 
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Notes / Préférences</label>
+              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">{t("notes")}</label>
               <textarea 
                 id="notes" 
                 name="notes" 
                 rows={4}
-                placeholder="Ex: Préfère les coupes ajustées..."
+                placeholder={t("notesPlaceholder")}
                 className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all resize-none" 
               />
             </div>
@@ -133,13 +135,13 @@ export default function NewClientPage() {
               href="/clients" 
               className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
             >
-              Annuler
+              {t("cancel")}
             </Link>
             <button 
               type="submit" 
               className="px-6 py-2.5 text-sm font-medium text-white bg-midnight rounded-lg hover:bg-gray-800 transition-colors shadow-sm"
             >
-              Créer le profil
+              {t("createProfile")}
             </button>
           </div>
         </form>

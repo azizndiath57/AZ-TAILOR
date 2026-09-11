@@ -11,6 +11,7 @@ import { createCheckoutSession, createCustomerPortalSession } from "@/app/action
 import { createPayTechCheckoutSession } from "@/app/actions/paytech";
 import { createClient } from "@/utils/supabase/client";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
+import { useTranslations } from "next-intl";
 
 type Tab = "profil" | "abonnement" | "preferences" | "securite";
 
@@ -39,6 +40,13 @@ function SettingsContent() {
 
   const [isPayTechConfirmOpen, setIsPayTechConfirmOpen] = useState(false);
   const [payTechError, setPayTechError] = useState<string | null>(null);
+
+  const t = useTranslations("Settings");
+  const tProfile = useTranslations("Settings.Profile");
+  const tSub = useTranslations("Settings.Subscription");
+  const tPref = useTranslations("Settings.Preferences");
+  const tSec = useTranslations("Settings.Security");
+  const tModals = useTranslations("Settings.Modals");
 
   useEffect(() => {
     setMounted(true);
@@ -131,8 +139,8 @@ function SettingsContent() {
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">Paramètres</h2>
-          <p className="text-sm text-gray-500 mt-1">Gérez les informations et préférences de votre atelier</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800">{t("title")}</h2>
+          <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
         </div>
       </div>
 
@@ -149,7 +157,7 @@ function SettingsContent() {
                 }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">storefront</span>
-              Profil de l'Atelier
+              {t("tabs.profile")}
             </button>
             <button
               onClick={() => setActiveTab("abonnement")}
@@ -159,7 +167,7 @@ function SettingsContent() {
                 }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">workspace_premium</span>
-              Abonnement
+              {t("tabs.subscription")}
             </button>
             <button
               onClick={() => setActiveTab("preferences")}
@@ -169,7 +177,7 @@ function SettingsContent() {
                 }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">tune</span>
-              Préférences
+              {t("tabs.preferences")}
             </button>
             <button
               onClick={() => setActiveTab("securite")}
@@ -179,7 +187,7 @@ function SettingsContent() {
                 }`}
             >
               <span aria-hidden="true" className="material-symbols-outlined text-[20px]">security</span>
-              Sécurité
+              {t("tabs.security")}
             </button>
           </nav>
         </div>
@@ -189,7 +197,7 @@ function SettingsContent() {
 
           {activeTab === "profil" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Informations de l'Atelier</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">{tProfile("title")}</h3>
 
               <form onSubmit={handleUpdateProfile} className="space-y-6">
                 {/* Logo / Image */}
@@ -206,7 +214,7 @@ function SettingsContent() {
                     className="w-24 h-24 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-400 cursor-pointer overflow-hidden hover:bg-gray-200 transition-colors relative group"
                   >
                     {logoUrl ? (
-                      <img src={logoUrl} alt="Logo de l'atelier" className="w-full h-full object-cover" />
+                      <img src={logoUrl} alt="Logo" className="w-full h-full object-cover" />
                     ) : (
                       <span aria-hidden="true" className="material-symbols-outlined text-3xl">add_a_photo</span>
                     )}
@@ -223,7 +231,7 @@ function SettingsContent() {
                         onClick={handleLogoClick}
                         className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
                       >
-                        Changer le logo
+                        {tProfile("changeLogo")}
                       </button>
                       {logoUrl && (
                         <button
@@ -231,17 +239,17 @@ function SettingsContent() {
                           onClick={handleRemoveLogo}
                           className="px-4 py-2 bg-red-50 border border-red-100 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors shadow-sm"
                         >
-                          Supprimer
+                          {tProfile("removeLogo")}
                         </button>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500">JPG, PNG ou GIF. 1MB max.</p>
+                    <p className="text-xs text-gray-500">{tProfile("logoHint")}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'atelier</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{tProfile("workshopName")}</label>
                     <input
                       type="text"
                       name="workshopName"
@@ -251,18 +259,18 @@ function SettingsContent() {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Slogan</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{tProfile("slogan")}</label>
                     <input
                       type="text"
                       name="slogan"
-                      placeholder="Ex: L'élégance sur-mesure"
+                      placeholder={tProfile("sloganPlaceholder")}
                       defaultValue={settings.slogan || ""}
                       className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{tProfile("address")}</label>
                     <input
                       type="text"
                       name="address"
@@ -272,18 +280,18 @@ function SettingsContent() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone Principal</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{tProfile("phone")}</label>
                     <PhoneInput defaultValue={settings.phone} name="phone" />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Devise par défaut</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{tProfile("currency")}</label>
                     <CustomSelect
                       defaultValue="XOF"
                       options={[
-                        { value: "XOF", label: "Franc CFA (XOF)", icon: "payments" },
-                        { value: "EUR", label: "Euro (€)", icon: "euro" },
-                        { value: "USD", label: "Dollar ($)", icon: "attach_money" }
+                        { value: "XOF", label: tProfile("currencies.xof"), icon: "payments" },
+                        { value: "EUR", label: tProfile("currencies.eur"), icon: "euro" },
+                        { value: "USD", label: tProfile("currencies.usd"), icon: "attach_money" }
                       ]}
                     />
                   </div>
@@ -293,7 +301,7 @@ function SettingsContent() {
                   {profileUpdateStatus === "success" && (
                     <span className="text-sm text-green-600 font-medium flex items-center gap-1 animate-in fade-in">
                       <span aria-hidden="true" className="material-symbols-outlined text-lg">check_circle</span>
-                      Profil mis à jour !
+                      {tProfile("updated")}
                     </span>
                   )}
                   <button
@@ -302,7 +310,7 @@ function SettingsContent() {
                     className="flex items-center gap-2 px-6 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {profileUpdateStatus === "loading" && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                    Enregistrer les modifications
+                    {tProfile("save")}
                   </button>
                 </div>
               </form>
@@ -311,27 +319,27 @@ function SettingsContent() {
 
           {activeTab === "abonnement" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Mon Abonnement</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">{tSub("title")}</h3>
 
               <div className="space-y-6">
                 <div className="p-6 rounded-xl border border-gray-200 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 bg-white border border-gray-200 text-gray-700 font-medium text-xs rounded-full uppercase tracking-wider mb-2">
-                        {subscription.plan === 'pro' ? 'Plan Pro' : 'Plan Gratuit'}
+                        {subscription.plan === 'pro' ? tSub("planPro") : tSub("planFree")}
                       </span>
                       <h4 className="text-xl font-bold text-gray-900">
-                        {subscription.plan === 'pro' ? 'AZ-TAILOR Pro' : 'AZ-TAILOR Débutant'}
+                        {subscription.plan === 'pro' ? tSub("titlePro") : tSub("titleFree")}
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
                         {subscription.plan === 'pro'
-                          ? 'Vous profitez de toutes les fonctionnalités.'
-                          : 'Vous êtes limité à 20 clients.'}
+                          ? tSub("descPro")
+                          : tSub("descFree")}
                       </p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-gray-900">
-                        {subscription.plan === 'pro' ? '4 000' : '0'} <span className="text-sm text-gray-500 font-normal">FCFA / mois</span>
+                        {subscription.plan === 'pro' ? '4 000' : '0'} <span className="text-sm text-gray-500 font-normal">{tSub("perMonth")}</span>
                       </div>
                     </div>
                   </div>
@@ -339,20 +347,20 @@ function SettingsContent() {
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2 text-sm text-gray-700">
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
-                      {subscription.plan === 'pro' ? 'Clients illimités' : 'Jusqu\'à 20 clients'}
+                      {subscription.plan === 'pro' ? tSub("features.unlimited") : tSub("features.limited")}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-700">
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
-                      Logo sur vos factures
+                      {tSub("features.logo")}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-700">
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
-                      Statistiques de base
+                      {tSub("features.stats")}
                     </li>
                     {subscription.plan !== 'pro' && (
                       <li className="flex items-center gap-2 text-sm text-gray-400">
                         <span className="material-symbols-outlined text-gray-300 text-lg">cancel</span>
-                        Mode sombre (Premium)
+                        {tSub("features.darkMode")}
                       </li>
                     )}
                   </ul>
@@ -378,13 +386,12 @@ function SettingsContent() {
                       className="w-full py-2.5 px-4 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                     >
                       {isStripeLoading && <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></span>}
-                      Gérer mon abonnement
+                      {tSub("manage")}
                     </button>
                   ) : (
                     <div className="space-y-3">
-                      <p className="text-sm text-gray-600 font-medium mb-1">Choisissez votre moyen de paiement :</p>
+                      <p className="text-sm text-gray-600 font-medium mb-1">{tSub("choosePayment")}</p>
 
-                      {/* Bouton PayTech Mobile Money */}
                       <button
                         type="button"
                         onClick={() => setIsPayTechConfirmOpen(true)}
@@ -392,10 +399,9 @@ function SettingsContent() {
                         className="w-full py-2.5 px-4 bg-[#00a650] text-white font-medium rounded-lg hover:bg-[#00a650]/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                       >
                         {isMobileMoneyLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                        S'abonner via PayTech (Wave, Orange, Free)
+                        {tSub("payTech")}
                       </button>
 
-                      {/* Bouton Stripe (Carte Bancaire) */}
                       <button
                         onClick={async () => {
                           setIsStripeLoading(true);
@@ -416,7 +422,7 @@ function SettingsContent() {
                         className="w-full py-2.5 px-4 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-900 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                       >
                         {isStripeLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                        S'abonner par Carte Bancaire
+                        {tSub("stripe")}
                       </button>
                     </div>
                   )}
@@ -427,35 +433,35 @@ function SettingsContent() {
 
           {activeTab === "preferences" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Préférences</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">{tPref("title")}</h3>
 
               <form onSubmit={handleUpdatePreferences} className="space-y-6">
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-800 mb-3">Notifications</h4>
+                  <h4 className="text-sm font-semibold text-gray-800 mb-3">{tPref("notifications")}</h4>
                   <div className="space-y-3">
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" defaultChecked className="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand" />
-                      <span className="text-sm text-gray-700">M'alerter 2 jours avant une livraison</span>
+                      <span className="text-sm text-gray-700">{tPref("alertDelivery")}</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" defaultChecked className="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand" />
-                      <span className="text-sm text-gray-700">M'alerter pour les essayages (fittings)</span>
+                      <span className="text-sm text-gray-700">{tPref("alertFitting")}</span>
                     </label>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-gray-100">
-                  <h4 className="text-sm font-semibold text-gray-800 mb-3">Thème</h4>
+                  <h4 className="text-sm font-semibold text-gray-800 mb-3">{tPref("theme")}</h4>
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input type="radio" name="theme" value="light" defaultChecked className="w-4 h-4 text-brand bg-gray-100 border-gray-300 focus:ring-brand" />
-                      <span className="text-sm text-gray-700">Clair</span>
+                      <span className="text-sm text-gray-700">{tPref("light")}</span>
                     </label>
                     <div className="flex items-center gap-2 cursor-not-allowed group">
                       <input type="radio" name="theme" value="dark" disabled className="w-4 h-4 text-brand bg-gray-100 border-gray-300 focus:ring-brand opacity-50 cursor-not-allowed" />
-                      <span className="text-sm text-gray-500">Sombre</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 uppercase tracking-wider border border-amber-200" title="Cette fonctionnalité nécessite un abonnement">
-                        Payant
+                      <span className="text-sm text-gray-500">{tPref("dark")}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 uppercase tracking-wider border border-amber-200" title={tPref("premiumTitle")}>
+                        {tPref("premium")}
                       </span>
                     </div>
                   </div>
@@ -465,7 +471,7 @@ function SettingsContent() {
                   {preferencesUpdateStatus === "success" && (
                     <span className="text-sm text-green-600 font-medium flex items-center gap-1 animate-in fade-in">
                       <span aria-hidden="true" className="material-symbols-outlined text-lg">check_circle</span>
-                      Préférences sauvegardées !
+                      {tPref("saved")}
                     </span>
                   )}
                   <button
@@ -474,7 +480,7 @@ function SettingsContent() {
                     className="flex items-center gap-2 px-6 py-2.5 bg-midnight text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {preferencesUpdateStatus === "loading" && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                    Sauvegarder
+                    {tPref("save")}
                   </button>
                 </div>
               </form>
@@ -483,14 +489,14 @@ function SettingsContent() {
 
           {activeTab === "securite" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">Sécurité & Compte</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">{tSec("title")}</h3>
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-800 mb-3">Changer le mot de passe</h4>
+                  <h4 className="text-sm font-semibold text-gray-800 mb-3">{tSec("changePassword")}</h4>
                   <form onSubmit={handleUpdatePassword} className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{tSec("currentPassword")}</label>
                       <input
                         type="password"
                         required
@@ -501,7 +507,7 @@ function SettingsContent() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{tSec("newPassword")}</label>
                       <input
                         type="password"
                         required
@@ -518,12 +524,12 @@ function SettingsContent() {
                         className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {passwordUpdateStatus === "loading" && <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></span>}
-                        Mettre à jour le mot de passe
+                        {tSec("updatePassword")}
                       </button>
                       {passwordUpdateStatus === "success" && (
                         <span className="text-sm text-green-600 font-medium flex items-center gap-1 animate-in fade-in">
                           <span aria-hidden="true" className="material-symbols-outlined text-lg">check_circle</span>
-                          Mis à jour !
+                          {tSec("passwordUpdated")}
                         </span>
                       )}
                     </div>
@@ -531,14 +537,14 @@ function SettingsContent() {
                 </div>
 
                 <div className="pt-6 border-t border-gray-100">
-                  <h4 className="text-sm font-semibold text-red-600 mb-3">Zone de danger</h4>
-                  <p className="text-sm text-gray-500 mb-4">Une fois que vous supprimez votre compte, il n'y a pas de retour en arrière possible. Soyez certain de votre choix.</p>
+                  <h4 className="text-sm font-semibold text-red-600 mb-3">{tSec("dangerZone")}</h4>
+                  <p className="text-sm text-gray-500 mb-4">{tSec("dangerDesc")}</p>
                   <button
                     type="button"
                     onClick={() => setIsDeleteAccountModalOpen(true)}
                     className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 text-sm font-medium rounded-lg hover:bg-red-100 transition-colors"
                   >
-                    Supprimer mon compte
+                    {tSec("deleteAccount")}
                   </button>
                 </div>
               </div>
@@ -553,16 +559,16 @@ function SettingsContent() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Supprimer le compte</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{tModals("deleteTitle")}</h3>
               <p className="text-sm text-gray-500 mb-6">
-                Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible et effacera toutes vos données (clients, commandes, paiements).
+                {tModals("deleteDesc")}
               </p>
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setIsDeleteAccountModalOpen(false)}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Annuler
+                  {tModals("cancel")}
                 </button>
                 <button
                   onClick={() => {
@@ -571,7 +577,7 @@ function SettingsContent() {
                   }}
                   className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
                 >
-                  Oui, supprimer mon compte
+                  {tModals("confirmDelete")}
                 </button>
               </div>
             </div>
@@ -585,10 +591,10 @@ function SettingsContent() {
         <>
           <ConfirmDialog
             isOpen={isPayTechConfirmOpen}
-            title="Confirmation d'abonnement"
-            message="Voulez-vous procéder au paiement de 4 000 FCFA via PayTech pour activer votre abonnement PRO ?"
-            confirmText="Oui, procéder au paiement"
-            cancelText="Non, annuler"
+            title={tModals("payTechTitle")}
+            message={tModals("payTechDesc")}
+            confirmText={tModals("payTechConfirm")}
+            cancelText={tModals("payTechCancel")}
             onConfirm={async () => {
               setIsPayTechConfirmOpen(false);
               setIsMobileMoneyLoading(true);
@@ -610,10 +616,10 @@ function SettingsContent() {
 
           <ConfirmDialog
             isOpen={!!payTechError}
-            title="Erreur de paiement"
+            title={tModals("errorTitle")}
             message={payTechError || ""}
             confirmText="OK"
-            cancelText="Fermer"
+            cancelText={tModals("close")}
             type="danger"
             onConfirm={() => setPayTechError(null)}
             onCancel={() => setPayTechError(null)}
