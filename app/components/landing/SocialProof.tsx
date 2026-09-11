@@ -2,14 +2,16 @@
 
 import React from "react";
 import FadeInUp from "./FadeInUp";
+import { useTranslations } from "next-intl";
 
 export default function SocialProof() {
+  const t = useTranslations("Landing.SocialProof");
   return (
     <section id="ateliers" className="py-12 bg-surface-container-low border-y border-outline-variant/10 scroll-mt-20">
       <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-center">
         <FadeInUp>
           <p className="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-8">
-            Ils transforment la mode ivoirienne et africaine avec nous
+            {t('title')}
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 grayscale">
             

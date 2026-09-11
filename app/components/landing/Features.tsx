@@ -3,8 +3,10 @@
 import React from "react";
 import FadeInUp from "./FadeInUp";
 import styles from "../../landing.module.css";
+import { useTranslations } from "next-intl";
 
 export default function Features() {
+  const t = useTranslations("Landing.Features");
   return (
     <>
       {/* Problems Section */}
@@ -12,10 +14,10 @@ export default function Features() {
         <FadeInUp>
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-headline-md text-headline-md text-primary mb-4">
-              Ce que vous perdez sans <span className="text-secondary">AZ-TAILOR</span>
+              {t('whatYouLose')}<span className="text-secondary">AZ-TAILOR</span>
             </h2>
             <p className="font-body-md text-body-md text-on-surface-variant">
-              Gérer un atelier avec du papier et des fichiers Excel éparpillés limite votre croissance.
+              {t('whatYouLoseSubtitle')}
             </p>
           </div>
         </FadeInUp>
@@ -23,20 +25,20 @@ export default function Features() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FadeInUp delay={100} className={`bg-error-container/30 p-8 rounded-2xl border border-error-container ${styles.hoverLift}`}>
             <span className="material-symbols-outlined text-error text-4xl mb-4">menu_book</span>
-            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">Mesures égarées</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant">Les carnets se perdent, les feuilles volent. Résultat : des clients mécontents et du tissu gâché.</p>
+            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">{t('card1Title')}</h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">{t('card1Text')}</p>
           </FadeInUp>
           
           <FadeInUp delay={200} className={`bg-error-container/30 p-8 rounded-2xl border border-error-container ${styles.hoverLift}`}>
             <span className="material-symbols-outlined text-error text-4xl mb-4">account_balance_wallet</span>
-            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">Acomptes oubliés</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant">Difficile de savoir qui a payé quoi sans un registre financier clair et centralisé.</p>
+            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">{t('card2Title')}</h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">{t('card2Text')}</p>
           </FadeInUp>
           
           <FadeInUp delay={300} className={`bg-error-container/30 p-8 rounded-2xl border border-error-container ${styles.hoverLift}`}>
             <span className="material-symbols-outlined text-error text-4xl mb-4">schedule</span>
-            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">Retards de livraison</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant">Pas de suivi de production signifie des commandes en retard et un stress constant.</p>
+            <h3 className="font-label-lg text-label-lg font-bold text-primary mb-2">{t('card3Title')}</h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">{t('card3Text')}</p>
           </FadeInUp>
         </div>
       </section>
@@ -46,9 +48,9 @@ export default function Features() {
         <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
           <FadeInUp>
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <span className="bg-primary-container text-on-primary-container px-4 py-1 rounded-full font-label-sm text-sm font-bold uppercase tracking-wider">La Solution</span>
+              <span className="bg-primary-container text-on-primary-container px-4 py-1 rounded-full font-label-sm text-sm font-bold uppercase tracking-wider">{t('solutionLabel')}</span>
               <h2 className="font-headline-md text-headline-md text-primary mt-6 mb-4">
-                Tout votre atelier, <br className="hidden md:block" />dans votre poche.
+                {t('solutionTitle1')} <br className="hidden md:block" />{t('solutionTitle2')}
               </h2>
             </div>
           </FadeInUp>
@@ -112,14 +114,14 @@ export default function Features() {
                 <div className="h-12 w-12 rounded-full bg-secondary-container flex items-center justify-center">
                   <span className="material-symbols-outlined text-on-secondary-container">straighten</span>
                 </div>
-                <h3 className="font-headline-sm text-headline-sm text-primary">Carnet de mesures numérique</h3>
+                <h3 className="font-headline-sm text-headline-sm text-primary">{t('feature1Title')}</h3>
                 <p className="font-body-md text-body-md text-on-surface-variant">
-                  Enregistrez jusqu&apos;à 30 points de mesure par client. Fini les erreurs de coupe. Retrouvez le profil d&apos;un client en une seconde grâce à la recherche instantanée.
+                  {t('feature1Text')}
                 </p>
                 <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Profils clients détaillés</li>
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Historique des mensurations</li>
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Photos des modèles souhaités</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature1Bullet1')}</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature1Bullet2')}</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature1Bullet3')}</li>
                 </ul>
               </FadeInUp>
             </div>
@@ -130,14 +132,14 @@ export default function Features() {
                 <div className="h-12 w-12 rounded-full bg-secondary-container flex items-center justify-center">
                   <span className="material-symbols-outlined text-on-secondary-container">receipt_long</span>
                 </div>
-                <h3 className="font-headline-sm text-headline-sm text-primary">Facturation & WhatsApp</h3>
+                <h3 className="font-headline-sm text-headline-sm text-primary">{t('feature2Title')}</h3>
                 <p className="font-body-md text-body-md text-on-surface-variant">
-                  Générez des factures professionnelles en un clic (format A4 ou mobile). Relancez vos clients pour le reste à payer directement via un message WhatsApp pré-rempli.
+                  {t('feature2Text')}
                 </p>
                 <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Calcul automatique des restes à payer</li>
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Factures avec votre logo</li>
-                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> Intégration WhatsApp</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature2Bullet1')}</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature2Bullet2')}</li>
+                  <li className="flex items-center gap-3 text-primary font-label-md"><span className="material-symbols-outlined text-secondary text-xl">check_circle</span> {t('feature2Bullet3')}</li>
                 </ul>
               </FadeInUp>
               <FadeInUp delay={200}>

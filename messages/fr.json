@@ -297,5 +297,96 @@
       "cancel": "Annuler",
       "confirm": "Confirmer"
     }
+  },
+  "Landing": {
+    "Navbar": {
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "blog": "Blog",
+      "login": "Connexion",
+      "getStarted": "Commencer"
+    },
+    "Hero": {
+      "title1": "Fàttel kaye yi.",
+      "title2": "Yoral sa atelye ni mu ware.",
+      "subtitle": "AZ-TAILOR centralise vos mesures, vos tissus et vos paiements en un seul endroit. Conçu par et pour les artisans de l'élégance.",
+      "startFree": "Commencer gratuitement",
+      "demo": "Voir la démo",
+      "trial": "3 mois d'essai 100% gratuit, sans carte bancaire ni engagement."
+    },
+    "SocialProof": {
+      "title": "Ils transforment la mode ivoirienne et africaine avec nous"
+    },
+    "Features": {
+      "whatYouLose": "Ce que vous perdez sans ",
+      "whatYouLoseSubtitle": "Gérer un atelier avec du papier et des fichiers Excel éparpillés limite votre croissance.",
+      "card1Title": "Mesures égarées",
+      "card1Text": "Les carnets se perdent, les feuilles volent. Résultat : des clients mécontents et du tissu gâché.",
+      "card2Title": "Acomptes oubliés",
+      "card2Text": "Difficile de savoir qui a payé quoi sans un registre financier clair et centralisé.",
+      "card3Title": "Retards de livraison",
+      "card3Text": "Pas de suivi de production signifie des commandes en retard et un stress constant.",
+      "solutionLabel": "La Solution",
+      "solutionTitle1": "Tout votre atelier,",
+      "solutionTitle2": "dans votre poche.",
+      "feature1Title": "Carnet de mesures numérique",
+      "feature1Text": "Enregistrez jusqu'à 30 points de mesure par client. Fini les erreurs de coupe. Retrouvez le profil d'un client en une seconde grâce à la recherche instantanée.",
+      "feature1Bullet1": "Profils clients détaillés",
+      "feature1Bullet2": "Historique des mensurations",
+      "feature1Bullet3": "Photos des modèles souhaités",
+      "feature2Title": "Facturation & WhatsApp",
+      "feature2Text": "Générez des factures professionnelles en un clic (format A4 ou mobile). Relancez vos clients pour le reste à payer directement via un message WhatsApp pré-rempli.",
+      "feature2Bullet1": "Calcul automatique des restes à payer",
+      "feature2Bullet2": "Factures avec votre logo",
+      "feature2Bullet3": "Intégration WhatsApp"
+    },
+    "Testimonials": {
+      "title": "Ce qu'ils en pensent",
+      "subtitle": "Découvrez comment AZ-TAILOR a transformé leur quotidien.",
+      "roles": {
+        "tailor": "Tailleur",
+        "designer": "Styliste",
+        "manager": "Gérant d'atelier"
+      },
+      "modou": "Depuis que j'utilise AZ-TAILOR, je ne perds plus les mesures de mes clients. Tout est sur mon téléphone, c'est vraiment pratique et rapide !",
+      "khadija": "Mes clients adorent recevoir des factures professionnelles sur WhatsApp. Ça donne une image beaucoup plus sérieuse de mon atelier.",
+      "bassirou": "La gestion des paiements et des acomptes est devenue un jeu d'enfant. Je sais exactement qui me doit quoi en un clin d'œil."
+    },
+    "Pricing": {
+      "title": "Des tarifs simples, sans surprise",
+      "subtitle": "Commencez gratuitement, évoluez selon vos besoins.",
+      "monthly": "mois",
+      "freePlan": "Débutant",
+      "proPlan": "Professionnel",
+      "premiumPlan": "Grand Atelier",
+      "popular": "Populaire",
+      "startTrial": "Essai gratuit 3 mois",
+      "choosePlan": "Commencer",
+      "features": {
+        "clients50": "Jusqu'à 20 clients",
+        "invoicing": "Factures standards",
+        "measurements": "Gestion des commandes basique",
+        "clientsUnl": "Clients illimités",
+        "customLogo": "Factures avec votre logo",
+        "whatsapp": "Relances WhatsApp Auto",
+        "analytics": "Statistiques avancées",
+        "ordersUnl": "Tout de Pro",
+        "employees": "Gestion multi-employés",
+        "multiShop": "Suivi d'inventaire tissu",
+        "support": "Support prioritaire"
+      }
+    },
+    "Footer": {
+      "description": "L'outil de gestion nouvelle génération pour les ateliers de couture sur-mesure exigeants.",
+      "product": "Produit",
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "company": "Entreprise",
+      "about": "À propos",
+      "contact": "Contact",
+      "privacy": "Politique de confidentialité",
+      "terms": "CONDITIONS GÉNÉRALES DE VENTE",
+      "rights": "Tous droits réservés."
+    }
   }
 }

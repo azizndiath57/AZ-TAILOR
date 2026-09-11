@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import Hero from "./Hero";
 import SocialProof from "./SocialProof";
 import Features from "./Features";
+import Testimonials from "./Testimonials";
 import Pricing from "./Pricing";
 import Footer from "./Footer";
 
@@ -16,6 +17,7 @@ export default function LandingPage() {
         <Hero />
         <SocialProof />
         <Features />
+        <Testimonials />
         <Pricing />
       </main>
       <Footer />

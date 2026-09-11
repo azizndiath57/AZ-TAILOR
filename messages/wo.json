@@ -297,5 +297,96 @@
       "cancel": "Bañ",
       "confirm": "Waw"
     }
+  },
+  "Landing": {
+    "Navbar": {
+      "features": "Melokaan yi",
+      "pricing": "Njëg yi",
+      "blog": "Xibaar yi",
+      "login": "Duggu",
+      "getStarted": "Tambali"
+    },
+    "Hero": {
+      "title1": "Fàttel kaye yi.",
+      "title2": "Yoral sa atelye ni mu ware.",
+      "subtitle": "AZ-TAILOR dafay dajale sa natt yi, sa piis yi ak sa fayku yi ci benn bërëb. Ñi ràññee ci mbirum sàñse ñoo ko defar.",
+      "startFree": "Tambali ci lu amul njëg",
+      "demo": "Xool ni muy doxee",
+      "trial": "Ñetti weer ci lu amul njëg, amul kart bank, amul xaart."
+    },
+    "SocialProof": {
+      "title": "Ñu ngi soppi xeeti sàñse yi ci ivoirienne ak afrique ak ñun"
+    },
+    "Features": {
+      "whatYouLose": "Li ngay ñàkk bu ",
+      "whatYouLoseSubtitle": "Yor atelye ak ay kayit walla fichier Excel yu tasaaroo dafay yàq sa yëngu-yëngu.",
+      "card1Title": "Natt yu réer",
+      "card1Text": "Kaye yi dañuy réer, xët yi di rëcc. Li ciy juddu: kiliyaan yu bëggul ak piis yu yàqu.",
+      "card2Title": "Ndëbël yu ñu fàtte",
+      "card2Text": "Xam ku fay ak ku fayul dafay jafe bu ñu amul kaye fayku gu leer.",
+      "card3Title": "Yeex a joxe",
+      "card3Text": "Bu ñul toppul ni ñuy joxe, liggéey yi dañuy yéex te loolu metti na.",
+      "solutionLabel": "Safara si",
+      "solutionTitle1": "Sa atelye bi yépp,",
+      "solutionTitle2": "ci sa poos.",
+      "feature1Title": "Kaye natt bu xarala",
+      "feature1Text": "Binda l 30 bërëb natt ci kiliyaan bu nekk. Jum ci dog bi jeex na. Gisaatal mbirum kiliyaan ci benn saa ndax seet gu gaaw gi.",
+      "feature1Bullet1": "Mbirum kiliyaan yu leer",
+      "feature1Bullet2": "Kaye natt yi wéés",
+      "feature1Bullet3": "Nataal modèl yi ñu bëgg",
+      "feature2Title": "Faktiir ak WhatsApp",
+      "feature2Text": "Defal faktiir yu rafet ci benn cuq (ci A4 walla portabal). Fàttali sa kiliyaan desit bi mu wara fay ci mesaas WhatsApp bu ñu waajal ba noppi.",
+      "feature2Bullet1": "Xayma otomatik ci desit bi ñu wara fay",
+      "feature2Bullet2": "Faktiir ak sa logo",
+      "feature2Bullet3": "Màng ak WhatsApp"
+    },
+    "Testimonials": {
+      "title": "Li ñu ciy wax",
+      "subtitle": "Xoolal ni AZ-TAILOR soppee seen dund.",
+      "roles": {
+        "tailor": "Tayer",
+        "designer": "Modélis",
+        "manager": "Kiy yor atelye bi"
+      },
+      "modou": "Bi may jëfandikoo AZ-TAILOR, dumatuma ñàkk natt kiliyaan yi. Lépp a ngi ci sama portabal, dafa gaaw te neex !",
+      "khadija": "Sama kiliyaan yi dañuy bëgg a gis faktiir yu rafet ci WhatsApp. Dafa jox sama atelye cër bu rëy.",
+      "bassirou": "Yor fayku yi ak ndëbël yi yomb na lool. Xam naa ku ma aamale ak lu mu ma aamale ci benn xool."
+    },
+    "Pricing": {
+      "title": "Njëg yu yomb, yu amul bette",
+      "subtitle": "Tambali ci lu amul njëg, dagg sa yitte.",
+      "monthly": "weer",
+      "freePlan": "Tambali",
+      "proPlan": "Pro",
+      "premiumPlan": "Atelye bu mag",
+      "popular": "Lu ñu gën a ràññee",
+      "startTrial": "Tambali ci 3 weer lu amul njëg",
+      "choosePlan": "Tambali",
+      "features": {
+        "clients50": "Ba ci 20 kiliyaan",
+        "invoicing": "Faktiir yu normal",
+        "measurements": "Yor komaand yi baas",
+        "clientsUnl": "Kiliyaan yi amul am dig",
+        "customLogo": "Faktiir ak sa logo",
+        "whatsapp": "Fàttali WhatsApp Automatik",
+        "analytics": "Statistik yu xoot",
+        "ordersUnl": "Lépp lu Pro",
+        "employees": "Yor liggéeykat yu bari",
+        "multiShop": "Topp inventaire piis yi",
+        "support": "Jàppale bu gaaw"
+      }
+    },
+    "Footer": {
+      "description": "Jëfandiku yor atelye bu yees ngir tayer yi sàñse yi ñu bugg.",
+      "product": "Mbiri",
+      "features": "Melokaan yi",
+      "pricing": "Njëg yi",
+      "company": "Liggéey bi",
+      "about": "Ci mbir",
+      "contact": "Jokkoo",
+      "privacy": "Sart yiy aaru sa mbir",
+      "terms": "SART YI ÑUY JAAY",
+      "rights": "Àq yépp a ngi ci moomeelam."
+    }
   }
 }

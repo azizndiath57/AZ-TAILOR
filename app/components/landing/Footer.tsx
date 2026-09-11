@@ -3,8 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import FadeInUp from "./FadeInUp";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations("Landing.Footer");
   return (
     <footer id="blog" className="bg-tertiary text-on-tertiary pt-24 pb-8 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary"></div>
@@ -24,32 +26,32 @@ export default function Footer() {
               </span>
             </Link>
             <p className="font-body-md text-tertiary-fixed-dim max-w-sm">
-              L&apos;outil de gestion nouvelle génération pour les ateliers de couture sur-mesure exigeants.
+              {t('description')}
             </p>
           </div>
           
           <div>
-            <h4 className="font-label-lg font-bold mb-6">Produit</h4>
+            <h4 className="font-label-lg font-bold mb-6">{t('product')}</h4>
             <ul className="space-y-4">
-              <li><Link href="#solutions" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">Fonctionnalités</Link></li>
-              <li><Link href="#tarifs" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">Tarifs</Link></li>
+              <li><Link href="#solutions" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('features')}</Link></li>
+              <li><Link href="#tarifs" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('pricing')}</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-label-lg font-bold mb-6">Entreprise</h4>
+            <h4 className="font-label-lg font-bold mb-6">{t('company')}</h4>
             <ul className="space-y-4">
-              <li><Link href="/a-propos" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">À propos</Link></li>
-              <li><a href="https://wa.me/221778685084" target="_blank" rel="noopener noreferrer" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">Contact</a></li>
-              <li><Link href="/politique-de-confidentialite" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">Politique de confidentialité</Link></li>
-              <li><Link href="/cgv" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">CONDITIONS GÉNÉRALES DE VENTE</Link></li>
+              <li><Link href="/a-propos" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('about')}</Link></li>
+              <li><a href="https://wa.me/221778685084" target="_blank" rel="noopener noreferrer" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('contact')}</a></li>
+              <li><Link href="/politique-de-confidentialite" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('privacy')}</Link></li>
+              <li><Link href="/cgv" className="text-tertiary-fixed-dim hover:text-white transition-colors font-body-sm">{t('terms')}</Link></li>
             </ul>
           </div>
         </FadeInUp>
         
         <div className="pt-8 border-t border-tertiary-fixed-dim/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-tertiary-fixed-dim font-body-sm">
-            © {new Date().getFullYear()} AZ-TAILOR (EI). Tous droits réservés.
+            © {new Date().getFullYear()} AZ-TAILOR (EI). {t('rights')}
           </p>
           <div className="flex gap-4">
             <a href="https://www.facebook.com/abdu.qw/" target="_blank" rel="noopener noreferrer" className="h-10 w-10 rounded-full bg-tertiary-fixed-dim/10 flex items-center justify-center hover:bg-secondary transition-colors text-white">

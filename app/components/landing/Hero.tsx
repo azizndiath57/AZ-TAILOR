@@ -5,8 +5,10 @@ import MagneticButton from "./MagneticButton";
 import FadeInUp from "./FadeInUp";
 import styles from "../../landing.module.css";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
+  const t = useTranslations("Landing.Hero");
   return (
     <section 
       className="relative pt-20 md:pt-28 pb-16 px-margin-mobile md:px-margin-desktop w-full mx-auto text-center object-cover bg-cover bg-center bg-no-repeat"
@@ -16,15 +18,14 @@ export default function Hero() {
       <FadeInUp delay={100}>
         <div className="max-w-3xl mx-auto space-y-stack-md relative z-10">
           <h1 className="font-display text-4xl md:text-6xl text-white leading-tight tracking-tight">
-            Fàttel kaye yi.<br className="mb-4 md:mb-6" />
+            {t('title1')}<br className="mb-4 md:mb-6" />
             <span className="text-teal-300 block mt-2 md:mt-4">
-              Yoral sa atelye ni mu ware.
+              {t('title2')}
             </span>
           </h1>
           
           <p className="font-body-lg text-body-lg text-gray-200 max-w-2xl mx-auto">
-            AZ-TAILOR centralise vos mesures, vos tissus et vos paiements en un seul endroit. 
-            Conçu par et pour les artisans de l&apos;élégance.
+            {t('subtitle')}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -32,19 +33,19 @@ export default function Hero() {
               href="/connexion"
               className="w-full sm:w-auto bg-brand text-white font-label-md text-label-md px-8 py-4 rounded-full hover:bg-brand/90 transition-colors shadow-md"
             >
-              Commencer gratuitement
+              {t('startFree')}
             </MagneticButton>
             
             <Link
               href="/connexion"
               className="w-full sm:w-auto border-[1.5px] border-white text-white font-label-md text-label-md px-8 py-4 rounded-full hover:bg-white/10 transition-colors"
             >
-              Voir la démo
+              {t('demo')}
             </Link>
           </div>
           <p className="text-gray-300 text-sm mt-4 font-medium flex items-center justify-center gap-2">
             <span aria-hidden="true" className="material-symbols-outlined text-[18px] text-teal-300">verified</span>
-            3 mois d'essai 100% gratuit, sans carte bancaire ni engagement.
+            {t('trial')}
           </p>
         </div>
       </FadeInUp>
