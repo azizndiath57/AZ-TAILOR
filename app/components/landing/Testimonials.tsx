@@ -11,19 +11,19 @@ export default function Testimonials() {
       name: "Modou",
       role: t('roles.tailor'),
       content: t('modou'),
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80",
+      image: "/images/modou.jpg",
     },
     {
       name: "Khadija",
       role: t('roles.designer'),
       content: t('khadija'),
-      image: "https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?auto=format&fit=crop&w=150&q=80",
+      image: "/images/khadija.jpg",
     },
     {
       name: "Bassirou",
       role: t('roles.manager'),
       content: t('bassirou'),
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+      image: "/images/bassirou.jpg",
     },
   ];
 
