@@ -31,9 +31,9 @@ export async function createCheckoutSession() {
             name: 'AZ-TAILOR Pro',
             description: 'Nombre illimité de clients, logo sur les factures, bouton WhatsApp.',
           },
-          // 5000 FCFA. Stripe pour les devises sans décimales (comme le XOF) 
+          // 4000 FCFA. Stripe pour les devises sans décimales (comme le XOF) 
           // prend le montant exact (pas de multiplication par 100)
-          unit_amount: 5000, 
+          unit_amount: 4000, 
           recurring: {
             interval: 'month',
           },

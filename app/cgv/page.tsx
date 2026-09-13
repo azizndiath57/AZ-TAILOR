@@ -74,12 +74,12 @@ export default function CGVPage() {
                     </tr>
                     <tr>
                       <td className="border border-outline-variant/30 px-4 py-3 font-medium">Pro</td>
-                      <td className="border border-outline-variant/30 px-4 py-3">5 000 FCFA / mois</td>
+                      <td className="border border-outline-variant/30 px-4 py-3">4 000 FCFA / mois</td>
                       <td className="border border-outline-variant/30 px-4 py-3">Commandes illimitées, 1 utilisateur</td>
                     </tr>
                     <tr>
                       <td className="border border-outline-variant/30 px-4 py-3 font-medium">Atelier</td>
-                      <td className="border border-outline-variant/30 px-4 py-3">15 000 FCFA / mois</td>
+                      <td className="border border-outline-variant/30 px-4 py-3">12 000 FCFA / mois</td>
                       <td className="border border-outline-variant/30 px-4 py-3">Commandes illimitées, plusieurs utilisateurs</td>
                     </tr>
                   </tbody>

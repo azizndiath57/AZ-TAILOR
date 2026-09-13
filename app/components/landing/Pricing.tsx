@@ -48,7 +48,7 @@ export default function Pricing() {
             </div>
             <h3 className="font-headline-sm text-headline-sm mb-2">{t('proPlan')}</h3>
             <div className="flex items-baseline gap-2 mb-6">
-              <span className="font-display-lg-mobile text-[48px]">5 000 FCFA</span>
+              <span className="font-display-lg-mobile text-[48px]">4 000 FCFA</span>
               <span className="text-primary-fixed-dim font-label-sm">/{t('monthly').toLowerCase()}</span>
             </div>
             <ul className="space-y-4 mb-8 flex-1">
@@ -66,7 +66,7 @@ export default function Pricing() {
           <FadeInUp delay={300} className={`bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}>
             <h3 className="font-headline-sm text-headline-sm text-primary mb-2">{t('premiumPlan')}</h3>
             <div className="flex items-baseline gap-2 mb-6">
-              <span className="font-display-lg-mobile text-[48px] text-primary">15 000 FCFA</span>
+              <span className="font-display-lg-mobile text-[48px] text-primary">12 000 FCFA</span>
               <span className="text-on-surface-variant font-label-sm">/{t('monthly').toLowerCase()}</span>
             </div>
             <ul className="space-y-4 mb-8 flex-1">

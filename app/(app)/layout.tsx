@@ -30,9 +30,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="bg-gray-50 text-gray-900 min-h-screen flex flex-col md:flex-row overflow-x-hidden print:min-h-0 print:bg-white">
       {/* Mobile Top App Bar */}
       <header className="md:hidden flex justify-between items-center px-4 py-4 w-full bg-white border-b border-gray-200 sticky top-0 z-40 print:hidden">
-        <div className="flex items-center gap-2 bg-gray-900 text-[#D4AF37] px-3 py-1.5 rounded-md">
-          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">architecture</span>
-          <span className="font-bold tracking-tight text-sm">AZ-TAILOR</span>
+        <div className="flex items-center gap-2 bg-gray-900 text-[#D4AF37] px-3 py-1.5 rounded-md max-w-[50%]">
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px] shrink-0">architecture</span>
+          <div className="flex flex-col overflow-hidden">
+            <span className="font-bold tracking-tight text-sm truncate leading-none">{settings?.workshopName || 'AZ-TAILOR'}</span>
+            {settings?.slogan && <span className="text-[9px] uppercase tracking-wider text-[#D4AF37]/70 truncate mt-0.5">{settings.slogan}</span>}
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
@@ -48,9 +51,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       {/* Desktop Navigation Drawer */}
       <nav className="hidden md:flex flex-col gap-2 py-6 h-screen w-64 fixed left-0 top-0 bg-white border-r border-gray-200 z-40 print:hidden">
         <div className="px-6 mb-8">
-          <div className="flex items-center gap-2 bg-gray-900 text-[#D4AF37] px-4 py-2.5 rounded-lg w-full justify-center">
-            <span aria-hidden="true" className="material-symbols-outlined text-2xl">architecture</span>
-            <h1 className="font-bold text-lg tracking-tight">AZ-TAILOR</h1>
+          <div className="flex flex-col items-center justify-center text-center bg-gray-900 text-[#D4AF37] px-4 py-3 rounded-lg w-full">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span aria-hidden="true" className="material-symbols-outlined text-2xl">architecture</span>
+              <h1 className="font-bold text-lg tracking-tight">{settings?.workshopName || 'AZ-TAILOR'}</h1>
+            </div>
+            {settings?.slogan && <span className="text-[10px] uppercase tracking-wider text-[#D4AF37]/70 font-semibold truncate w-full">{settings.slogan}</span>}
           </div>
         </div>
 
