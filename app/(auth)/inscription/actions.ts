@@ -24,13 +24,17 @@ export async function signup(prevState: any, formData: FormData) {
 
   const email = generateSyntheticEmail(normalizedPhone);
 
+  // Generate a random 6-digit recovery code
+  const recoveryCode = Math.floor(100000 + Math.random() * 900000).toString();
+
   // 1. Check if the synthetic email already exists implicitly by trying to sign up
   const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
-        workshop_name: workshopName
+        workshop_name: workshopName,
+        recovery_code: recoveryCode
       }
     }
   })

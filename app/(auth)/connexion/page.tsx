@@ -56,6 +56,12 @@ export default function ConnexionPage() {
                 >
                   Mot de passe
                 </label>
+                <Link
+                  href="/mot-de-passe-oublie"
+                  className="text-sm text-brand font-medium hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
               </div>
               <input
                 id="password"

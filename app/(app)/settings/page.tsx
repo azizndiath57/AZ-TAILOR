@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import CustomSelect from "@/app/components/CustomSelect";
 import PhoneInput from "@/app/components/PhoneInput";
-import { getSettingsAction, updateSettingsAction } from "@/app/actions/settings";
+import { getSettingsAction, updateSettingsAction, getRecoveryCodeAction } from "@/app/actions/settings";
 import { getSubscriptionStatus } from "@/app/actions/subscription";
 import { createCheckoutSession, createCustomerPortalSession } from "@/app/actions/stripe";
 import { createPayTechCheckoutSession } from "@/app/actions/paytech";
@@ -33,6 +33,7 @@ function SettingsContent() {
   const [preferencesUpdateStatus, setPreferencesUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [profileUpdateStatus, setProfileUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [settings, setSettings] = useState<any>({ workshopName: "AZ-TAILOR", address: "Dakar, Sénégal", phone: "+221 77 123 45 67" });
+  const [recoveryCode, setRecoveryCode] = useState<string | null>(null);
 
   const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: false, isTrialExpired: false, trialDaysLeft: 0, endDate: null });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
@@ -58,6 +59,9 @@ function SettingsContent() {
     });
     getSubscriptionStatus().then(data => {
       setSubscription(data);
+    });
+    getRecoveryCodeAction().then(code => {
+      if (code) setRecoveryCode(code);
     });
   }, []);
 
@@ -521,20 +525,34 @@ function SettingsContent() {
                       <button
                         type="submit"
                         disabled={passwordUpdateStatus === "loading"}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-6 py-2.5 bg-brand text-white font-medium rounded-lg hover:bg-brand/90 transition-colors shadow-sm disabled:opacity-50"
                       >
-                        {passwordUpdateStatus === "loading" && <span className="w-4 h-4 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"></span>}
-                        {tSec("updatePassword")}
+                        {passwordUpdateStatus === "loading" ? tSec("saving") : tSec("updatePassword")}
                       </button>
                       {passwordUpdateStatus === "success" && (
-                        <span className="text-sm text-green-600 font-medium flex items-center gap-1 animate-in fade-in">
-                          <span aria-hidden="true" className="material-symbols-outlined text-lg">check_circle</span>
-                          {tSec("passwordUpdated")}
+                        <span className="text-sm text-green-600 font-medium flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                          {tSec("successMessage")}
                         </span>
                       )}
                     </div>
                   </form>
                 </div>
+
+                {/* Code de récupération */}
+                <div className="pt-6 mt-6 border-t border-gray-100">
+                  <h4 className="text-sm font-semibold text-gray-800 mb-2">Code de récupération</h4>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Ce code vous permet de réinitialiser votre mot de passe en cas d'oubli. Conservez-le précieusement.
+                  </p>
+                  <div className="inline-flex items-center gap-3 bg-gray-50 border border-gray-200 px-4 py-3 rounded-lg">
+                    <span className="material-symbols-outlined text-gray-400">key</span>
+                    <span className="font-mono text-xl font-bold tracking-widest text-gray-800">
+                      {recoveryCode || "------"}
+                    </span>
+                  </div>
+                </div>
+
 
                 <div className="pt-6 border-t border-gray-100">
                   <h4 className="text-sm font-semibold text-red-600 mb-3">{tSec("dangerZone")}</h4>
