@@ -32,7 +32,7 @@ function SettingsContent() {
 
   const [preferencesUpdateStatus, setPreferencesUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
   const [profileUpdateStatus, setProfileUpdateStatus] = useState<"idle" | "loading" | "success">("idle");
-  const [settings, setSettings] = useState<any>({ workshopName: "AZ-TAILOR", address: "Dakar, Sénégal", phone: "+221 77 123 45 67" });
+  const [settings, setSettings] = useState<any>(null);
   const [recoveryCode, setRecoveryCode] = useState<string | null>(null);
 
   const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: false, isTrialExpired: false, trialDaysLeft: 0, endDate: null });
@@ -199,7 +199,13 @@ function SettingsContent() {
         {/* Content Area */}
         <div className="md:col-span-8 lg:col-span-7 flex flex-col gap-6">
 
-          {activeTab === "profil" && (
+          {!settings ? (
+            <div className="flex justify-center py-12">
+              <span className="w-8 h-8 border-4 border-gray-200 border-t-brand rounded-full animate-spin"></span>
+            </div>
+          ) : (
+            <>
+              {activeTab === "profil" && (
             <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-100 pb-2">{tProfile("title")}</h3>
 
@@ -567,6 +573,8 @@ function SettingsContent() {
                 </div>
               </div>
             </section>
+              )}
+            </>
           )}
 
         </div>

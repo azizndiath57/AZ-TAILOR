@@ -69,6 +69,7 @@ export async function updateSession(request: NextRequest) {
   // /, /dashboard, /orders, /clients, /settings
   const isProtectedRoute = !request.nextUrl.pathname.startsWith('/connexion') && 
                            !request.nextUrl.pathname.startsWith('/inscription') &&
+                           !request.nextUrl.pathname.startsWith('/mot-de-passe-oublie') &&
                            !request.nextUrl.pathname.startsWith('/auth') &&
                            !request.nextUrl.pathname.startsWith('/_next') &&
                            !request.nextUrl.pathname.startsWith('/api') &&
@@ -85,7 +86,9 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
   
-  if ((request.nextUrl.pathname.startsWith('/connexion') || request.nextUrl.pathname.startsWith('/inscription')) && user) {
+  if ((request.nextUrl.pathname.startsWith('/connexion') || 
+       request.nextUrl.pathname.startsWith('/inscription') ||
+       request.nextUrl.pathname.startsWith('/mot-de-passe-oublie')) && user) {
      // user is logged in, don't let them see the login page
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'

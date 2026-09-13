@@ -558,23 +558,30 @@ export const SupabaseSettingsRepository = {
       .eq('owner_id', owner_id)
       .single();
       
+    // Fetch profile to get default phone and workshop name from registration
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('phone, nom_atelier')
+      .eq('id', owner_id)
+      .single();
+      
     if (!settings) {
       return {
         ownerId: owner_id,
-        workshopName: "Mon Atelier",
+        workshopName: profile?.nom_atelier || "Mon Atelier",
         slogan: null,
         address: null,
-        phone: null,
+        phone: profile?.phone || null,
         logoUrl: null
       };
     }
     
     return {
       ownerId: settings.owner_id,
-      workshopName: settings.workshop_name,
+      workshopName: settings.workshop_name || profile?.nom_atelier || "Mon Atelier",
       slogan: settings.slogan,
       address: settings.address,
-      phone: settings.phone,
+      phone: settings.phone || profile?.phone || null,
       logoUrl: settings.logo_url
     };
   },
