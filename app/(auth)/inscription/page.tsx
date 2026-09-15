@@ -77,6 +77,8 @@ export default function InscriptionPage() {
                 name="password"
                 type="text"
                 required
+                minLength={6}
+                maxLength={10}
                 autoComplete="new-password"
                 style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
@@ -95,6 +97,8 @@ export default function InscriptionPage() {
                 name="confirmPassword"
                 type="text"
                 required
+                minLength={6}
+                maxLength={10}
                 autoComplete="new-password"
                 style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"

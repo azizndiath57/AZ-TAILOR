@@ -13,6 +13,10 @@ export async function signup(prevState: any, formData: FormData) {
   const confirmPassword = formData.get('confirmPassword') as string;
   const workshopName = (formData.get('workshopName') as string).trim();
 
+  if (password.length < 6 || password.length > 10) {
+    return { error: "Le mot de passe doit contenir entre 6 et 10 caractères." };
+  }
+
   if (password !== confirmPassword) {
     return { error: "Les mots de passe ne correspondent pas." };
   }

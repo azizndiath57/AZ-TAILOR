@@ -14,8 +14,8 @@ export async function resetPassword(prevState: any, formData: FormData) {
     return { error: "Numéro de téléphone invalide." }
   }
 
-  if (!newPassword || newPassword.length < 6) {
-    return { error: "Le mot de passe doit contenir au moins 6 caractères." }
+  if (!newPassword || newPassword.length < 6 || newPassword.length > 10) {
+    return { error: "Le mot de passe doit contenir entre 6 et 10 caractères." }
   }
 
   try {
