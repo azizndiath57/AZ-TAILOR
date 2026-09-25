@@ -122,13 +122,13 @@ export default function CustomDatePicker({
         days.push(
           <div
             key={day.toString()}
-            className="flex items-center justify-center h-10"
+            className="flex items-center justify-center h-8 sm:h-10"
           >
             <button
               type="button"
               onClick={() => onDateClick(cloneDay)}
               className={`
-                flex items-center justify-center w-8 h-8 rounded-full text-sm transition-colors
+                flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs sm:text-sm transition-colors
                 ${!isCurrentMonth ? "text-gray-300 hover:text-gray-500" : ""}
                 ${isCurrentMonth && !isSelected ? "text-gray-700 hover:bg-gray-100" : ""}
                 ${isSelected ? "bg-orange-400 text-black font-bold shadow-md" : ""}
@@ -175,7 +175,7 @@ export default function CustomDatePicker({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 p-4 bg-white border border-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] w-[320px] left-0">
+        <div className="absolute z-[60] mt-2 p-2 sm:p-4 bg-white border border-gray-900 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] w-[240px] sm:w-[320px] left-0 origin-top-left">
           {renderHeader()}
           {renderDays()}
           {renderCells()}

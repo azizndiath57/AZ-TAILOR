@@ -7,31 +7,38 @@
 export function normalizePhone(input: string): string | null {
   if (!input) return null;
 
-  // 1. Enlever tous les caractères non numériques
-  let digits = input.replace(/\D/g, "");
+  // 1. Nettoyer les espaces, tirets, points
+  let cleaned = input.replace(/[\s\-\.]/g, "");
 
-  // 2. Traiter l'indicatif
-  if (digits.startsWith("00221")) {
-    digits = digits.substring(5);
-  } else if (digits.startsWith("221") && digits.length === 12) { // 221 + 9 chiffres
-    digits = digits.substring(3);
+  // 2. Remplacer '00' initial par '+'
+  if (cleaned.startsWith("00")) {
+    cleaned = "+" + cleaned.substring(2);
   }
 
-  // 3. Vérifier la longueur (un numéro sénégalais local a 9 chiffres)
-  if (digits.length !== 9) {
-    return null;
+  let digits = cleaned.replace(/\D/g, "");
+
+  // 3. Si aucun '+' n'a été fourni
+  if (!cleaned.startsWith("+")) {
+    // Cas spécial Sénégal : 9 chiffres sans indicatif
+    if (digits.length === 9) {
+      const prefix = digits.substring(0, 2);
+      if (["70", "75", "76", "77", "78"].includes(prefix)) {
+        return `+221${digits}`;
+      }
+    }
+    
+    // S'ils ont tapé directement avec l'indicatif sans le '+' (ex: 22501020304)
+    if (digits.length >= 10 && digits.length <= 15) {
+      return `+${digits}`;
+    }
+  } else {
+    // Il y a un '+'
+    if (digits.length >= 10 && digits.length <= 15) {
+      return `+${digits}`;
+    }
   }
 
-  // 4. Vérifier le préfixe mobile (70, 75, 76, 77, 78)
-  const prefix = digits.substring(0, 2);
-  const validPrefixes = ["70", "75", "76", "77", "78"];
-  
-  if (!validPrefixes.includes(prefix)) {
-    return null;
-  }
-
-  // 5. Retourner au format E.164
-  return `+221${digits}`;
+  return null;
 }
 
 /**

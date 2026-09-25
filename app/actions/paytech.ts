@@ -31,6 +31,19 @@ export async function createPayTechCheckoutSession() {
     // Si l'utilisateur a mis "live" dans son .env par erreur, on force à "prod"
     const finalEnv = (process.env.PAYTECH_ENV === "live" || process.env.PAYTECH_ENV === "prod") ? "prod" : "test";
 
+    // Récupérer les paramètres de l'atelier pour pré-remplir le numéro et le nom
+    const { SettingsRepository } = await import('@/lib/data-access');
+    let clientName = user.user_metadata?.full_name || user.email?.split('@')[0] || '';
+    let clientPhone = '';
+
+    try {
+      const settings = await SettingsRepository.getSettings();
+      if (settings.workshopName) clientName = settings.workshopName;
+      if (settings.phone) clientPhone = settings.phone;
+    } catch (e) {
+      console.error("Erreur lors de la récupération des paramètres :", e);
+    }
+
     const bodyData = {
       item_name: "Abonnement PRO AZ-TAILOR",
       item_price: amount,
@@ -40,7 +53,12 @@ export async function createPayTechCheckoutSession() {
       env: finalEnv,
       success_url: `${siteUrl}/settings?success=true`,
       ipn_url: `${siteUrl}/api/webhooks/paytech`,
-      cancel_url: `${siteUrl}/settings?canceled=true`
+      cancel_url: `${siteUrl}/settings?canceled=true`,
+      custom_field_1: user.id,
+      // Pré-remplissage des champs pour éviter à l'utilisateur de les retaper
+      client_name: clientName,
+      client_phone: clientPhone,
+      is_mobile: 'yes'
     };
 
     const response = await fetch('https://paytech.sn/api/payment/request-payment', {

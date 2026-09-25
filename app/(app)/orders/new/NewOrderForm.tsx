@@ -33,8 +33,8 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   
-  const [totalPriceStr, setTotalPriceStr] = useState<string>("0");
-  const [totalPaidStr, setTotalPaidStr] = useState<string>("0");
+  const [totalPriceStr, setTotalPriceStr] = useState<string>("");
+  const [totalPaidStr, setTotalPaidStr] = useState<string>("");
   
   const remainingToPay = Math.max(0, (Number(totalPriceStr) || 0) - (Number(totalPaidStr) || 0));
 

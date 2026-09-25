@@ -74,6 +74,9 @@ export async function updateSession(request: NextRequest) {
                            !request.nextUrl.pathname.startsWith('/_next') &&
                            !request.nextUrl.pathname.startsWith('/api') &&
                            request.nextUrl.pathname !== '/favicon.ico' &&
+                           request.nextUrl.pathname !== '/manifest.webmanifest' &&
+                           !request.nextUrl.pathname.startsWith('/icon') &&
+                           !request.nextUrl.pathname.startsWith('/apple-icon') &&
                            request.nextUrl.pathname !== '/' &&
                            request.nextUrl.pathname !== '/a-propos' &&
                            request.nextUrl.pathname !== '/politique-de-confidentialite' &&
