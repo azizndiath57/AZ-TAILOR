@@ -177,6 +177,9 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 required
                 options={[
                   { value: "costume", label: "Costume", icon: "checkroom" },
+                  { value: "ensemble costume africain", label: "Ensemble costume africain", icon: "checkroom" },
+                  { value: "taibasse", label: "Taibasse", icon: "apparel" },
+                  { value: "haut", label: "Haut", icon: "styler" },
                   { value: "chemise", label: "Chemise", icon: "styler" },
                   { value: "pantalon", label: "Pantalon", icon: "accessibility_new" },
                   { value: "boubou", label: "Boubou", icon: "apparel" },

@@ -68,5 +68,5 @@ export async function signup(prevState: any, formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { success: true }
 }

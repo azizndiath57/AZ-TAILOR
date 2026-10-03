@@ -187,6 +187,9 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
                 required
                 options={[
                   { value: "costume", label: "Costume", icon: "checkroom" },
+                  { value: "ensemble costume africain", label: "Ensemble costume africain", icon: "checkroom" },
+                  { value: "taibasse", label: "Taibasse", icon: "apparel" },
+                  { value: "haut", label: "Haut", icon: "styler" },
                   { value: "chemise", label: "Chemise", icon: "styler" },
                   { value: "pantalon", label: "Pantalon", icon: "accessibility_new" },
                   { value: "boubou", label: "Boubou", icon: "apparel" },
@@ -274,9 +277,9 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
             </div>
           ) : showMeasurements ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in zoom-in-95 duration-200">
-              {['cou', 'epaule', 'poitrine', 'manche', 'taille', 'hanche', 'cuisse', 'longueur_totale'].map((m) => (
+              {['cou', 'epaule', 'carrure_devant', 'poitrine', 'volume_poitrine', 'ecartement_seins', 'manche', 'manche_3_4', 'tour_manche', 'valeur_piece', 'taille', 'taille_vetement', 'hanche', 'tour_hanche', 'cuisse', 'longueur_haut', 'longueur_taille', 'longueur_totale', 'longueur_boubou', 'longueur_robe', 'longueur_jupe', 'longueur_jupe_3_4', 'longueur_pagne'].map((m) => (
                 <div key={m}>
-                  <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{m.replace('_', ' ')}</label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{m.replace(/_/g, ' ')}</label>
                   <input 
                     type="number" 
                     name={`measurement_${m}`} 

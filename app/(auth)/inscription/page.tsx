@@ -2,10 +2,18 @@
 
 import { signup } from "./actions";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function InscriptionPage() {
   const [state, formAction, isPending] = useActionState(signup, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.success) {
+      router.push('/dashboard');
+    }
+  }, [state, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-paytech-theme p-4">

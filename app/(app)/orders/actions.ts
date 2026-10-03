@@ -58,6 +58,8 @@ export async function createOrderAction(formData: FormData) {
     console.log("ORDER ADDED SUCCESSFULLY");
     revalidatePath("/orders");
     revalidatePath("/dashboard");
+    revalidatePath("/clients");
+    if (clientId) revalidatePath(`/clients/${clientId}`);
     return { success: true };
   } catch (err: any) {
     console.error("ERROR IN CREATE ORDER ACTION:", err);
@@ -121,6 +123,8 @@ export async function editOrderAction(formData: FormData) {
     revalidatePath("/orders");
     revalidatePath(`/orders/${orderId}`);
     revalidatePath("/dashboard");
+    revalidatePath("/clients");
+    if (clientId) revalidatePath(`/clients/${clientId}`);
     
     return { success: true };
   } catch (err: any) {

@@ -65,8 +65,8 @@ export default function Navbar() {
         </div>
 
         {/* Action Buttons (Desktop) & Hamburger (Mobile) */}
-        <div className="flex items-center gap-4">
-          <div className="hidden md:block">
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center">
             <LanguageSwitcher />
           </div>
           <Link
@@ -105,9 +105,6 @@ export default function Navbar() {
           <Link href="#ateliers" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('ateliers')}</Link>
           <Link href="#blog" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('blog')}</Link>
           <hr className="border-outline-variant/20 my-2" />
-          <div className="flex justify-center my-2">
-            <LanguageSwitcher />
-          </div>
           <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold text-center">{t('login')}</Link>
           <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-on-secondary text-center font-bold py-3 rounded-full mt-2">{t('startFree')}</Link>
         </div>

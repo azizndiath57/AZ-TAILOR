@@ -7,5 +7,8 @@ export const GARMENT_TYPES = [
   "Ensemble",
   "Veste",
   "Manteau",
-  "Costume"
+  "Costume",
+  "Ensemble costume africain",
+  "Taibasse",
+  "Haut"
 ] as const;

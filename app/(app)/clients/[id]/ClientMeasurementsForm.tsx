@@ -60,10 +60,17 @@ export default function ClientMeasurementsForm({
             <div className="grid grid-cols-2 gap-4">
               <MeasurementInput label={t("neck")} name="measure_cou" defaultValue={getVal("cou")} />
               <MeasurementInput label={t("shoulder")} name="measure_epaule" defaultValue={getVal("epaule")} />
+              <MeasurementInput label="Carrure Devant" name="measure_carrure_devant" defaultValue={getVal("carrure_devant")} />
               <MeasurementInput label={t("chest")} name="measure_poitrine" defaultValue={getVal("poitrine")} />
+              <MeasurementInput label="Volume Poitrine" name="measure_volume_poitrine" defaultValue={getVal("volume_poitrine")} />
+              <MeasurementInput label="Écartement Seins" name="measure_ecartement_seins" defaultValue={getVal("ecartement_seins")} />
+              <MeasurementInput label="Longueur Haut" name="measure_longueur_haut" defaultValue={getVal("longueur_haut")} />
               <MeasurementInput label={t("shirtLength")} name="measure_longueur_chemise" defaultValue={getVal("longueur_chemise")} />
               <MeasurementInput label={t("sleeveLength")} name="measure_longueur_manche" defaultValue={getVal("longueur_manche")} />
+              <MeasurementInput label="Manche 3/4" name="measure_manche_3_4" defaultValue={getVal("manche_3_4")} />
+              <MeasurementInput label="Tour de Manche" name="measure_tour_manche" defaultValue={getVal("tour_manche")} />
               <MeasurementInput label={t("armCircumference")} name="measure_tour_bras" defaultValue={getVal("tour_bras")} />
+              <MeasurementInput label="Valeur de Pièce" name="measure_valeur_piece" defaultValue={getVal("valeur_piece")} />
             </div>
           </div>
 
@@ -73,11 +80,27 @@ export default function ClientMeasurementsForm({
             
             <div className="grid grid-cols-2 gap-4">
               <MeasurementInput label={t("waist")} name="measure_ceinture" defaultValue={getVal("ceinture")} />
+              <MeasurementInput label="Taille vêtement" name="measure_taille_vetement" defaultValue={getVal("taille_vetement")} />
               <MeasurementInput label={t("hips")} name="measure_bassin" defaultValue={getVal("bassin")} />
+              <MeasurementInput label="Tour de Hanche" name="measure_tour_hanche" defaultValue={getVal("tour_hanche")} />
               <MeasurementInput label={t("pantsLength")} name="measure_longueur_pantalon" defaultValue={getVal("longueur_pantalon")} />
               <MeasurementInput label={t("thigh")} name="measure_cuisse" defaultValue={getVal("cuisse")} />
               <MeasurementInput label={t("knee")} name="measure_genou" defaultValue={getVal("genou")} />
               <MeasurementInput label={t("ankle")} name="measure_cheville" defaultValue={getVal("cheville")} />
+            </div>
+          </div>
+          
+          {/* Longueurs & Autres (Robes, Jupes, Boubous) */}
+          <div className="space-y-4 md:col-span-2">
+            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">Robes, Jupes & Boubous</h4>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <MeasurementInput label="Longueur Taille" name="measure_longueur_taille" defaultValue={getVal("longueur_taille")} />
+              <MeasurementInput label="Longueur Boubou" name="measure_longueur_boubou" defaultValue={getVal("longueur_boubou")} />
+              <MeasurementInput label="Longueur Robe" name="measure_longueur_robe" defaultValue={getVal("longueur_robe")} />
+              <MeasurementInput label="Longueur Jupe" name="measure_longueur_jupe" defaultValue={getVal("longueur_jupe")} />
+              <MeasurementInput label="Longueur Jupe 3/4" name="measure_longueur_jupe_3_4" defaultValue={getVal("longueur_jupe_3_4")} />
+              <MeasurementInput label="Longueur Pagne" name="measure_longueur_pagne" defaultValue={getVal("longueur_pagne")} />
             </div>
           </div>
         </div>

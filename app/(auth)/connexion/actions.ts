@@ -37,11 +37,9 @@ export async function login(prevState: any, formData: FormData) {
     }
     return { error: errorMessage }
   }
-
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { success: true }
 }
-
 export async function signout() {
   const supabase = await createClient()
   await supabase.auth.signOut()

@@ -435,7 +435,9 @@ export const SupabaseClientsRepository = {
       notes: c.notes,
       measurements: c.measurements,
       createdAt: new Date(c.created_at),
-      orders: (c.orders || []).map((o: any) => ({
+      orders: (c.orders || [])
+        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .map((o: any) => ({
         id: o.id,
         reference: o.reference,
         garmentType: o.garment_type,
