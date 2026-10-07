@@ -2,6 +2,7 @@
 
 import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
+import { TRIAL_DURATION_DAYS } from "@/lib/constants/subscription";
 
 // Une Server Action est appelable par simple requête POST : le contrôle du layout /admin
 // ne la protège pas, il faut donc revérifier le rôle ici avant d'utiliser la clé service_role.
@@ -54,7 +55,7 @@ export async function getAdminDashboardData() {
     let trialDaysLeft = 0;
 
     if (sub && sub.plan_type === 'free') {
-        const trialDurationDays = 30;
+        const trialDurationDays = TRIAL_DURATION_DAYS;
         const createdAt = new Date(sub.created_at);
         const now = new Date();
         const diffTime = now.getTime() - createdAt.getTime();

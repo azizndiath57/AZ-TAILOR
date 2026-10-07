@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { SubscriptionStatus } from '@/app/actions/subscription';
+import { TRIAL_DURATION_DAYS } from '@/lib/constants/subscription';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export default function SubscriptionGuard({ children, status }: SubscriptionGuar
         </div>
         <h2 className="text-3xl font-bold mb-3 text-gray-900">Période d'essai terminée</h2>
         <p className="text-gray-600 mb-8 max-w-lg text-lg">
-          Votre période d'essai gratuit de 30 jours est arrivée à son terme. Pour continuer à gérer vos clients et vos commandes, veuillez activer un abonnement.
+          Votre période d'essai gratuit de {TRIAL_DURATION_DAYS} jours est arrivée à son terme. Pour continuer à gérer vos clients et vos commandes, veuillez activer un abonnement.
         </p>
         <Link 
           href="/settings" 

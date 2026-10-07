@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from '@/utils/supabase/server';
+import { TRIAL_DURATION_DAYS } from '@/lib/constants/subscription';
 
 export type SubscriptionStatus = {
   plan: string;
@@ -29,7 +30,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
   let trialDaysLeft = 0;
 
   if (sub.plan_type === 'free') {
-      const trialDurationDays = 90;
+      const trialDurationDays = TRIAL_DURATION_DAYS;
       const createdAt = new Date(sub.created_at);
       const now = new Date();
       // Calculate diff in days
