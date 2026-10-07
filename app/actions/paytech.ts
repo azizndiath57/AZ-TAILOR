@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { PRO_MONTHLY_PRICE_XOF } from '@/lib/constants/subscription';
 
 export async function createPayTechCheckoutSession() {
   try {
@@ -21,7 +22,7 @@ export async function createPayTechCheckoutSession() {
 
     // On intègre l'ID de l'utilisateur directement dans la référence pour l'IPN (format: timestamp__userid)
     const orderId = `${Date.now()}__${user.id}`;
-    const amount = 4000; // Montant de l'abonnement
+    const amount = PRO_MONTHLY_PRICE_XOF; // Montant de l'abonnement
 
     const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org').replace(/\/$/, '');
 
