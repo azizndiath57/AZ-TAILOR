@@ -10,7 +10,8 @@ import {
 } from '../types';
 import { PaymentMethod, toPaymentMethod } from '../../constants/payment-methods';
 import { FREE_CLIENT_LIMIT } from '../../constants/subscription';
-import { resolveSubscription, type SubscriptionAccess } from '../../subscription';
+import type { SubscriptionAccess } from '../../subscription';
+import { loadSubscriptionAccess } from '../../subscription-access';
 
 // Moyen du paiement le plus récent d'une commande (undefined si aucun paiement)
 function lastPaymentMethodOf(payments: { method: string; created_at: string }[] | null | undefined) {
@@ -27,21 +28,15 @@ async function getUserId() {
   return user.id;
 }
 
-// Droits de l'atelier selon son abonnement (essai, formule gratuite historique, Pro)
+// Droits de l'atelier selon son abonnement (essai en cours, Pro, administrateur)
 async function getAccess(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
-  const { data: sub } = await supabase
-    .from('subscriptions')
-    .select('plan_type, current_period_end, created_at, stripe_subscription_id')
-    .eq('owner_id', userId)
-    .single();
-
-  const access = resolveSubscription(sub);
+  const access = await loadSubscriptionAccess(supabase, userId);
   // L'écran est déjà bloqué dans ce cas ; on refuse aussi côté serveur
   if (!access.isActive) throw new Error("ABONNEMENT_REQUIS");
   return access;
 }
 
-// Sans abonnement Pro, un atelier ne dépasse pas FREE_CLIENT_LIMIT clients
+// Pendant leur essai, les comptes créés avant le 8 octobre 2026 ne dépassent pas FREE_CLIENT_LIMIT clients
 async function assertClientLimit(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, access: SubscriptionAccess) {
   if (!access.hasClientLimit) return;
   const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', userId);

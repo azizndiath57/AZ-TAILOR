@@ -92,7 +92,7 @@ export default function CGVPage() {
                 Tout nouveau compte bénéficie d'un essai gratuit de 14 jours. À son terme, un abonnement est nécessaire pour continuer à utiliser le service.
               </p>
               <p className="mt-4">
-                Les comptes créés avant le 8 octobre 2026 conservent la formule gratuite dont ils bénéficiaient, limitée à 20 clients.
+                Les comptes créés avant le 8 octobre 2026 conservent l'essai gratuit de 3 mois (90 jours à compter de leur inscription) dont ils bénéficiaient, limité à 20 clients. À son terme, un abonnement est nécessaire pour continuer à utiliser le service.
               </p>
             </section>
 

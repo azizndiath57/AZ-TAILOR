@@ -53,12 +53,13 @@ export async function getAdminDashboardData() {
     // Même règle que celle qui bloque ou non l'application de l'atelier
     return {
       ...profile,
-      subscription: sub ? { ...resolveSubscription(sub), status: sub.status } : null
+      subscription: sub ? { ...resolveSubscription(sub, { isAdmin: profile.role === 'admin' }), status: sub.status } : null
     };
   });
 
   const totalUsers = users.length;
-  const activeSubscriptions = users.filter(u => u.subscription?.plan === 'pro').length;
+  // Le compte administrateur a tous les droits sans payer : il ne compte pas comme un abonnement
+  const activeSubscriptions = users.filter(u => u.subscription?.plan === 'pro' && !u.subscription.isExempt).length;
 
   return {
     users,

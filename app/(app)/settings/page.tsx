@@ -35,7 +35,7 @@ function SettingsContent() {
   const [settings, setSettings] = useState<any>(null);
   const [recoveryCode, setRecoveryCode] = useState<string | null>(null);
 
-  const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: true, isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, hasClientLimit: true, renewsManually: false, endDate: null });
+  const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: true, isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, trialDurationDays: 0, hasClientLimit: true, renewsManually: false, isExempt: false, endDate: null });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [isMobileMoneyLoading, setIsMobileMoneyLoading] = useState(false);
 
@@ -344,13 +344,13 @@ function SettingsContent() {
                       <p className="text-sm text-gray-500 mt-1">
                         {subscription.plan === 'pro'
                           ? tSub("descPro")
-                          : subscription.plan === 'free'
-                            ? tSub("descFree")
-                            : subscription.isSubscriptionExpired
-                              ? tSub("descExpired")
-                              : subscription.isTrialExpired
-                                ? tSub("descTrialEnded")
-                                : tSub("descTrial", { days: subscription.trialDaysLeft })}
+                          : subscription.isSubscriptionExpired
+                            ? tSub("descExpired")
+                            : subscription.isTrialExpired
+                              ? tSub("descTrialEnded")
+                              : subscription.trialDurationDays > 0
+                                ? `${subscription.hasClientLimit ? `${tSub("descFree")} ` : ""}${tSub("descTrial", { days: subscription.trialDaysLeft })}`
+                                : tSub("descFree")}
                       </p>
                     </div>
                     <div className="text-right">
@@ -387,8 +387,9 @@ function SettingsContent() {
                     </p>
                   )}
 
-                  {/* Un Pro payé par PayTech se renouvelle à la main : on lui laisse le bouton de paiement */}
-                  {subscription.plan === 'pro' && !subscription.renewsManually ? (
+                  {/* Un Pro payé par PayTech se renouvelle à la main : on lui laisse le bouton de paiement.
+                      Le compte administrateur n'a rien à payer ni à gérer. */}
+                  {subscription.isExempt ? null : subscription.plan === 'pro' && !subscription.renewsManually ? (
                     <button
                       onClick={async () => {
                         setIsStripeLoading(true);

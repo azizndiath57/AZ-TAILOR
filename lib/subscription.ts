@@ -1,4 +1,4 @@
-import { LEGACY_FREE_CUTOFF, PRO_GRACE_DAYS, TRIAL_DURATION_DAYS } from "./constants/subscription";
+import { LEGACY_CUTOFF, LEGACY_TRIAL_DURATION_DAYS, PRO_GRACE_DAYS, TRIAL_DURATION_DAYS } from "./constants/subscription";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -10,30 +10,39 @@ export type SubscriptionRow = {
 };
 
 export type SubscriptionAccess = {
-  // "free" : formule gratuite conservée par les comptes historiques
-  // "trial" : essai d'un nouveau compte, en cours ou terminé
-  // "pro" : abonnement Pro en cours de validité
+  // "free" : essai de 3 mois d'un compte créé avant LEGACY_CUTOFF (limité en clients), en cours ou terminé
+  // "trial" : essai de 14 jours d'un nouveau compte, en cours ou terminé
+  // "pro" : abonnement Pro en cours de validité, ou compte administrateur
   plan: "free" | "trial" | "pro";
   // false : l'application est bloquée jusqu'à l'abonnement
   isActive: boolean;
   isTrialExpired: boolean;
   isSubscriptionExpired: boolean;
   trialDaysLeft: number;
+  trialDurationDays: number;
   hasClientLimit: boolean;
   // true : Pro payé par PayTech, à renouveler à la main chaque mois (pas de prélèvement automatique)
   renewsManually: boolean;
+  // true : compte administrateur, jamais bloqué et sans abonnement à payer
+  isExempt: boolean;
   endDate: string | null;
 };
 
+const NO_TRIAL = { isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, trialDurationDays: 0 };
+
 // Règle unique d'accès : appelée par l'écran de blocage, les limites de clients et le tableau de bord admin
-export function resolveSubscription(sub: SubscriptionRow | null | undefined, now: Date = new Date()): SubscriptionAccess {
-  // Un compte sans ligne d'abonnement est une anomalie : on ne le bloque pas, mais il reste limité
-  if (!sub) {
-    return { plan: "free", isActive: true, isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, hasClientLimit: true, renewsManually: false, endDate: null };
+export function resolveSubscription(
+  sub: SubscriptionRow | null | undefined,
+  { isAdmin = false, now = new Date() }: { isAdmin?: boolean; now?: Date } = {}
+): SubscriptionAccess {
+  if (isAdmin) {
+    return { plan: "pro", isActive: true, ...NO_TRIAL, hasClientLimit: false, renewsManually: false, isExempt: true, endDate: null };
   }
 
-  const createdAt = new Date(sub.created_at);
-  const isLegacy = createdAt < new Date(LEGACY_FREE_CUTOFF);
+  // Un compte sans ligne d'abonnement est une anomalie : on ne le bloque pas, mais il reste limité
+  if (!sub) {
+    return { plan: "free", isActive: true, ...NO_TRIAL, hasClientLimit: true, renewsManually: false, isExempt: false, endDate: null };
+  }
 
   // Seuls les paiements PayTech sont ponctuels (un paiement = un mois) ; un abonnement Stripe
   // est reconduit et son état est tenu à jour par le webhook Stripe.
@@ -43,32 +52,31 @@ export function resolveSubscription(sub: SubscriptionRow | null | undefined, now
     && now.getTime() > periodEnd.getTime() + PRO_GRACE_DAYS * DAY_MS;
 
   if (sub.plan_type === "pro" && !isProLapsed) {
-    return { plan: "pro", isActive: true, isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, hasClientLimit: false, renewsManually: isPayTech, endDate: sub.current_period_end };
+    return { plan: "pro", isActive: true, ...NO_TRIAL, hasClientLimit: false, renewsManually: isPayTech, isExempt: false, endDate: sub.current_period_end };
   }
 
-  if (isLegacy) {
-    return { plan: "free", isActive: true, isTrialExpired: false, isSubscriptionExpired: isProLapsed, trialDaysLeft: 0, hasClientLimit: true, renewsManually: false, endDate: sub.current_period_end };
-  }
-
-  if (isProLapsed) {
-    return { plan: "trial", isActive: false, isTrialExpired: false, isSubscriptionExpired: true, trialDaysLeft: 0, hasClientLimit: false, renewsManually: false, endDate: sub.current_period_end };
-  }
+  const createdAt = new Date(sub.created_at);
+  const isLegacy = createdAt < new Date(LEGACY_CUTOFF);
+  const trialDurationDays = isLegacy ? LEGACY_TRIAL_DURATION_DAYS : TRIAL_DURATION_DAYS;
 
   const daysSinceSignup = Math.floor((now.getTime() - createdAt.getTime()) / DAY_MS);
-  const trialDaysLeft = Math.max(0, TRIAL_DURATION_DAYS - daysSinceSignup);
+  const trialDaysLeft = Math.max(0, trialDurationDays - daysSinceSignup);
   const isOver = trialDaysLeft === 0;
   // Un compte qui a déjà payé puis arrêté n'est pas « en fin d'essai » : son abonnement est terminé
   const hadSubscription = !!sub.stripe_subscription_id;
 
   return {
-    plan: "trial",
+    plan: isLegacy ? "free" : "trial",
     isActive: !isOver,
     isTrialExpired: isOver && !hadSubscription,
     isSubscriptionExpired: isOver && hadSubscription,
     trialDaysLeft,
-    // L'essai donne accès à la formule Pro complète : pas de limite de clients pendant ces 14 jours
-    hasClientLimit: false,
+    trialDurationDays,
+    // Les anciens comptes gardent la limite de clients de leur formule d'origine ;
+    // le nouvel essai de 14 jours donne accès à la formule Pro complète
+    hasClientLimit: isLegacy,
     renewsManually: false,
+    isExempt: false,
     endDate: null,
   };
 }

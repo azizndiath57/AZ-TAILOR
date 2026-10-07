@@ -4,7 +4,6 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { SubscriptionStatus } from '@/app/actions/subscription';
-import { TRIAL_DURATION_DAYS } from '@/lib/constants/subscription';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
@@ -27,7 +26,7 @@ export default function SubscriptionGuard({ children, status }: SubscriptionGuar
         <p className="text-gray-600 mb-8 max-w-lg text-lg">
           {status.isSubscriptionExpired
             ? "Votre abonnement Pro est arrivé à échéance. Vos clients et vos commandes sont conservés : renouvelez votre abonnement pour y accéder de nouveau."
-            : `Votre période d'essai gratuit de ${TRIAL_DURATION_DAYS} jours est arrivée à son terme. Vos clients et vos commandes sont conservés : activez l'abonnement Pro pour continuer.`}
+            : `Votre période d'essai gratuit de ${status.trialDurationDays} jours est arrivée à son terme. Vos clients et vos commandes sont conservés : activez l'abonnement Pro pour continuer.`}
         </p>
         <Link
           href="/settings?tab=abonnement"
@@ -42,7 +41,7 @@ export default function SubscriptionGuard({ children, status }: SubscriptionGuar
 
   return (
     <>
-      {status.isActive && status.plan === 'trial' && status.trialDaysLeft <= 5 && (
+      {status.isActive && status.plan !== 'pro' && status.trialDurationDays > 0 && status.trialDaysLeft <= 5 && (
         <div className="bg-orange-50 border-b border-orange-100 px-4 py-2 text-center text-sm text-orange-800 font-medium">
           Il vous reste {status.trialDaysLeft} {status.trialDaysLeft > 1 ? 'jours' : 'jour'} d'essai gratuit. Pensez à activer votre abonnement pour ne pas être bloqué.
         </div>

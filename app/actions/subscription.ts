@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { resolveSubscription, type SubscriptionAccess } from '@/lib/subscription';
+import { loadSubscriptionAccess } from '@/lib/subscription-access';
 
 export type SubscriptionStatus = SubscriptionAccess;
 
@@ -11,11 +12,5 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
 
   if (!user) return resolveSubscription(null);
 
-  const { data: sub } = await supabase
-    .from('subscriptions')
-    .select('plan_type, current_period_end, created_at, stripe_subscription_id')
-    .eq('owner_id', user.id)
-    .single();
-
-  return resolveSubscription(sub);
+  return loadSubscriptionAccess(supabase, user.id);
 }
