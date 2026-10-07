@@ -3,11 +3,14 @@
 import { createAdminClient } from '@/utils/supabase/admin'
 import { normalizePhone } from '@/lib/phone'
 
+// Même message que le numéro soit inconnu ou le code faux, pour ne pas révéler quels numéros ont un compte
+const INVALID_CREDENTIALS = "Numéro ou code de récupération incorrect. Si vous n'avez pas de code, contactez le support."
+
 export async function resetPassword(prevState: any, formData: FormData) {
   const phone = formData.get('phone') as string;
   const newPassword = formData.get('password') as string;
   const recoveryCode = formData.get('recoveryCode') as string;
-  
+
   const normalizedPhone = normalizePhone(phone);
 
   if (!normalizedPhone) {
@@ -29,10 +32,24 @@ export async function resetPassword(prevState: any, formData: FormData) {
       .single();
 
     if (profileError || !profile) {
-      return { error: "Aucun compte n'est associé à ce numéro." }
+      return { error: INVALID_CREDENTIALS }
     }
 
-    // 2. Fetch the user's data to check the recovery code
+    // 2. Count this attempt before checking the code: 5 per hour and per account at most,
+    //    otherwise the 6-digit code can simply be brute-forced
+    const { data: isAllowed, error: attemptError } = await adminSupabase
+      .rpc('consume_password_reset_attempt', { p_user_id: profile.id });
+
+    if (attemptError) {
+      console.error("Erreur lors du comptage des tentatives:", attemptError.message);
+      return { error: "Une erreur inattendue est survenue." }
+    }
+
+    if (!isAllowed) {
+      return { error: "Trop de tentatives. Réessayez dans une heure." }
+    }
+
+    // 3. Fetch the user's data to check the recovery code
     const { data: userData, error: userError } = await adminSupabase.auth.admin.getUserById(profile.id);
 
     if (userError || !userData?.user) {
@@ -41,15 +58,11 @@ export async function resetPassword(prevState: any, formData: FormData) {
 
     const expectedRecoveryCode = userData.user.user_metadata?.recovery_code;
 
-    if (!expectedRecoveryCode) {
-      return { error: "Aucun code de récupération n'est configuré pour ce compte. Veuillez contacter le support." }
+    if (!expectedRecoveryCode || expectedRecoveryCode !== recoveryCode) {
+      return { error: INVALID_CREDENTIALS }
     }
 
-    if (expectedRecoveryCode !== recoveryCode) {
-      return { error: "Code de récupération incorrect." }
-    }
-
-    // 3. Update the user's password using the Admin API
+    // 4. Update the user's password using the Admin API
     const { error: updateError } = await adminSupabase.auth.admin.updateUserById(
       profile.id,
       { password: newPassword }
@@ -59,6 +72,8 @@ export async function resetPassword(prevState: any, formData: FormData) {
       console.error("Erreur lors de la mise à jour du mot de passe:", updateError.message);
       return { error: "Une erreur est survenue lors de la réinitialisation du mot de passe." }
     }
+
+    await adminSupabase.from('password_reset_attempts').delete().eq('user_id', profile.id);
 
     return { success: true }
   } catch (err: any) {
