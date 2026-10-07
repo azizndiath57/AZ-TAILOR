@@ -9,6 +9,7 @@ import CustomSelect from "@/app/components/CustomSelect";
 import CustomDatePicker from "@/app/components/CustomDatePicker";
 import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS, PaymentMethod } from "@/lib/constants/payment-methods";
+import LimitReachedModal from "@/app/components/LimitReachedModal";
 
 export default function NewOrderForm({ clients }: { clients: Client[] }) {
   const t = useTranslations("OrderForm");
@@ -45,6 +46,7 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
   const [showMeasurements, setShowMeasurements] = useState(false);
   const [fabricPhotoName, setFabricPhotoName] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,6 +56,12 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
     try {
       const result = await createOrderAction(formData);
       
+      if (result?.error === "LIMITE_ATTEINTE") {
+        setIsSubmitting(false);
+        setShowLimitModal(true);
+        return;
+      }
+
       if (result && result.error) {
         setIsSubmitting(false);
         alert("Une erreur est survenue lors de l'enregistrement de la commande: " + result.error);
@@ -407,6 +415,8 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
       </div>
     </form>
     
+    {showLimitModal && <LimitReachedModal onClose={() => setShowLimitModal(false)} />}
+
     {/* Success Alert Modal */}
     {showSuccessAlert && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
