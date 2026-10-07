@@ -8,6 +8,7 @@ import { OrderWithFinancials, Client } from "@/lib/data-access/types";
 import CustomSelect from "@/app/components/CustomSelect";
 import CustomDatePicker from "@/app/components/CustomDatePicker";
 import { useTranslations } from "next-intl";
+import { PAYMENT_METHODS, PaymentMethod } from "@/lib/constants/payment-methods";
 
 export default function EditOrderForm({ order, clients }: { order: OrderWithFinancials; clients: Client[] }) {
   const t = useTranslations("OrderForm");
@@ -28,6 +29,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
   
   const remainingToPay = Math.max(0, (Number(totalPriceStr) || 0) - (Number(totalPaidStr) || 0));
   const [fabricPhotoName, setFabricPhotoName] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(order.lastPaymentMethod ?? "cash");
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -326,6 +328,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
             </div>
             
             <div>
+              <input type="hidden" name="paymentMethod" value={paymentMethod} />
               <label className="block text-sm font-medium text-gray-700 mb-1">{t("amountPaid")}</label>
               <input 
                 type="number" 
@@ -334,6 +337,28 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 onChange={(e) => setTotalPaidStr(e.target.value)}
                 className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
               />
+              
+              {Number(totalPaidStr) > 0 && (
+                <div className="mt-4 animate-in fade-in slide-in-from-top-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Moyen de paiement</label>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                    {PAYMENT_METHODS.map((method) => (
+                      <button
+                        key={method.id}
+                        type="button"
+                        onClick={() => setPaymentMethod(method.id)}
+                        className={`p-2 rounded-lg text-xs font-semibold transition-all border-2 ${
+                          paymentMethod === method.id 
+                            ? 'bg-orange-50 border-brand text-brand' 
+                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {method.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="pt-4 border-t border-gray-100 flex justify-between items-center">

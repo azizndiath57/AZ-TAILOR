@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { OrdersRepository } from "@/lib/data-access";
+import { PaymentMethod, toPaymentMethod } from "@/lib/constants/payment-methods";
 
 export async function createOrderAction(formData: FormData) {
   const clientId = formData.get("clientId") as string;
@@ -14,6 +15,8 @@ export async function createOrderAction(formData: FormData) {
   const fabricText = formData.get("fabricText") as string;
   const expectedDeliveryDate = formData.get("expectedDeliveryDate") as string;
   const totalPrice = Number(formData.get("totalPrice") || 0);
+  const totalPaid = Number(formData.get("totalPaid") || 0);
+  const paymentMethod = toPaymentMethod(formData.get("paymentMethod"));
 
   let fabricPhotoUrl: string | undefined = undefined;
   const fabricPhoto = formData.get("fabricPhoto") as File | null;
@@ -41,7 +44,7 @@ export async function createOrderAction(formData: FormData) {
 
   console.log("CREATE ORDER ACTION CALLED with formData:", Object.fromEntries(formData.entries()));
   try {
-    await OrdersRepository.addOrder({
+    const newOrder = await OrdersRepository.addOrder({
       garmentType,
       fabricText,
       fabricPhotoUrl,
@@ -54,6 +57,10 @@ export async function createOrderAction(formData: FormData) {
       phone,
       measurements: Object.keys(measurements).length > 0 ? measurements : undefined
     });
+
+    if (totalPaid > 0) {
+      await OrdersRepository.addPayment(newOrder.id, totalPaid, paymentMethod);
+    }
 
     console.log("ORDER ADDED SUCCESSFULLY");
     revalidatePath("/orders");
@@ -87,6 +94,7 @@ export async function editOrderAction(formData: FormData) {
   const expectedDeliveryDate = formData.get("expectedDeliveryDate") as string;
   const totalPrice = Number(formData.get("totalPrice") || 0);
   const totalPaid = Number(formData.get("totalPaid") || 0);
+  const paymentMethod = toPaymentMethod(formData.get("paymentMethod"));
   const status = formData.get("status") as string;
   const notes = formData.get("notes") as string;
 
@@ -116,6 +124,7 @@ export async function editOrderAction(formData: FormData) {
       expectedDeliveryDate: expectedDeliveryDate ? new Date(expectedDeliveryDate) : undefined,
       totalPrice: totalPrice || undefined,
       totalPaid: totalPaid !== undefined ? totalPaid : undefined,
+      paymentMethod: paymentMethod,
       status: (status as any) || undefined,
       notes: notes || undefined,
     });
@@ -133,9 +142,9 @@ export async function editOrderAction(formData: FormData) {
   }
 }
 
-export async function addPaymentAction(orderId: string, amount: number, method: string, signature?: string | null) {
+export async function addPaymentAction(orderId: string, amount: number, method: PaymentMethod, signature?: string | null) {
   try {
-    await OrdersRepository.addPayment(orderId, amount, method, signature);
+    await OrdersRepository.addPayment(orderId, amount, toPaymentMethod(method), signature);
     revalidatePath("/orders");
     revalidatePath(`/orders/${orderId}`);
     revalidatePath(`/orders/${orderId}/invoice`);

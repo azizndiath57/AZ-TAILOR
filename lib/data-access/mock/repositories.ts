@@ -1,4 +1,5 @@
 import { Client, DashboardStats, Order, OrderWithFinancials, Payment, AppNotification } from "../types";
+import { PaymentMethod } from "../../constants/payment-methods";
 
 // In-memory store (persist across HMR)
 const globalForMockDb = globalThis as unknown as {
@@ -213,7 +214,7 @@ export const mockOrdersRepository = {
       orders.splice(index, 1);
     }
   },
-  async updateOrder(orderId: string, data: Partial<Order> & { totalPaid?: number }) {
+  async updateOrder(orderId: string, data: Partial<Order> & { totalPaid?: number; paymentMethod?: PaymentMethod }) {
     const index = orders.findIndex(o => o.id === orderId);
     if (index > -1) {
       orders[index] = { ...orders[index], ...data };
@@ -228,7 +229,7 @@ export const mockOrdersRepository = {
             id: `p${Date.now()}`,
             orderId,
             amount: data.totalPaid,
-            method: "cash",
+            method: data.paymentMethod || "cash",
             recordedAt: new Date()
           });
         }

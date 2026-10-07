@@ -61,6 +61,8 @@ export interface OrderWithFinancials extends Order {
   totalPaid: number;
   balanceDue: number;
   paymentStatus: PaymentStatus;
+  // Moyen du paiement le plus récent, absent si rien n'a encore été payé
+  lastPaymentMethod?: PaymentMethod;
 }
 
 export interface DashboardStats {

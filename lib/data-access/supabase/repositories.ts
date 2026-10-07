@@ -8,6 +8,14 @@ import {
   Client, 
   WorkshopSettings 
 } from '../types';
+import { PaymentMethod, toPaymentMethod } from '../../constants/payment-methods';
+
+// Moyen du paiement le plus récent d'une commande (undefined si aucun paiement)
+function lastPaymentMethodOf(payments: { method: string; created_at: string }[] | null | undefined) {
+  if (!payments || payments.length === 0) return undefined;
+  const latest = payments.reduce((a, b) => (new Date(b.created_at) > new Date(a.created_at) ? b : a));
+  return toPaymentMethod(latest.method);
+}
 
 // Helper to get authenticated user
 async function getUserId() {
@@ -126,7 +134,7 @@ export const SupabaseOrdersRepository = {
       .select(`
         *,
         clients(*),
-        payments(amount)
+        payments(amount, method, created_at)
       `)
       .order('created_at', { ascending: false });
 
@@ -158,7 +166,8 @@ export const SupabaseOrdersRepository = {
         },
         totalPaid,
         balanceDue: Math.max(0, totalPrice - totalPaid),
-        paymentStatus: totalPaid === 0 ? "non_paye" : totalPaid >= totalPrice ? "paye" : "partiel"
+        paymentStatus: totalPaid === 0 ? "non_paye" : totalPaid >= totalPrice ? "paye" : "partiel",
+        lastPaymentMethod: lastPaymentMethodOf(o.payments)
       };
     });
   },
@@ -170,16 +179,16 @@ export const SupabaseOrdersRepository = {
       .select(`
         *,
         clients(*),
-        payments(amount)
+        payments(amount, method, created_at)
       `)
       .eq('id', orderId)
       .single();
 
     if (!o) return null;
-    
+
     const totalPaid = o.payments?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0;
     const totalPrice = Number(o.total_price);
-    
+
     return {
       id: o.id,
       clientId: o.client_id,
@@ -188,6 +197,7 @@ export const SupabaseOrdersRepository = {
       fabricText: o.fabric_text,
       fabricPhotoUrl: o.fabric_photo_url,
       measurements: o.measurements,
+      lastPaymentMethod: lastPaymentMethodOf(o.payments),
       totalPrice,
       status: o.status as any,
       expectedDeliveryDate: new Date(o.expected_delivery_date),
@@ -340,7 +350,7 @@ export const SupabaseOrdersRepository = {
     await supabase.from('orders').delete().eq('id', orderId);
   },
   
-  async updateOrder(orderId: string, data: Partial<Order> & { totalPaid?: number }) {
+  async updateOrder(orderId: string, data: Partial<Order> & { totalPaid?: number; paymentMethod?: PaymentMethod }) {
     const supabase = await createClient();
     const user_id = await getUserId();
     
@@ -358,21 +368,36 @@ export const SupabaseOrdersRepository = {
     }
     
     if (data.totalPaid !== undefined) {
-      // For simplicity, we just delete all existing payments for this order and insert one new payment
-      await supabase.from('payments').delete().eq('order_id', orderId);
-      
-      if (data.totalPaid > 0) {
-        await supabase.from('payments').insert({
-          owner_id: user_id,
-          order_id: orderId,
-          amount: data.totalPaid,
-          method: 'cash'
-        });
+      const method = data.paymentMethod || 'cash';
+
+      const { data: existingPayments } = await supabase
+        .from('payments')
+        .select('amount, method, created_at')
+        .eq('order_id', orderId);
+      const currentTotal = (existingPayments || []).reduce((sum, p) => sum + Number(p.amount), 0);
+      const currentMethod = lastPaymentMethodOf(existingPayments);
+
+      // Same amount and same method: the edit was about something else, so the recorded
+      // payments (their dates and methods) must stay exactly as they are
+      const isPaymentUnchanged = data.totalPaid === currentTotal && (currentTotal === 0 || method === currentMethod);
+
+      if (!isPaymentUnchanged) {
+        // For simplicity, we just delete all existing payments for this order and insert one new payment
+        await supabase.from('payments').delete().eq('order_id', orderId);
+
+        if (data.totalPaid > 0) {
+          await supabase.from('payments').insert({
+            owner_id: user_id,
+            order_id: orderId,
+            amount: data.totalPaid,
+            method
+          });
+        }
       }
     }
   },
 
-  async addPayment(orderId: string, amount: number, method: string, signature?: string | null) {
+  async addPayment(orderId: string, amount: number, method: PaymentMethod, signature?: string | null) {
     const supabase = await createClient();
     const user_id = await getUserId();
     
