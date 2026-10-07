@@ -50,6 +50,7 @@ export async function updateSession(request: NextRequest) {
                            !request.nextUrl.pathname.startsWith('/api') &&
                            request.nextUrl.pathname !== '/favicon.ico' &&
                            request.nextUrl.pathname !== '/manifest.webmanifest' &&
+                           request.nextUrl.pathname !== '/sw.js' &&
                            !request.nextUrl.pathname.startsWith('/icon') &&
                            !request.nextUrl.pathname.startsWith('/apple-icon') &&
                            request.nextUrl.pathname !== '/' &&

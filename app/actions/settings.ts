@@ -1,5 +1,6 @@
 "use server";
 
+import { randomInt } from "crypto";
 import { revalidatePath } from "next/cache";
 import { mockSettingsRepository } from "@/lib/data-access";
 
@@ -24,7 +25,7 @@ export async function getRecoveryCodeAction() {
   
   if (!code) {
     // Generate one if the user doesn't have it yet (backward compatibility)
-    code = Math.floor(100000 + Math.random() * 900000).toString();
+    code = randomInt(100000, 1000000).toString();
     await supabase.auth.updateUser({
       data: { recovery_code: code }
     });

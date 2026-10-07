@@ -1,8 +1,27 @@
 "use server";
 
 import { createAdminClient } from "@/utils/supabase/admin";
+import { createClient } from "@/utils/supabase/server";
+
+// Une Server Action est appelable par simple requête POST : le contrôle du layout /admin
+// ne la protège pas, il faut donc revérifier le rôle ici avant d'utiliser la clé service_role.
+async function requireAdmin() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Non autorisé");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.role !== "admin") throw new Error("Non autorisé");
+}
 
 export async function getAdminDashboardData() {
+  await requireAdmin();
+
   const supabase = createAdminClient();
 
   // 1. Fetch all profiles
@@ -29,18 +48,18 @@ export async function getAdminDashboardData() {
   // 3. Merge data
   const users = profiles.map(profile => {
     const sub = subscriptions.find(s => s.owner_id === profile.id);
-    
+
     // Calculate trial status for free plans
     let isTrialExpired = false;
     let trialDaysLeft = 0;
-    
+
     if (sub && sub.plan_type === 'free') {
         const trialDurationDays = 30;
         const createdAt = new Date(sub.created_at);
         const now = new Date();
         const diffTime = now.getTime() - createdAt.getTime();
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays >= trialDurationDays) {
             isTrialExpired = true;
         } else {

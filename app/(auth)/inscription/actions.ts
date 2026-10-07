@@ -1,5 +1,6 @@
 'use server'
 
+import { randomInt } from 'crypto'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
@@ -29,7 +30,7 @@ export async function signup(prevState: any, formData: FormData) {
   const email = generateSyntheticEmail(normalizedPhone);
 
   // Generate a random 6-digit recovery code
-  const recoveryCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const recoveryCode = randomInt(100000, 1000000).toString();
 
   // 1. Check if the synthetic email already exists implicitly by trying to sign up
   const { data: authData, error } = await supabase.auth.signUp({
