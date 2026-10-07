@@ -338,27 +338,25 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
                 className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
               />
               
-              {Number(totalPaidStr) > 0 && (
-                <div className="mt-4 animate-in fade-in slide-in-from-top-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Moyen de paiement</label>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                    {PAYMENT_METHODS.map((method) => (
-                      <button
-                        key={method.id}
-                        type="button"
-                        onClick={() => setPaymentMethod(method.id)}
-                        className={`p-2 rounded-lg text-xs font-semibold transition-all border-2 ${
-                          paymentMethod === method.id 
-                            ? 'bg-orange-50 border-brand text-brand' 
-                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {method.label}
-                      </button>
-                    ))}
-                  </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Moyen de paiement</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {PAYMENT_METHODS.map((method) => (
+                    <button
+                      key={method.id}
+                      type="button"
+                      onClick={() => setPaymentMethod(method.id)}
+                      className={`p-2 rounded-lg text-xs font-semibold transition-all border-2 ${
+                        paymentMethod === method.id
+                          ? 'bg-orange-50 border-brand text-brand'
+                          : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      {method.label}
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
