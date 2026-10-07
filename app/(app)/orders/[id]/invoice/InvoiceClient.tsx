@@ -12,7 +12,7 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
   const [isSavedDialogOpen, setIsSavedDialogOpen] = useState(false);
   const [isLinkCopiedDialogOpen, setIsLinkCopiedDialogOpen] = useState(false);
   const [isStoryModalOpen, setIsStoryModalOpen] = useState(searchParams.get('share') === 'true');
-  const [baseUrl, setBaseUrl] = useState(process.env.NEXT_PUBLIC_SITE_URL || 'https://az-tailor.com');
+  const [baseUrl, setBaseUrl] = useState(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.aztailor.org');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -44,7 +44,7 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
 
   const trackingUrl = `${baseUrl}/suivi/${order.id}`;
 
-  const whatsappText = `Bonjour ${order.client.firstName}, voici le récapitulatif de votre commande (${order.reference}). Le reste à payer est de ${new Intl.NumberFormat('fr-FR').format(order.balanceDue)} FCFA. \n\nSuivez l'avancement de votre commande en direct ici : ${trackingUrl}\n\nMerci pour votre confiance ! - ${settings.workshopName || "AZ-TAILOR"}\n\n✂️ Géré par AZ-TAILOR - L'application n°1 des tailleurs. Créez votre atelier sur az-tailor.com`;
+  const whatsappText = `Bonjour ${order.client.firstName}, voici le récapitulatif de votre commande (${order.reference}). Le reste à payer est de ${new Intl.NumberFormat('fr-FR').format(order.balanceDue)} FCFA. \n\nSuivez l'avancement de votre commande en direct ici : ${trackingUrl}\n\nMerci pour votre confiance ! - ${settings.workshopName || "AZ-TAILOR"}\n\n✂️ Géré par AZ-TAILOR - L'application n°1 des tailleurs. Créez votre atelier sur www.aztailor.org`;
   const whatsappUrl = `https://wa.me/${order.client.phone.replace(/[^0-9+]/g, '')}?text=${encodeURIComponent(whatsappText)}`;
 
   return (

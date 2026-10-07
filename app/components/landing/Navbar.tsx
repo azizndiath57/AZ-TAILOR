@@ -66,12 +66,6 @@ export default function Navbar() {
           </Link>
           <Link
             className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1 hover:-translate-y-0.5 duration-200"
-            href="#ateliers"
-          >
-            {t('ateliers')}
-          </Link>
-          <Link
-            className="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors py-1 hover:-translate-y-0.5 duration-200"
             href="#blog"
           >
             {t('blog')}
@@ -123,7 +117,6 @@ export default function Navbar() {
         >
           <Link href="#solutions" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold">{t('solutions')}</Link>
           <Link href="#tarifs" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('tarifs')}</Link>
-          <Link href="#ateliers" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('ateliers')}</Link>
           <Link href="#blog" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('blog')}</Link>
           <hr className="border-outline-variant/20 my-2" />
           <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold text-center">{t('login')}</Link>

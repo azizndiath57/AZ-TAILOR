@@ -5,9 +5,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { MotionConfig, motion, useScroll, useSpring } from "motion/react";
 import Navbar from "./Navbar";
 import Hero from "./Hero";
-import SocialProof from "./SocialProof";
 import Features from "./Features";
-import Testimonials from "./Testimonials";
 import Pricing from "./Pricing";
 import Footer from "./Footer";
 import styles from "../../landing.module.css";
@@ -38,9 +36,8 @@ export default function LandingPage() {
         <Navbar />
         <main>
           <Hero />
-          <SocialProof />
           <Features />
-          <Testimonials />
+          {/* La section Testimonials (et le lien « Ateliers » de la Navbar) reviendra avec les vrais témoignages */}
           <Pricing />
         </main>
         <Footer />

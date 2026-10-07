@@ -68,36 +68,8 @@
   background-size: 24px 24px;
 }
 
-/* Infinite logo marquee */
-.marquee {
-  overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
-}
-.marqueeTrack {
-  display: flex;
-  width: max-content;
-  animation: marquee 32s linear infinite;
-}
-.marquee:hover .marqueeTrack {
-  animation-play-state: paused;
-}
-.marqueeGroup {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 4.5rem;
-  padding-right: 4.5rem;
-}
-@keyframes marquee {
-  to { transform: translateX(-50%); }
-}
-
 /* Stitched seam that runs under the section titles */
 .stitch {
   height: 2px;
   background-image: repeating-linear-gradient(to right, var(--color-brand) 0 10px, transparent 10px 18px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marqueeTrack { animation: none; }
 }

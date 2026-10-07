@@ -152,7 +152,7 @@ export default async function PublicOrderTrackingPage({ params }: { params: Prom
               Vous aimez notre travail ? Partagez ce lien avec un ami. S'il commande, vous gagnez <span className="font-bold text-white">10% de réduction</span> sur votre prochaine tenue !
             </p>
             <a 
-              href={`https://wa.me/?text=${encodeURIComponent(`Hello, mon tailleur est incroyable ! Viens découvrir ses créations et passe commande de ma part : https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'az-tailor.com'}/invite/${order.clientId}`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`Hello, mon tailleur est incroyable ! Viens découvrir ses créations et passe commande de ma part : https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || 'www.aztailor.org'}/invite/${order.clientId}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white text-indigo-600 font-bold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-colors shadow-sm"
