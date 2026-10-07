@@ -81,7 +81,6 @@ export default function Hero() {
   ];
 
   const plans = [
-    { price: 0, label: tPricing('freePlan') },
     { price: 4000, label: tPricing('proPlan') },
     { price: 12000, label: tPricing('premiumPlan') },
   ];
@@ -241,7 +240,7 @@ export default function Hero() {
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.8, ease: EASE_OUT }}
       >
-        <dl className="grid grid-cols-3 flex-1 w-full divide-x divide-white/15">
+        <dl className="grid grid-cols-2 flex-1 w-full divide-x divide-white/15">
           {plans.map((plan) => (
             <div key={plan.label} className="px-2 flex flex-col-reverse gap-1">
               <dt className="text-xs md:text-sm text-white/60">{plan.label}</dt>

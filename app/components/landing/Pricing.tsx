@@ -6,7 +6,6 @@ import FadeInUp from "./FadeInUp";
 import CountUp from "./CountUp";
 import MagneticButton from "./MagneticButton";
 import styles from "../../landing.module.css";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 export default function Pricing() {
@@ -25,26 +24,9 @@ export default function Pricing() {
           </div>
         </FadeInUp>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Plan Gratuit */}
-          <FadeInUp delay={100} className={`bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}>
-            <h3 className="font-headline-sm text-xl md:text-2xl font-bold text-primary mb-2">{t('freePlan')}</h3>
-            <div className="flex flex-wrap items-baseline gap-x-2 mb-6">
-              <span className="font-display-lg-mobile text-[32px] font-extrabold tracking-tight whitespace-nowrap text-primary">0 FCFA</span>
-              <span className="text-on-surface-variant font-label-sm">/{t('monthly').toLowerCase()}</span>
-            </div>
-            <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> {t('features.clients50')}</li>
-              <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> {t('features.invoicing')}</li>
-              <li className="flex items-center gap-3 text-on-surface-variant font-body-sm"><span className="material-symbols-outlined text-primary text-xl">check</span> {t('features.measurements')}</li>
-            </ul>
-            <Link href="/connexion" className="block text-center w-full py-3 rounded-full border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors">
-              {t('choosePlan')}
-            </Link>
-          </FadeInUp>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
           {/* Plan Pro */}
-          <FadeInUp delay={200} className={`bg-primary text-on-primary p-8 rounded-2xl relative md:-mt-4 md:mb-4 flex flex-col ${styles.hoverLift}`}>
+          <FadeInUp delay={100} className={`bg-primary text-on-primary p-8 rounded-2xl relative md:-mt-4 md:mb-4 flex flex-col ${styles.hoverLift}`}>
             <motion.div
               className="absolute -top-3 right-8 bg-secondary text-on-secondary px-3 py-1 rounded-full font-label-sm text-xs font-bold uppercase tracking-wider"
               animate={{ scale: [1, 1.08, 1] }}
@@ -69,7 +51,7 @@ export default function Pricing() {
           </FadeInUp>
 
           {/* Plan Atelier */}
-          <FadeInUp delay={300} className={`bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}>
+          <FadeInUp delay={200} className={`bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}>
             <h3 className="font-headline-sm text-xl md:text-2xl font-bold text-primary mb-2">{t('premiumPlan')}</h3>
             <div className="flex flex-wrap items-baseline gap-x-2 mb-6">
               <span className="font-display-lg-mobile text-[32px] font-extrabold tracking-tight whitespace-nowrap text-primary"><CountUp value={12000} /> FCFA</span>

@@ -20,7 +20,7 @@ export default function CGVPage() {
             <h1 className="font-display text-4xl md:text-5xl text-primary leading-tight font-bold">
               Conditions Générales de Vente
             </h1>
-            <p className="text-sm text-on-surface-variant mt-4">Dernière mise à jour : 02/09/2026</p>
+            <p className="text-sm text-on-surface-variant mt-4">Dernière mise à jour : 07/10/2026</p>
           </header>
 
           <div className="prose prose-lg text-on-surface-variant space-y-8">
@@ -68,9 +68,9 @@ export default function CGVPage() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-outline-variant/30 px-4 py-3 font-medium">Gratuit</td>
+                      <td className="border border-outline-variant/30 px-4 py-3 font-medium">Essai gratuit</td>
                       <td className="border border-outline-variant/30 px-4 py-3">0 FCFA</td>
-                      <td className="border border-outline-variant/30 px-4 py-3">10 commandes par mois, 1 utilisateur</td>
+                      <td className="border border-outline-variant/30 px-4 py-3">14 jours, toutes les fonctions de la formule Pro</td>
                     </tr>
                     <tr>
                       <td className="border border-outline-variant/30 px-4 py-3 font-medium">Pro</td>
@@ -87,6 +87,12 @@ export default function CGVPage() {
               </div>
               <p>
                 Les prix sont indiqués en francs CFA, toutes taxes comprises.
+              </p>
+              <p className="mt-4">
+                Tout nouveau compte bénéficie d'un essai gratuit de 14 jours. À son terme, un abonnement est nécessaire pour continuer à utiliser le service.
+              </p>
+              <p className="mt-4">
+                Les comptes créés avant le 8 octobre 2026 conservent la formule gratuite dont ils bénéficiaient, limitée à 20 clients.
               </p>
             </section>
 
@@ -116,7 +122,7 @@ export default function CGVPage() {
             <section>
               <h2 className="font-display text-2xl text-primary mb-4">Article 7 — Rétractation</h2>
               <p>
-                Le service étant fourni immédiatement après souscription et destiné à un usage professionnel, il ne donne pas lieu à un droit de rétractation. La formule gratuite vous permet de tester l'outil avant tout paiement.
+                Le service étant fourni immédiatement après souscription et destiné à un usage professionnel, il ne donne pas lieu à un droit de rétractation. L'essai gratuit de 14 jours vous permet de tester l'outil avant tout paiement.
               </p>
             </section>
 

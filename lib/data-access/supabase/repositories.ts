@@ -9,6 +9,8 @@ import {
   WorkshopSettings 
 } from '../types';
 import { PaymentMethod, toPaymentMethod } from '../../constants/payment-methods';
+import { FREE_CLIENT_LIMIT } from '../../constants/subscription';
+import { resolveSubscription, type SubscriptionAccess } from '../../subscription';
 
 // Moyen du paiement le plus récent d'une commande (undefined si aucun paiement)
 function lastPaymentMethodOf(payments: { method: string; created_at: string }[] | null | undefined) {
@@ -23,6 +25,29 @@ async function getUserId() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Non autorisé");
   return user.id;
+}
+
+// Droits de l'atelier selon son abonnement (essai, formule gratuite historique, Pro)
+async function getAccess(supabase: Awaited<ReturnType<typeof createClient>>, userId: string) {
+  const { data: sub } = await supabase
+    .from('subscriptions')
+    .select('plan_type, current_period_end, created_at, stripe_subscription_id')
+    .eq('owner_id', userId)
+    .single();
+
+  const access = resolveSubscription(sub);
+  // L'écran est déjà bloqué dans ce cas ; on refuse aussi côté serveur
+  if (!access.isActive) throw new Error("ABONNEMENT_REQUIS");
+  return access;
+}
+
+// Sans abonnement Pro, un atelier ne dépasse pas FREE_CLIENT_LIMIT clients
+async function assertClientLimit(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, access: SubscriptionAccess) {
+  if (!access.hasClientLimit) return;
+  const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', userId);
+  if (count !== null && count >= FREE_CLIENT_LIMIT) {
+    throw new Error("LIMITE_ATTEINTE");
+  }
 }
 
 export const SupabaseDashboardRepository = {
@@ -280,17 +305,12 @@ export const SupabaseOrdersRepository = {
     const supabase = await createClient();
     const user_id = await getUserId();
     
+    const access = await getAccess(supabase, user_id);
+
     let clientId = clientData.id;
-    
+
     if (!clientId) {
-      // Vérification des limites (Freemium)
-      const { data: sub } = await supabase.from('subscriptions').select('plan_type').eq('owner_id', user_id).single();
-      if (!sub || sub.plan_type === 'free') {
-        const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', user_id);
-        if (count !== null && count >= 20) {
-          throw new Error("LIMITE_ATTEINTE");
-        }
-      }
+      await assertClientLimit(supabase, user_id, access);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: newClient, error } = await supabase.from('clients').insert({
@@ -515,14 +535,8 @@ export const SupabaseClientsRepository = {
     const supabase = await createClient();
     const user_id = await getUserId();
     
-    // Vérification des limites (Freemium)
-    const { data: sub } = await supabase.from('subscriptions').select('plan_type').eq('owner_id', user_id).single();
-    if (!sub || sub.plan_type === 'free') {
-      const { count } = await supabase.from('clients').select('*', { count: 'exact', head: true }).eq('owner_id', user_id);
-      if (count !== null && count >= 20) {
-        throw new Error("LIMITE_ATTEINTE");
-      }
-    }
+    const access = await getAccess(supabase, user_id);
+    await assertClientLimit(supabase, user_id, access);
 
     const { data: newClient } = await supabase.from('clients').insert({
       owner_id: user_id,

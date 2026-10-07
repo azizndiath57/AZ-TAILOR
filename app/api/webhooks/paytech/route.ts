@@ -85,7 +85,7 @@ export async function POST(req: Request) {
       const paymentReference = `paytech_${ref_command}`;
       const { data: subscription } = await supabaseAdmin
         .from('subscriptions')
-        .select('stripe_subscription_id')
+        .select('stripe_subscription_id, plan_type, current_period_end')
         .eq('owner_id', customUserId)
         .maybeSingle();
 
@@ -93,8 +93,15 @@ export async function POST(req: Request) {
         return NextResponse.json({ received: true, ignored: "duplicate" });
       }
 
-      // On calcule une date de fin (1 mois plus tard)
+      // On calcule une date de fin (1 mois plus tard). Un renouvellement payé avant l'échéance
+      // prolonge à partir de celle-ci, pour ne pas faire perdre les jours restants.
       const currentDate = new Date();
+      const currentEnd = subscription?.plan_type === 'pro' && subscription.current_period_end
+        ? new Date(subscription.current_period_end)
+        : null;
+      if (currentEnd && currentEnd > currentDate) {
+        currentDate.setTime(currentEnd.getTime());
+      }
       currentDate.setMonth(currentDate.getMonth() + 1);
 
       const { data: updated, error: updateError } = await supabaseAdmin

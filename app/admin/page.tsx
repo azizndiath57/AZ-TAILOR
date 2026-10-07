@@ -62,7 +62,7 @@ export default function AdminDashboardPage() {
           <div>
             <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">En Période d'Essai</h3>
             <p className="text-3xl font-bold text-gray-900">
-              {data.users.filter(u => u.subscription?.plan === 'free' && !u.subscription?.isTrialExpired).length}
+              {data.users.filter(u => u.subscription?.plan === 'trial' && u.subscription?.isActive).length}
             </p>
           </div>
         </div>
@@ -104,6 +104,16 @@ export default function AdminDashboardPage() {
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
                         <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                         PRO Actif
+                      </span>
+                    ) : user.subscription?.plan === 'free' ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                        Gratuit (compte historique)
+                      </span>
+                    ) : user.subscription?.isSubscriptionExpired ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                        Abonnement expiré
                       </span>
                     ) : user.subscription?.isTrialExpired ? (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">

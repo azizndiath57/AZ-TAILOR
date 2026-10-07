@@ -2,7 +2,7 @@
 
 import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
-import { TRIAL_DURATION_DAYS } from "@/lib/constants/subscription";
+import { resolveSubscription } from "@/lib/subscription";
 
 // Une Server Action est appelable par simple requête POST : le contrôle du layout /admin
 // ne la protège pas, il faut donc revérifier le rôle ici avant d'utiliser la clé service_role.
@@ -39,7 +39,7 @@ export async function getAdminDashboardData() {
   // 2. Fetch all subscriptions
   const { data: subscriptions, error: subError } = await supabase
     .from("subscriptions")
-    .select("owner_id, plan_type, status, current_period_end, created_at");
+    .select("owner_id, plan_type, status, current_period_end, created_at, stripe_subscription_id");
 
   if (subError) {
     console.error("Error fetching subscriptions:", subError);
@@ -50,33 +50,10 @@ export async function getAdminDashboardData() {
   const users = profiles.map(profile => {
     const sub = subscriptions.find(s => s.owner_id === profile.id);
 
-    // Calculate trial status for free plans
-    let isTrialExpired = false;
-    let trialDaysLeft = 0;
-
-    if (sub && sub.plan_type === 'free') {
-        const trialDurationDays = TRIAL_DURATION_DAYS;
-        const createdAt = new Date(sub.created_at);
-        const now = new Date();
-        const diffTime = now.getTime() - createdAt.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays >= trialDurationDays) {
-            isTrialExpired = true;
-        } else {
-            trialDaysLeft = trialDurationDays - diffDays;
-        }
-    }
-
+    // Même règle que celle qui bloque ou non l'application de l'atelier
     return {
       ...profile,
-      subscription: sub ? {
-        plan: sub.plan_type,
-        status: sub.status,
-        endDate: sub.current_period_end,
-        isTrialExpired,
-        trialDaysLeft
-      } : null
+      subscription: sub ? { ...resolveSubscription(sub), status: sub.status } : null
     };
   });
 

@@ -200,6 +200,12 @@
       "titleFree": "AZ-TAILOR Débutant",
       "descPro": "Mën nga def lépp.",
       "descFree": "20 kiliyàn rekk nga am.",
+      "planTrial": "Essai gratuit",
+      "descTrial": "{days, plural, one {Il vous reste # jour d'essai gratuit} other {Il vous reste # jours d'essai gratuit}}. Abonnez-vous pour continuer ensuite.",
+      "descTrialEnded": "Votre essai gratuit est terminé. Abonnez-vous pour continuer à utiliser AZ-TAILOR.",
+      "descExpired": "Votre abonnement est arrivé à échéance. Renouvelez-le pour continuer à utiliser AZ-TAILOR.",
+      "validUntil": "Valable jusqu'au {date}",
+      "renew": "Renouveler pour un mois (Wave, Orange, Free)",
       "perMonth": "FCFA / weer",
       "features": {
         "unlimited": "Kiliyàn yu amul dig",
@@ -313,7 +319,7 @@
       "subtitle": "AZ-TAILOR dafay dajale sa natt yi, sa piis yi ak sa fayku yi ci benn bërëb. Ñi ràññee ci mbirum sàñse ñoo ko defar.",
       "startFree": "Tambali ci lu amul njëg",
       "demo": "Xool ni muy doxee",
-      "trial": "Ñetti weer ci lu amul njëg, amul kart bank, amul xaart."
+      "trial": "14 fan ci lu amul njëg, amul kart bank, amul xaart."
     },
     "Features": {
       "whatYouLose": "Li ngay ñàkk bu ",
@@ -358,7 +364,7 @@
       "proPlan": "Pro",
       "premiumPlan": "Atelye bu mag",
       "popular": "Lu ñu gën a ràññee",
-      "startTrial": "Tambali ci 3 weer lu amul njëg",
+      "startTrial": "Tambali ci 14 fan lu amul njëg",
       "choosePlan": "Tambali",
       "features": {
         "clients50": "Ba ci 20 kiliyaan",

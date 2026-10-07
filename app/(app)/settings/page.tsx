@@ -35,7 +35,7 @@ function SettingsContent() {
   const [settings, setSettings] = useState<any>(null);
   const [recoveryCode, setRecoveryCode] = useState<string | null>(null);
 
-  const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: false, isTrialExpired: false, trialDaysLeft: 0, endDate: null });
+  const [subscription, setSubscription] = useState<import('@/app/actions/subscription').SubscriptionStatus>({ plan: 'free', isActive: true, isTrialExpired: false, isSubscriptionExpired: false, trialDaysLeft: 0, hasClientLimit: true, renewsManually: false, endDate: null });
   const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [isMobileMoneyLoading, setIsMobileMoneyLoading] = useState(false);
 
@@ -336,20 +336,26 @@ function SettingsContent() {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 bg-white border border-gray-200 text-gray-700 font-medium text-xs rounded-full uppercase tracking-wider mb-2">
-                        {subscription.plan === 'pro' ? tSub("planPro") : tSub("planFree")}
+                        {subscription.plan === 'pro' ? tSub("planPro") : subscription.plan === 'trial' ? tSub("planTrial") : tSub("planFree")}
                       </span>
                       <h4 className="text-xl font-bold text-gray-900">
-                        {subscription.plan === 'pro' ? tSub("titlePro") : tSub("titleFree")}
+                        {subscription.plan === 'free' ? tSub("titleFree") : tSub("titlePro")}
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
                         {subscription.plan === 'pro'
                           ? tSub("descPro")
-                          : tSub("descFree")}
+                          : subscription.plan === 'free'
+                            ? tSub("descFree")
+                            : subscription.isSubscriptionExpired
+                              ? tSub("descExpired")
+                              : subscription.isTrialExpired
+                                ? tSub("descTrialEnded")
+                                : tSub("descTrial", { days: subscription.trialDaysLeft })}
                       </p>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-gray-900">
-                        {subscription.plan === 'pro' ? '4 000' : '0'} <span className="text-sm text-gray-500 font-normal">{tSub("perMonth")}</span>
+                        {subscription.plan === 'free' ? '0' : '4 000'} <span className="text-sm text-gray-500 font-normal">{tSub("perMonth")}</span>
                       </div>
                     </div>
                   </div>
@@ -357,7 +363,7 @@ function SettingsContent() {
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center gap-2 text-sm text-gray-700">
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
-                      {subscription.plan === 'pro' ? tSub("features.unlimited") : tSub("features.limited")}
+                      {subscription.hasClientLimit ? tSub("features.limited") : tSub("features.unlimited")}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-700">
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
@@ -367,7 +373,7 @@ function SettingsContent() {
                       <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
                       {tSub("features.stats")}
                     </li>
-                    {subscription.plan !== 'pro' && (
+                    {subscription.plan === 'free' && (
                       <li className="flex items-center gap-2 text-sm text-gray-400">
                         <span className="material-symbols-outlined text-gray-300 text-lg">cancel</span>
                         {tSub("features.darkMode")}
@@ -375,7 +381,14 @@ function SettingsContent() {
                     )}
                   </ul>
 
-                  {subscription.plan === 'pro' ? (
+                  {subscription.plan === 'pro' && subscription.endDate && (
+                    <p className="text-sm text-gray-600 mb-4">
+                      {tSub("validUntil", { date: new Date(subscription.endDate).toLocaleDateString('fr-FR') })}
+                    </p>
+                  )}
+
+                  {/* Un Pro payé par PayTech se renouvelle à la main : on lui laisse le bouton de paiement */}
+                  {subscription.plan === 'pro' && !subscription.renewsManually ? (
                     <button
                       onClick={async () => {
                         setIsStripeLoading(true);
@@ -400,7 +413,9 @@ function SettingsContent() {
                     </button>
                   ) : (
                     <div className="space-y-3">
-                      <p className="text-sm text-gray-600 font-medium mb-1">{tSub("choosePayment")}</p>
+                      {subscription.plan !== 'pro' && (
+                        <p className="text-sm text-gray-600 font-medium mb-1">{tSub("choosePayment")}</p>
+                      )}
 
                       <button
                         type="button"
@@ -409,9 +424,10 @@ function SettingsContent() {
                         className="w-full py-2.5 px-4 bg-[#00a650] text-white font-medium rounded-lg hover:bg-[#00a650]/90 transition-colors shadow-sm disabled:opacity-50 flex justify-center items-center gap-2"
                       >
                         {isMobileMoneyLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
-                        {tSub("payTech")}
+                        {subscription.plan === 'pro' ? tSub("renew") : tSub("payTech")}
                       </button>
 
+                      {subscription.plan !== 'pro' && (
                       <button
                         onClick={async () => {
                           setIsStripeLoading(true);
@@ -434,6 +450,7 @@ function SettingsContent() {
                         {isStripeLoading && <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>}
                         {tSub("stripe")}
                       </button>
+                      )}
                     </div>
                   )}
                 </div>
