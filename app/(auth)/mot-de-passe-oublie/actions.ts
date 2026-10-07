@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/utils/supabase/admin'
 import { normalizePhone } from '@/lib/phone'
+import { isPasswordLengthValid, PASSWORD_LENGTH_ERROR } from '@/lib/constants/password'
 
 // Même message que le numéro soit inconnu ou le code faux, pour ne pas révéler quels numéros ont un compte
 const INVALID_CREDENTIALS = "Numéro ou code de récupération incorrect. Si vous n'avez pas de code, contactez le support."
@@ -17,8 +18,8 @@ export async function resetPassword(prevState: any, formData: FormData) {
     return { error: "Numéro de téléphone invalide." }
   }
 
-  if (!newPassword || newPassword.length < 6 || newPassword.length > 10) {
-    return { error: "Le mot de passe doit contenir entre 6 et 10 caractères." }
+  if (!isPasswordLengthValid(newPassword)) {
+    return { error: PASSWORD_LENGTH_ERROR }
   }
 
   try {

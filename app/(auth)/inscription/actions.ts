@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import { normalizePhone, generateSyntheticEmail } from '@/lib/phone'
+import { isPasswordLengthValid, PASSWORD_LENGTH_ERROR } from '@/lib/constants/password'
 
 export async function signup(prevState: any, formData: FormData) {
   const supabase = await createClient()
@@ -14,8 +15,8 @@ export async function signup(prevState: any, formData: FormData) {
   const confirmPassword = formData.get('confirmPassword') as string;
   const workshopName = (formData.get('workshopName') as string).trim();
 
-  if (password.length < 6 || password.length > 10) {
-    return { error: "Le mot de passe doit contenir entre 6 et 10 caractères." };
+  if (!isPasswordLengthValid(password)) {
+    return { error: PASSWORD_LENGTH_ERROR };
   }
 
   if (password !== confirmPassword) {

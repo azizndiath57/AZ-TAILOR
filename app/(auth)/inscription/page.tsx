@@ -1,6 +1,7 @@
 "use client";
 
 import { signup } from "./actions";
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "@/lib/constants/password";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -81,8 +82,8 @@ export default function InscriptionPage() {
                 name="password"
                 type="text"
                 required
-                minLength={6}
-                maxLength={10}
+                minLength={PASSWORD_MIN_LENGTH}
+                maxLength={PASSWORD_MAX_LENGTH}
                 autoComplete="new-password"
                 style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
@@ -101,8 +102,8 @@ export default function InscriptionPage() {
                 name="confirmPassword"
                 type="text"
                 required
-                minLength={6}
-                maxLength={10}
+                minLength={PASSWORD_MIN_LENGTH}
+                maxLength={PASSWORD_MAX_LENGTH}
                 autoComplete="new-password"
                 style={{ WebkitTextSecurity: "disc" } as any}
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all"
