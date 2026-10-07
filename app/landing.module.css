@@ -1,43 +1,103 @@
-.ambientShadow { 
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.04); 
-}
-.hoverLift { 
-  transition: transform 0.3s ease, box-shadow 0.3s ease; 
-}
-.hoverLift:hover { 
-  transform: translateY(-4px); 
-  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.08); 
+/* Flat navy + electric blue theme, scoped to the landing page.
+   Tokens are re-declared here (not in globals.css) so the rest of the app keeps its own palette;
+   the font tokens must live here anyway because the next/font variables are not visible from :root */
+.theme {
+  --font-display: var(--font-plus-jakarta-sans);
+  --font-display-lg: var(--font-plus-jakarta-sans);
+  --font-display-lg-mobile: var(--font-plus-jakarta-sans);
+  --font-headline-md: var(--font-plus-jakarta-sans);
+  --font-headline-sm: var(--font-plus-jakarta-sans);
+  --font-body: var(--font-plus-jakarta-sans);
+  --font-body-lg: var(--font-plus-jakarta-sans);
+  --font-body-md: var(--font-plus-jakarta-sans);
+  --font-label-md: var(--font-plus-jakarta-sans);
+  --font-label-sm: var(--font-plus-jakarta-sans);
+
+  --color-brand: #2b7fff;
+  --color-primary: #0b1437;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #dbe7ff;
+  --color-on-primary-container: #1553d6;
+  --color-primary-fixed-dim: #a9c4ff;
+  --color-secondary: #1f6bff;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dbe7ff;
+  --color-on-secondary-container: #1553d6;
+  --color-tertiary: #070c22;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-fixed-dim: #9aa6c7;
+  --color-background: #ffffff;
+  --color-on-background: #0b1437;
+  --color-surface: #ffffff;
+  --color-on-surface: #0b1437;
+  --color-on-surface-variant: #4a5578;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f3f6fc;
+  --color-surface-container: #eaf0fa;
+  --color-surface-dim: #d5ddee;
+  --color-outline: #6b7799;
+  --color-outline-variant: #c9d3e8;
 }
 
-/* Base fade-in-up class for elements using IntersectionObserver */
-.fadeInUp { 
-  opacity: 0; 
-  transform: translateY(20px); 
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+/* Uses `translate` (not `transform`) so it never fights the motion-driven transforms */
+.hoverLift {
+  transition: translate 0.3s ease, border-color 0.3s ease;
 }
-/* When visible class is added via Observer */
-.fadeInUp.visible { 
-  opacity: 1; 
-  transform: translateY(0); 
+.hoverLift:hover {
+  translate: 0 -6px;
+  border-color: var(--color-brand);
 }
 
 /* Magnetic Button Base Styles */
-.magneticBtn { 
-  position: relative; 
-  overflow: hidden; 
-  display: inline-flex; 
-  justify-content: center; 
-  align-items: center; 
+.magneticBtn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
-.magneticBtn > span { 
-  position: relative; 
-  z-index: 10; 
-  pointer-events: none; 
-  transition: transform 0.3s cubic-bezier(0.2, 1, 0.2, 1); 
+.magneticBtn > span {
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
 }
 
 /* Background pattern */
-.bgPattern { 
-  background-image: radial-gradient(var(--color-surface-dim) 1px, transparent 1px); 
-  background-size: 24px 24px; 
+.bgPattern {
+  background-image: radial-gradient(var(--color-surface-dim) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Infinite logo marquee */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+.marqueeGroup {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4.5rem;
+  padding-right: 4.5rem;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Stitched seam that runs under the section titles */
+.stitch {
+  height: 2px;
+  background-image: repeating-linear-gradient(to right, var(--color-brand) 0 10px, transparent 10px 18px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack { animation: none; }
 }

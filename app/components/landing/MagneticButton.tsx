@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, MouseEvent } from "react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import styles from "../../landing.module.css";
 import Link from "next/link";
 
@@ -11,6 +12,8 @@ interface MagneticButtonProps {
   onClick?: () => void;
 }
 
+const SPRING = { stiffness: 220, damping: 14, mass: 0.4 };
+
 export default function MagneticButton({
   children,
   href,
@@ -18,21 +21,21 @@ export default function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
-  const spanRef = useRef<HTMLSpanElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const x = useSpring(useMotionValue(0), SPRING);
+  const y = useSpring(useMotionValue(0), SPRING);
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!buttonRef.current || !spanRef.current) return;
+    if (!buttonRef.current) return;
     const position = buttonRef.current.getBoundingClientRect();
-    const x = e.clientX - position.left - position.width / 2;
-    const y = e.clientY - position.top - position.height / 2;
-    spanRef.current.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+    x.set((e.clientX - position.left - position.width / 2) * 0.3);
+    y.set((e.clientY - position.top - position.height / 2) * 0.5);
   };
 
-  const handleMouseOut = () => {
+  const handleMouseLeave = () => {
     setIsHovered(false);
-    if (!spanRef.current) return;
-    spanRef.current.style.transform = `translate(0px, 0px)`;
+    x.set(0);
+    y.set(0);
   };
 
   const handleMouseEnter = () => {
@@ -40,14 +43,14 @@ export default function MagneticButton({
   };
 
   const innerContent = (
-    <span
-      ref={spanRef}
-      className={`inline-block ${
-        isHovered ? "scale-110" : "scale-100"
-      } transition-transform duration-200`}
+    <motion.span
+      className="inline-block"
+      style={{ x, y }}
+      animate={{ scale: isHovered ? 1.08 : 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 18 }}
     >
       {children}
-    </span>
+    </motion.span>
   );
 
   const combinedClassName = `${styles.magneticBtn} ${className} active:scale-95 transition-transform duration-150`;
@@ -59,7 +62,7 @@ export default function MagneticButton({
         ref={buttonRef}
         className={combinedClassName}
         onMouseMove={handleMouseMove}
-        onMouseOut={handleMouseOut}
+        onMouseLeave={handleMouseLeave}
         onMouseEnter={handleMouseEnter}
       >
         {innerContent}
@@ -73,7 +76,7 @@ export default function MagneticButton({
       className={combinedClassName}
       onClick={onClick}
       onMouseMove={handleMouseMove}
-      onMouseOut={handleMouseOut}
+      onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
     >
       {innerContent}

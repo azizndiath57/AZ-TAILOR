@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import styles from "../../landing.module.css";
+import React from "react";
+import { motion } from "motion/react";
+
+export const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 interface FadeInUpProps {
   children: React.ReactNode;
@@ -14,43 +16,15 @@ export default function FadeInUp({
   className = "",
   delay = 0,
 }: FadeInUpProps) {
-  const domRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            if (domRef.current) {
-              observer.unobserve(domRef.current);
-            }
-          }
-        });
-      },
-      { root: null, rootMargin: "0px", threshold: 0.1 }
-    );
-
-    const currentRef = domRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      ref={domRef}
-      className={`${styles.fadeInUp} ${isVisible ? styles.visible : ""} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.9, delay: delay / 1000, ease: EASE_OUT }}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }

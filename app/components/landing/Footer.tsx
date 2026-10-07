@@ -9,7 +9,7 @@ export default function Footer() {
   const t = useTranslations("Landing.Footer");
   return (
     <footer id="blog" className="bg-tertiary text-on-tertiary pt-24 pb-8 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary"></div>
+      <div className="absolute top-0 left-0 w-full h-1 bg-secondary"></div>
       
       <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <FadeInUp className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import MagneticButton from "./MagneticButton";
 import Image from "next/image";
 import LanguageSwitcher from "../LanguageSwitcher";
@@ -9,10 +10,23 @@ import { useTranslations } from "next-intl";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const t = useTranslations("Landing.Navbar");
+  const { scrollY } = useScroll();
+
+  // Slide away when scrolling down, come back as soon as the user scrolls up
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    setIsHidden(latest > previous && latest > 160);
+  });
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-b border-outline-variant/10 shadow-md">
+    <motion.nav
+      className="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-b border-outline-variant/10"
+      initial={{ y: "-100%" }}
+      animate={{ y: isHidden && !isMobileMenuOpen ? "-100%" : 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
       <div className="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <Link href="/" className="flex items-center gap-4 group">
           <svg 
@@ -78,7 +92,7 @@ export default function Navbar() {
           <div className="hidden md:block">
             <MagneticButton
               href="/connexion"
-              className="bg-secondary text-on-secondary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-on-secondary-container transition-colors shadow-sm"
+              className="bg-secondary text-on-secondary font-label-md text-label-md px-6 py-3 rounded-full hover:bg-on-secondary-container transition-colors"
             >
               {t('startFree')}
             </MagneticButton>
@@ -98,8 +112,15 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Navigation Menu */}
+      <AnimatePresence>
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-20 left-0 w-full bg-surface border-b border-outline-variant/10 shadow-lg py-4 px-margin-mobile flex flex-col gap-4 animate-[slide-down_0.3s_ease-out]">
+        <motion.div
+          className="md:hidden absolute top-20 left-0 w-full bg-surface border-b border-outline-variant/10 py-4 px-margin-mobile flex flex-col gap-4 origin-top"
+          initial={{ opacity: 0, y: -12, scaleY: 0.9 }}
+          animate={{ opacity: 1, y: 0, scaleY: 1 }}
+          exit={{ opacity: 0, y: -12, scaleY: 0.9 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        >
           <Link href="#solutions" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold">{t('solutions')}</Link>
           <Link href="#tarifs" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('tarifs')}</Link>
           <Link href="#ateliers" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-on-surface-variant">{t('ateliers')}</Link>
@@ -107,8 +128,9 @@ export default function Navbar() {
           <hr className="border-outline-variant/20 my-2" />
           <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-primary font-bold text-center">{t('login')}</Link>
           <Link href="/connexion" onClick={() => setIsMobileMenuOpen(false)} className="bg-secondary text-on-secondary text-center font-bold py-3 rounded-full mt-2">{t('startFree')}</Link>
-        </div>
+        </motion.div>
       )}
-    </nav>
+      </AnimatePresence>
+    </motion.nav>
   );
 }

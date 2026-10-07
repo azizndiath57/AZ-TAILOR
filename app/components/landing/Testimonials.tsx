@@ -1,7 +1,23 @@
+"use client";
+
 import React from "react";
-import FadeInUp from "./FadeInUp";
+import { motion, type Variants } from "motion/react";
+import FadeInUp, { EASE_OUT } from "./FadeInUp";
 import styles from "../../landing.module.css";
 import { useTranslations } from "next-intl";
+
+const card: Variants = {
+  hidden: { opacity: 0, y: 50 },
+  show: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, delay: index * 0.14, ease: EASE_OUT, staggerChildren: 0.08, delayChildren: 0.4 + index * 0.14 },
+  }),
+};
+const star: Variants = {
+  hidden: { scale: 0, rotate: -90, opacity: 0 },
+  show: { scale: 1, rotate: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 12 } },
+};
 
 export default function Testimonials() {
   const t = useTranslations("Landing.Testimonials");
@@ -32,7 +48,7 @@ export default function Testimonials() {
       <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
         <FadeInUp>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-headline-md text-headline-md text-primary mb-4">
+            <h2 className="font-headline-md text-3xl md:text-4xl font-bold tracking-tight leading-tight text-primary mb-4">
               {t('title')}
             </h2>
             <p className="font-body-md text-body-md text-on-surface-variant">
@@ -43,7 +59,15 @@ export default function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <FadeInUp key={index} delay={(index + 1) * 100} className={`bg-surface p-8 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}>
+            <motion.div
+              key={index}
+              className={`bg-surface p-8 rounded-2xl border border-outline-variant/30 flex flex-col ${styles.hoverLift}`}
+              variants={card}
+              custom={index}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.3 }}
+            >
               <div className="flex items-center gap-4 mb-6">
                 <img src={testimonial.image} alt={testimonial.name} className="w-14 h-14 rounded-full object-cover" />
                 <div>
@@ -53,15 +77,15 @@ export default function Testimonials() {
               </div>
               <div className="flex-1">
                 <p className="font-body-md text-body-md text-on-surface italic">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
               </div>
               <div className="mt-6 flex text-secondary">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span key={star} className="material-symbols-outlined text-sm">star</span>
+                {[1, 2, 3, 4, 5].map((starIndex) => (
+                  <motion.span key={starIndex} variants={star} className="material-symbols-outlined text-sm">star</motion.span>
                 ))}
               </div>
-            </FadeInUp>
+            </motion.div>
           ))}
         </div>
       </div>
