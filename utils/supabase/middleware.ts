@@ -56,7 +56,10 @@ export async function updateSession(request: NextRequest) {
                            request.nextUrl.pathname !== '/' &&
                            request.nextUrl.pathname !== '/a-propos' &&
                            request.nextUrl.pathname !== '/politique-de-confidentialite' &&
-                           request.nextUrl.pathname !== '/cgv'
+                           request.nextUrl.pathname !== '/cgv' &&
+                           // Pages ouvertes par les clients des tailleurs (lien WhatsApp), sans compte
+                           !request.nextUrl.pathname.startsWith('/suivi/') &&
+                           !request.nextUrl.pathname.startsWith('/invite/')
 
   if (isProtectedRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page
