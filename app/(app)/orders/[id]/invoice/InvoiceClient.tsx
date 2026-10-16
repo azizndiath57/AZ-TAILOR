@@ -174,7 +174,7 @@ export default function InvoiceClient({ order, settings }: { order: OrderWithFin
       />
 
       {/* Invoice Document - A4 Container */}
-      <div className="bg-white border-0 sm:border sm:border-gray-100 sm:rounded-xl sm:shadow-sm overflow-x-auto print:border-none print:shadow-none print:bg-transparent print:overflow-visible">
+      <div className="keep-light bg-white border-0 sm:border sm:border-gray-100 sm:rounded-xl sm:shadow-sm overflow-x-auto print:border-none print:shadow-none print:bg-transparent print:overflow-visible">
         <div className="w-full min-w-[320px] max-w-[210mm] mx-auto p-8 sm:p-12 md:p-14 bg-white print:w-[210mm] print:mx-auto print:p-12 shrink-0">
         
         {/* Header */}

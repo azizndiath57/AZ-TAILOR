@@ -102,6 +102,166 @@
 }
 
 
+/* ------------------------------------------------------------------
+   Mode sombre de l'application (espace connecté uniquement)
+   La classe `dark` est posée sur <html> par le script de app/layout.tsx
+   selon le choix enregistré (ThemeToggle). Elle ne s'applique que si la
+   page contient `.app-shell` : la vitrine et les pages publiques restent claires.
+   Plutôt que d'ajouter des classes `dark:` partout, on redéfinit les couleurs
+   Tailwind utilisées (gris, blanc, teintes claires) : chaque page suit.
+   Les variables sont posées sur <body> (et non :root) pour que `.keep-light`
+   puisse restaurer les valeurs claires gardées sur :root.
+   ------------------------------------------------------------------ */
+:root {
+  --lt-white: var(--color-white);
+  --lt-gray-50: var(--color-gray-50);
+  --lt-gray-100: var(--color-gray-100);
+  --lt-gray-200: var(--color-gray-200);
+  --lt-gray-300: var(--color-gray-300);
+  --lt-gray-400: var(--color-gray-400);
+  --lt-gray-500: var(--color-gray-500);
+  --lt-gray-600: var(--color-gray-600);
+  --lt-gray-700: var(--color-gray-700);
+  --lt-gray-800: var(--color-gray-800);
+  --lt-gray-900: var(--color-gray-900);
+  --lt-midnight: var(--color-midnight);
+  --lt-brand-light: var(--color-brand-light);
+}
+
+/* Écran seulement : à l'impression, tout reste clair */
+@media screen {
+html.dark:has(.app-shell) body {
+  color-scheme: dark;
+  background-color: #0b0f19;
+  color: #f3f4f6;
+
+  --color-white: #161c2a;
+  --color-brand-light: #2a2318;
+  --color-midnight: #b48c5a;
+
+  --color-gray-50: #0f1420;
+  --color-gray-100: #1f2636;
+  --color-gray-200: #2a3242;
+  --color-gray-300: #3a4354;
+  --color-gray-400: #6b7385;
+  --color-gray-500: #9aa1b0;
+  --color-gray-600: #b4bac6;
+  --color-gray-700: #cdd2db;
+  --color-gray-800: #e1e4ea;
+  --color-gray-900: #f3f4f6;
+  --color-gray-950: #f9fafb;
+
+  --color-slate-50: #0f1420;
+  --color-slate-100: #1f2636;
+  --color-slate-200: #2a3242;
+  --color-slate-300: #3a4354;
+  --color-slate-400: #6b7385;
+  --color-slate-500: #9aa1b0;
+  --color-slate-600: #b4bac6;
+  --color-slate-700: #cdd2db;
+  --color-slate-800: #e1e4ea;
+  --color-slate-900: #f3f4f6;
+
+  /* Teintes : fonds clairs -> fonds sombres teintés, textes foncés -> textes clairs */
+  --color-red-50: color-mix(in srgb, #ef4444 14%, #161c2a);
+  --color-red-100: color-mix(in srgb, #ef4444 22%, #161c2a);
+  --color-red-200: color-mix(in srgb, #ef4444 35%, #161c2a);
+  --color-red-600: #ef4444;
+  --color-red-700: #f87171;
+  --color-red-800: #fca5a5;
+  --color-red-900: #fecaca;
+
+  --color-orange-50: color-mix(in srgb, #f97316 14%, #161c2a);
+  --color-orange-100: color-mix(in srgb, #f97316 22%, #161c2a);
+  --color-orange-200: color-mix(in srgb, #f97316 35%, #161c2a);
+  --color-orange-600: #fb923c;
+  --color-orange-700: #fb923c;
+  --color-orange-800: #fdba74;
+  --color-orange-900: #fed7aa;
+
+  --color-amber-50: color-mix(in srgb, #f59e0b 14%, #161c2a);
+  --color-amber-100: color-mix(in srgb, #f59e0b 22%, #161c2a);
+  --color-amber-200: color-mix(in srgb, #f59e0b 35%, #161c2a);
+  --color-amber-600: #f59e0b;
+  --color-amber-700: #fbbf24;
+  --color-amber-800: #fcd34d;
+  --color-amber-900: #fde68a;
+
+  --color-yellow-50: color-mix(in srgb, #eab308 14%, #161c2a);
+  --color-yellow-100: color-mix(in srgb, #eab308 22%, #161c2a);
+  --color-yellow-200: color-mix(in srgb, #eab308 35%, #161c2a);
+  --color-yellow-600: #eab308;
+  --color-yellow-700: #facc15;
+  --color-yellow-800: #fde047;
+  --color-yellow-900: #fef08a;
+
+  --color-green-50: color-mix(in srgb, #22c55e 14%, #161c2a);
+  --color-green-100: color-mix(in srgb, #22c55e 22%, #161c2a);
+  --color-green-200: color-mix(in srgb, #22c55e 35%, #161c2a);
+  --color-green-600: #22c55e;
+  --color-green-700: #4ade80;
+  --color-green-800: #86efac;
+  --color-green-900: #bbf7d0;
+
+  --color-blue-50: color-mix(in srgb, #3b82f6 14%, #161c2a);
+  --color-blue-100: color-mix(in srgb, #3b82f6 22%, #161c2a);
+  --color-blue-200: color-mix(in srgb, #3b82f6 35%, #161c2a);
+  --color-blue-600: #60a5fa;
+  --color-blue-700: #60a5fa;
+  --color-blue-800: #93c5fd;
+  --color-blue-900: #bfdbfe;
+
+  --color-indigo-50: color-mix(in srgb, #6366f1 14%, #161c2a);
+  --color-indigo-100: color-mix(in srgb, #6366f1 22%, #161c2a);
+  --color-indigo-200: color-mix(in srgb, #6366f1 35%, #161c2a);
+  --color-indigo-600: #818cf8;
+  --color-indigo-700: #818cf8;
+  --color-indigo-800: #a5b4fc;
+  --color-indigo-900: #c7d2fe;
+}
+
+/* `--color-white` sert aussi au texte blanc : on le garde blanc */
+html.dark:has(.app-shell) body :is(.text-white, .hover\:text-white:hover, .group:hover .group-hover\:text-white) {
+  color: #fff;
+}
+
+/* Boutons principaux (bg-midnight + hover:bg-gray-800) : or en mode sombre */
+html.dark:has(.app-shell) body .hover\:bg-gray-800:hover {
+  background-color: #9a7548;
+}
+
+/* Fonds foncés qui doivent rester foncés (logo, boutons secondaires, voiles) */
+html.dark:has(.app-shell) body .bg-gray-900,
+html.dark:has(.app-shell) body .hover\:bg-gray-900:hover {
+  background-color: #070a12;
+}
+html.dark:has(.app-shell) body .bg-gray-800 {
+  background-color: #2a3242;
+}
+html.dark:has(.app-shell) body .bg-gray-900\/50 {
+  background-color: rgb(0 0 0 / 0.6);
+}
+
+/* Zones toujours claires : facture (papier), visuel de story partagé */
+html.dark:has(.app-shell) body .keep-light {
+  color-scheme: light;
+  color: var(--lt-gray-900);
+  --color-white: var(--lt-white);
+  --color-brand-light: var(--lt-brand-light);
+  --color-midnight: var(--lt-midnight);
+  --color-gray-50: var(--lt-gray-50);
+  --color-gray-100: var(--lt-gray-100);
+  --color-gray-200: var(--lt-gray-200);
+  --color-gray-300: var(--lt-gray-300);
+  --color-gray-400: var(--lt-gray-400);
+  --color-gray-500: var(--lt-gray-500);
+  --color-gray-600: var(--lt-gray-600);
+  --color-gray-700: var(--lt-gray-700);
+  --color-gray-800: var(--lt-gray-800);
+  --color-gray-900: var(--lt-gray-900);
+}
+}
+
 @layer utilities {
   .bg-paytech-theme {
     background: linear-gradient(135deg, #0f6764 0%, #06323a 100%);
