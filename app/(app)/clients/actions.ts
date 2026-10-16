@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { mockClientsRepository } from "@/lib/data-access";
+import { parseMeasurementsForm } from "@/lib/constants/measurement-fields";
 
 export async function createClientAction(formData: FormData) {
   const data = {
@@ -46,15 +47,7 @@ export async function updateClientAction(id: string, formData: FormData) {
 }
 
 export async function saveClientMeasurementsAction(clientId: string, formData: FormData) {
-  const measurements: Record<string, number> = {};
-  formData.forEach((value, key) => {
-    if (key.startsWith("measure_") && value) {
-      const numValue = parseFloat(value as string);
-      if (!isNaN(numValue)) {
-        measurements[key.replace("measure_", "")] = numValue;
-      }
-    }
-  });
+  const measurements = parseMeasurementsForm(formData, "measure_");
 
   await mockClientsRepository.updateClientMeasurements(clientId, measurements);
   revalidatePath(`/clients/${clientId}`);

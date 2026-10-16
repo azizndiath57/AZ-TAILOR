@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { OrdersRepository } from "@/lib/data-access";
 import { PaymentMethod, toPaymentMethod } from "@/lib/constants/payment-methods";
+import { mergeMeasurements, parseMeasurementsForm } from "@/lib/constants/measurement-fields";
 
 export async function createOrderAction(formData: FormData) {
   const clientId = formData.get("clientId") as string;
@@ -35,12 +36,7 @@ export async function createOrderAction(formData: FormData) {
     }
   }
 
-  const measurements: Record<string, number> = {};
-  for (const [key, value] of formData.entries()) {
-    if (key.startsWith("measurement_") && value) {
-      measurements[key.replace("measurement_", "")] = Number(value);
-    }
-  }
+  const measurements = mergeMeasurements({}, parseMeasurementsForm(formData, "measurement_"));
 
   console.log("CREATE ORDER ACTION CALLED with formData:", Object.fromEntries(formData.entries()));
   try {

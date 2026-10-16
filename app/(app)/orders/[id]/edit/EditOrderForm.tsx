@@ -9,6 +9,7 @@ import CustomSelect from "@/app/components/CustomSelect";
 import CustomDatePicker from "@/app/components/CustomDatePicker";
 import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS, PaymentMethod } from "@/lib/constants/payment-methods";
+import { MeasurementSummary } from "@/app/components/MeasurementFields";
 
 export default function EditOrderForm({ order, clients }: { order: OrderWithFinancials; clients: Client[] }) {
   const t = useTranslations("OrderForm");
@@ -262,14 +263,7 @@ export default function EditOrderForm({ order, clients }: { order: OrderWithFina
               </div>
               
               {clients.find(c => c.id === selectedClientId)?.measurements ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {Object.entries(clients.find(c => c.id === selectedClientId)!.measurements!).map(([key, val]) => (
-                    <div key={key} className="p-3 bg-gray-50 border border-gray-100 rounded-lg">
-                      <p className="text-xs text-gray-500 mb-1 capitalize">{key.replace(/_/g, ' ')}</p>
-                      <p className="text-sm font-semibold text-gray-900">{val} cm</p>
-                    </div>
-                  ))}
-                </div>
+                <MeasurementSummary measurements={clients.find(c => c.id === selectedClientId)!.measurements!} />
               ) : (
                  <div className="p-4 text-sm text-gray-500 bg-gray-50 rounded-lg text-center border border-gray-100">{t("noMeasurements")}</div>
               )}

@@ -10,6 +10,7 @@ import {
 } from '../types';
 import { PaymentMethod, toPaymentMethod } from '../../constants/payment-methods';
 import { FREE_CLIENT_LIMIT } from '../../constants/subscription';
+import { MeasurementValue, mergeMeasurements } from '../../constants/measurement-fields';
 import type { SubscriptionAccess } from '../../subscription';
 import { loadSubscriptionAccess } from '../../subscription-access';
 
@@ -556,11 +557,11 @@ export const SupabaseClientsRepository = {
     };
   },
   
-  async updateClientMeasurements(id: string, measurements: Record<string, number>) {
+  async updateClientMeasurements(id: string, measurements: Record<string, MeasurementValue | null>) {
     const supabase = await createClient();
     const { data: client } = await supabase.from('clients').select('measurements').eq('id', id).single();
     await supabase.from('clients').update({
-      measurements: { ...(client?.measurements || {}), ...measurements }
+      measurements: mergeMeasurements(client?.measurements, measurements)
     }).eq('id', id);
   },
   

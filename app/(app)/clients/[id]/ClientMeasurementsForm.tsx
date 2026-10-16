@@ -1,44 +1,37 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { saveClientMeasurementsAction } from "../actions";
 import { useTranslations } from "next-intl";
+import MeasurementFields, { countInitialWarnings } from "@/app/components/MeasurementFields";
+import { Measurements } from "@/lib/constants/measurement-fields";
 
-function MeasurementInput({ label, name, defaultValue }: { label: string, name: string, defaultValue: string }) {
-  return (
-    <div>
-      <label className="block text-xs font-medium text-gray-500 mb-1">{label}</label>
-      <div className="relative">
-        <input 
-          type="number" 
-          step="0.5" 
-          name={name}
-          defaultValue={defaultValue} 
-          className="w-full pl-3 pr-8 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
-        />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium pointer-events-none">cm</span>
-      </div>
-    </div>
-  );
-}
-
-export default function ClientMeasurementsForm({ 
-  clientId, 
-  initialMeasurements 
-}: { 
-  clientId: string, 
-  initialMeasurements?: Record<string, number> 
+export default function ClientMeasurementsForm({
+  clientId,
+  initialMeasurements
+}: {
+  clientId: string,
+  initialMeasurements?: Measurements
 }) {
   const t = useTranslations("Measurements");
   const [isPending, startTransition] = useTransition();
+  const [warningCount, setWarningCount] = useState(() => countInitialWarnings(initialMeasurements));
+  // Une mesure hors bornes demande un second clic pour être enregistrée
+  const [confirmingWarnings, setConfirmingWarnings] = useState(false);
 
-  const handleAction = (formData: FormData) => {
+  // onSubmit plutôt que action : une action de formulaire React vide les champs, même quand on bloque l'envoi
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (warningCount > 0 && !confirmingWarnings) {
+      setConfirmingWarnings(true);
+      return;
+    }
+    setConfirmingWarnings(false);
+    const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       await saveClientMeasurementsAction(clientId, formData);
     });
   };
-
-  const getVal = (key: string) => initialMeasurements?.[key]?.toString() || "";
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
@@ -49,72 +42,39 @@ export default function ClientMeasurementsForm({
         </div>
         <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{t("unit")}</span>
       </div>
-      
-      <form action={handleAction} className="p-6">
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Haut du corps */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">{t("upperBody")}</h4>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <MeasurementInput label={t("neck")} name="measure_cou" defaultValue={getVal("cou")} />
-              <MeasurementInput label={t("shoulder")} name="measure_epaule" defaultValue={getVal("epaule")} />
-              <MeasurementInput label="Carrure Devant" name="measure_carrure_devant" defaultValue={getVal("carrure_devant")} />
-              <MeasurementInput label={t("chest")} name="measure_poitrine" defaultValue={getVal("poitrine")} />
-              <MeasurementInput label="Volume Poitrine" name="measure_volume_poitrine" defaultValue={getVal("volume_poitrine")} />
-              <MeasurementInput label="Écartement Seins" name="measure_ecartement_seins" defaultValue={getVal("ecartement_seins")} />
-              <MeasurementInput label="Longueur Haut" name="measure_longueur_haut" defaultValue={getVal("longueur_haut")} />
-              <MeasurementInput label={t("shirtLength")} name="measure_longueur_chemise" defaultValue={getVal("longueur_chemise")} />
-              <MeasurementInput label={t("sleeveLength")} name="measure_longueur_manche" defaultValue={getVal("longueur_manche")} />
-              <MeasurementInput label="Manche 3/4" name="measure_manche_3_4" defaultValue={getVal("manche_3_4")} />
-              <MeasurementInput label="Tour de Manche" name="measure_tour_manche" defaultValue={getVal("tour_manche")} />
-              <MeasurementInput label={t("armCircumference")} name="measure_tour_bras" defaultValue={getVal("tour_bras")} />
-              <MeasurementInput label="Valeur de Pièce" name="measure_valeur_piece" defaultValue={getVal("valeur_piece")} />
-            </div>
-          </div>
 
-          {/* Bas du corps */}
-          <div className="space-y-4">
-            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">{t("lowerBody")}</h4>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <MeasurementInput label={t("waist")} name="measure_ceinture" defaultValue={getVal("ceinture")} />
-              <MeasurementInput label="Taille vêtement" name="measure_taille_vetement" defaultValue={getVal("taille_vetement")} />
-              <MeasurementInput label={t("hips")} name="measure_bassin" defaultValue={getVal("bassin")} />
-              <MeasurementInput label="Tour de Hanche" name="measure_tour_hanche" defaultValue={getVal("tour_hanche")} />
-              <MeasurementInput label={t("pantsLength")} name="measure_longueur_pantalon" defaultValue={getVal("longueur_pantalon")} />
-              <MeasurementInput label={t("thigh")} name="measure_cuisse" defaultValue={getVal("cuisse")} />
-              <MeasurementInput label={t("knee")} name="measure_genou" defaultValue={getVal("genou")} />
-              <MeasurementInput label={t("ankle")} name="measure_cheville" defaultValue={getVal("cheville")} />
-            </div>
-          </div>
-          
-          {/* Longueurs & Autres (Robes, Jupes, Boubous) */}
-          <div className="space-y-4 md:col-span-2">
-            <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">Robes, Jupes & Boubous</h4>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <MeasurementInput label="Longueur Taille" name="measure_longueur_taille" defaultValue={getVal("longueur_taille")} />
-              <MeasurementInput label="Longueur Boubou" name="measure_longueur_boubou" defaultValue={getVal("longueur_boubou")} />
-              <MeasurementInput label="Longueur Robe" name="measure_longueur_robe" defaultValue={getVal("longueur_robe")} />
-              <MeasurementInput label="Longueur Jupe" name="measure_longueur_jupe" defaultValue={getVal("longueur_jupe")} />
-              <MeasurementInput label="Longueur Jupe 3/4" name="measure_longueur_jupe_3_4" defaultValue={getVal("longueur_jupe_3_4")} />
-              <MeasurementInput label="Longueur Pagne" name="measure_longueur_pagne" defaultValue={getVal("longueur_pagne")} />
-            </div>
-          </div>
+      <form onSubmit={handleSubmit} className="p-6">
+        <div className="mb-8">
+          <MeasurementFields
+            namePrefix="measure_"
+            initial={initialMeasurements}
+            onWarningCountChange={(count) => {
+              setWarningCount(count);
+              if (count === 0) setConfirmingWarnings(false);
+            }}
+          />
         </div>
 
+        {confirmingWarnings && warningCount > 0 && (
+          <div role="alert" className="mb-4 flex items-start gap-2 p-3 rounded-lg bg-orange-50 border border-orange-200 text-sm text-orange-800">
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">warning</span>
+            <p>
+              {warningCount === 1 ? "1 mesure semble anormale" : `${warningCount} mesures semblent anormales`} (en orange).
+              Corrigez-les, ou cliquez à nouveau pour enregistrer quand même.
+            </p>
+          </div>
+        )}
+
         <div className="flex justify-end pt-4 border-t border-gray-100">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={isPending}
             className="flex items-center gap-2 px-6 py-2.5 bg-midnight text-white font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-70"
           >
             <span className="material-symbols-outlined text-[18px]">
               {isPending ? "sync" : "save"}
             </span>
-            {isPending ? t("saving") : t("save")}
+            {isPending ? t("saving") : confirmingWarnings && warningCount > 0 ? "Enregistrer quand même" : t("save")}
           </button>
         </div>
       </form>

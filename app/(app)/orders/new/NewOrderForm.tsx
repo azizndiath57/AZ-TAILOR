@@ -10,6 +10,7 @@ import CustomDatePicker from "@/app/components/CustomDatePicker";
 import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS, PaymentMethod } from "@/lib/constants/payment-methods";
 import LimitReachedModal from "@/app/components/LimitReachedModal";
+import MeasurementFields, { MeasurementSummary } from "@/app/components/MeasurementFields";
 
 export default function NewOrderForm({ clients }: { clients: Client[] }) {
   const t = useTranslations("OrderForm");
@@ -47,9 +48,19 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
   const [fabricPhotoName, setFabricPhotoName] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cash");
   const [showLimitModal, setShowLimitModal] = useState(false);
+  const [measurementWarningCount, setMeasurementWarningCount] = useState(0);
+  const [confirmingWarnings, setConfirmingWarnings] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Mesure hors bornes : un second clic confirme l'enregistrement
+    const measurementFieldsShown = showMeasurements && !(clientType === "existant" && selectedClientId);
+    const hasMeasurementWarnings = measurementFieldsShown && measurementWarningCount > 0;
+    if (hasMeasurementWarnings && !confirmingWarnings) {
+      setConfirmingWarnings(true);
+      return;
+    }
+    setConfirmingWarnings(false);
     setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     
@@ -273,32 +284,20 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
               </div>
               
               {clients.find(c => c.id === selectedClientId)?.measurements ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {Object.entries(clients.find(c => c.id === selectedClientId)!.measurements!).map(([key, val]) => (
-                    <div key={key} className="p-3 bg-gray-50 border border-gray-100 rounded-lg">
-                      <p className="text-xs text-gray-500 mb-1 capitalize">{key.replace(/_/g, ' ')}</p>
-                      <p className="text-sm font-semibold text-gray-900">{val} cm</p>
-                    </div>
-                  ))}
-                </div>
+                <MeasurementSummary measurements={clients.find(c => c.id === selectedClientId)!.measurements!} />
               ) : (
                  <div className="p-4 text-sm text-gray-500 bg-gray-50 rounded-lg text-center border border-gray-100">{t("noMeasurements")}</div>
               )}
             </div>
           ) : showMeasurements ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in zoom-in-95 duration-200">
-              {['cou', 'epaule', 'carrure_devant', 'poitrine', 'volume_poitrine', 'ecartement_seins', 'manche', 'manche_3_4', 'tour_manche', 'valeur_piece', 'taille', 'taille_vetement', 'hanche', 'tour_hanche', 'cuisse', 'longueur_haut', 'longueur_taille', 'longueur_totale', 'longueur_boubou', 'longueur_robe', 'longueur_jupe', 'longueur_jupe_3_4', 'longueur_pagne'].map((m) => (
-                <div key={m}>
-                  <label className="block text-xs font-medium text-gray-700 mb-1 capitalize">{m.replace(/_/g, ' ')}</label>
-                  <input 
-                    type="number" 
-                    name={`measurement_${m}`} 
-                    step="0.5" 
-                    placeholder="ex: 45"
-                    className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-brand focus:border-brand outline-none transition-all" 
-                  />
-                </div>
-              ))}
+            <div className="animate-in fade-in zoom-in-95 duration-200">
+              <MeasurementFields
+                namePrefix="measurement_"
+                onWarningCountChange={(count) => {
+                  setMeasurementWarningCount(count);
+                  if (count === 0) setConfirmingWarnings(false);
+                }}
+              />
             </div>
           ) : (
             <div className="flex items-center justify-center p-8 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">
@@ -395,6 +394,15 @@ export default function NewOrderForm({ clients }: { clients: Client[] }) {
 
         {/* Submit Actions */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col gap-3">
+          {confirmingWarnings && measurementWarningCount > 0 && (
+            <div role="alert" className="flex items-start gap-2 p-3 rounded-lg bg-orange-50 border border-orange-200 text-sm text-orange-800">
+              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">warning</span>
+              <p>
+                {measurementWarningCount === 1 ? "1 mesure semble anormale" : `${measurementWarningCount} mesures semblent anormales`} (en orange).
+                Corrigez-les, ou cliquez à nouveau pour créer la commande quand même.
+              </p>
+            </div>
+          )}
           <button type="submit" disabled={isSubmitting} className="w-full py-3 bg-midnight text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-70 flex items-center justify-center gap-2">
             {isSubmitting ? (
               <>

@@ -1,5 +1,6 @@
 import { Client, DashboardStats, Order, OrderWithFinancials, Payment, AppNotification } from "../types";
 import { PaymentMethod } from "../../constants/payment-methods";
+import { MeasurementValue, mergeMeasurements } from "../../constants/measurement-fields";
 
 // In-memory store (persist across HMR)
 const globalForMockDb = globalThis as unknown as {
@@ -301,10 +302,10 @@ export const mockClientsRepository = {
       clients.splice(index, 1);
     }
   },
-  async updateClientMeasurements(id: string, measurements: Record<string, number>) {
+  async updateClientMeasurements(id: string, measurements: Record<string, MeasurementValue | null>) {
     const client = clients.find(c => c.id === id);
     if (client) {
-      client.measurements = measurements;
+      client.measurements = mergeMeasurements(client.measurements, measurements);
     }
   },
   async updateClient(id: string, data: Partial<Client>) {

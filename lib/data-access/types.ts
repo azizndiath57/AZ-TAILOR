@@ -1,6 +1,7 @@
 import { OrderStatus } from "../domain/order-status";
 import { PaymentStatus } from "../domain/payment-status";
 import { PaymentMethod } from "../constants/payment-methods";
+import type { Measurements } from "../constants/measurement-fields";
 
 export interface WorkshopSettings {
   ownerId: string;
@@ -27,7 +28,7 @@ export interface Client {
   phone: string;
   address: string | null;
   notes: string | null;
-  measurements?: Record<string, number>;
+  measurements?: Measurements;
   createdAt: Date;
 }
 
@@ -38,7 +39,7 @@ export interface Order {
   garmentType: string;
   fabricText: string | null;
   fabricPhotoUrl: string | null;
-  measurements: Record<string, number>;
+  measurements: Measurements;
   totalPrice: number;
   status: OrderStatus;
   expectedDeliveryDate: Date;
